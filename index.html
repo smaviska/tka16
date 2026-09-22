@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Sistem Jadwal Pengawas Silang TKA 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --color-bg: #F6F2E8;
+            --color-bg-dot: rgba(30, 42, 74, 0.07);
+            --color-surface: #FFFFFF;
+            --color-surface-alt: #FAF6EC;
+            --color-border: #E7DFCB;
+            --color-text: #23273A;
+            --color-text-muted: #75798A;
+            --color-primary: #1E2A4A;
+            --color-primary-hover: #141C33;
+            --color-primary-text: #FFFFFF;
+            --color-accent: #B4842C;
+            --color-accent-tint: rgba(180, 132, 44, 0.12);
+            --color-success: #2F7A50;
+            --color-success-bg: #E8F3EC;
+            --color-danger: #B14B36;
+            --color-danger-bg: #FBEAE6;
+            --color-warning: #B4682C;
+            --color-warning-bg: #FBEEE1;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --color-bg: #14161F;
+                --color-bg-dot: rgba(255, 255, 255, 0.05);
+                --color-surface: #1C1F2A;
+                --color-surface-alt: #21242F;
+                --color-border: #343849;
+                --color-text: #EDEAE0;
+                --color-text-muted: #9BA0B2;
+                --color-primary: #2C3D6B;
+                --color-primary-hover: #354A82;
+                --color-primary-text: #FFFFFF;
+                --color-accent: #D9A94F;
+                --color-accent-tint: rgba(217, 169, 79, 0.16);
+                --color-success: #5FBE8A;
+                --color-success-bg: #1C2C22;
+                --color-danger: #E08A73;
+                --color-danger-bg: #2E1E1B;
+                --color-warning: #D9A94F;
+                --color-warning-bg: #2E2718;
+            }
+        }
+        :root[data-theme="dark"] {
+            --color-bg: #14161F; --color-bg-dot: rgba(255, 255, 255, 0.05);
+            --color-surface: #1C1F2A; --color-surface-alt: #21242F; --color-border: #343849;
+            --color-text: #EDEAE0; --color-text-muted: #9BA0B2;
+            --color-primary: #2C3D6B; --color-primary-hover: #354A82; --color-primary-text: #FFFFFF;
+            --color-accent: #D9A94F; --color-accent-tint: rgba(217, 169, 79, 0.16);
+            --color-success: #5FBE8A; --color-success-bg: #1C2C22;
+            --color-danger: #E08A73; --color-danger-bg: #2E1E1B;
+            --color-warning: #D9A94F; --color-warning-bg: #2E2718;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--color-bg);
+            background-image: radial-gradient(var(--color-bg-dot) 1.4px, transparent 1.4px);
+            background-size: 20px 20px;
+            color: var(--color-text);
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        }
+
+        .font-display { font-family: 'Fraunces', ui-serif, Georgia, serif; }
+
+        .fade-in { animation: fadeIn .35s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        #app-container {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            box-shadow: 0 1px 2px rgba(20, 20, 30, .04), 0 20px 40px -18px rgba(20, 20, 30, .28);
+        }
+        .accent-strip { height: 4px; background: linear-gradient(90deg, var(--color-accent), var(--color-primary) 65%); }
+
+        .header-banner { position: relative; overflow: hidden; background: linear-gradient(135deg, #1E2A4A 0%, #2E3C68 100%); }
+        .header-banner::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,.09) 1.2px, transparent 1.2px);
+            background-size: 16px 16px; opacity: .6;
+        }
+        .header-banner > * { position: relative; z-index: 1; }
+        .cross-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 2.5rem; height: 2.5rem; border-radius: 999px;
+            background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+            font-size: 1.1rem;
+        }
+        .eyebrow-pill {
+            display: inline-flex; align-items: center; gap: .4rem;
+            padding: .25rem .75rem; border-radius: 999px;
+            background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+            font-size: .75rem; color: #E9DFC3;
+        }
+
+        .step-dot {
+            width: 1.9rem; height: 1.9rem; border-radius: 999px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .75rem; font-weight: 600;
+            border: 1px solid var(--color-border); color: var(--color-text-muted);
+            background: var(--color-surface); transition: all .2s ease; flex-shrink: 0;
+        }
+        .step-dot.is-active { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-text); }
+        .step-dot.is-done { background: var(--color-accent-tint); border-color: var(--color-accent); color: var(--color-accent); }
+        .step-line { flex: 1; height: 1px; background: var(--color-border); transition: background .2s ease; }
+        .step-line.is-done { background: var(--color-accent); }
+        .step-label { font-size: .65rem; color: var(--color-text-muted); }
+        .step-label.is-active { color: var(--color-text); font-weight: 600; }
+
+        label.field-label { display:block; font-size:.8125rem; font-weight:500; color:var(--color-text-muted); margin-bottom:.375rem; }
+        .input-field {
+            width: 100%; padding: .625rem .875rem;
+            border: 1px solid var(--color-border); border-radius: .75rem;
+            background: var(--color-surface); color: var(--color-text);
+            font-size: .9375rem; transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        .input-field:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-tint); }
+        .input-field::placeholder { color: var(--color-text-muted); }
+        .help-text { font-size: .75rem; color: var(--color-text-muted); }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+            padding: .7rem 1.25rem; border-radius: .75rem;
+            font-weight: 600; font-size: .9375rem;
+            border: 1px solid transparent; cursor: pointer; transition: all .15s ease;
+        }
+        .btn-primary { background: var(--color-primary); color: var(--color-primary-text); box-shadow: 0 1px 2px rgba(0,0,0,.1); }
+        .btn-primary:hover { background: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 8px 20px -8px rgba(0,0,0,.35); }
+        .btn-secondary { background: transparent; color: var(--color-text-muted); border-color: var(--color-border); }
+        .btn-secondary:hover { color: var(--color-text); border-color: var(--color-text-muted); }
+        .btn-success { background: var(--color-success); color: #fff; }
+        .btn-success:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn-ghost { background: transparent; color: var(--color-text-muted); }
+        .btn-ghost:hover { color: var(--color-text); }
+        .btn-dark { background: #14192E; color: #fff; }
+        .btn-dark:hover { background: #0C0F1D; transform: translateY(-1px); }
+        .btn-accent { background: var(--color-accent); color: #fff; }
+        .btn-accent:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn-sm { padding: .4rem .8rem; font-size: .8125rem; border-radius: .6rem; }
+
+        .tab-seg { display: flex; gap: .25rem; padding: .25rem; border-radius: 999px; background: var(--color-surface-alt); border: 1px solid var(--color-border); }
+        .tab-seg-btn { flex: 1; text-align: center; padding: .55rem .75rem; border-radius: 999px; font-size: .8125rem; font-weight: 600; color: var(--color-text-muted); cursor: pointer; transition: all .15s ease; border: none; background: transparent; }
+        .tab-seg-btn.is-active { background: var(--color-surface); color: var(--color-primary); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+
+        .wave-card-body {
+            display: block; position: relative;
+            border: 1px solid var(--color-border); border-radius: 1rem;
+            padding: 1rem 2.5rem 1rem 1rem; background: var(--color-surface); cursor: pointer;
+            transition: all .15s ease;
+        }
+        .wave-card-body::after {
+            content: ''; position: absolute; top: 1rem; right: 1rem;
+            width: 1.1rem; height: 1.1rem; border-radius: 999px;
+            border: 1.5px solid var(--color-border); background: var(--color-surface);
+            transition: all .15s ease;
+        }
+        .peer:checked ~ .wave-card-body { border-color: var(--color-primary); background: var(--color-accent-tint); box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+        .peer:checked ~ .wave-card-body::after { background: var(--color-primary); border-color: var(--color-primary); box-shadow: inset 0 0 0 3px var(--color-surface); }
+
+        .surface-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 1rem; }
+        .surface-alt { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: .875rem; }
+        .notice-panel { border: 1px solid var(--color-border); border-left: 3px solid var(--color-accent); border-radius: .875rem; background: var(--color-accent-tint); }
+        .notice-success { border: 1px solid var(--color-border); border-left: 3px solid var(--color-success); border-radius: .875rem; background: var(--color-success-bg); }
+        .notice-warning { border: 1px solid var(--color-border); border-left: 3px solid var(--color-warning); border-radius: .875rem; background: var(--color-warning-bg); }
+
+        .badge { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .65rem; border-radius: 999px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+        .badge-success { background: var(--color-success-bg); color: var(--color-success); }
+        .badge-danger { background: var(--color-danger-bg); color: var(--color-danger); }
+        .badge-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+        .badge-primary { background: var(--color-accent-tint); color: var(--color-primary); }
+
+        .table-elegant { width: 100%; border-collapse: separate; border-spacing: 0; font-size: .8125rem; }
+        .table-elegant thead th { text-align: left; padding: .6rem .8rem; font-weight: 600; border-bottom: 1px solid var(--color-border); }
+        .table-elegant tbody td { padding: .65rem .8rem; border-bottom: 1px solid var(--color-border); color: var(--color-text); vertical-align: middle; }
+        .table-elegant tbody tr:last-child td { border-bottom: none; }
+        .table-elegant tbody tr:hover td { background: var(--color-surface-alt); }
+        .table-wrap { border: 1px solid var(--color-border); border-radius: .875rem; overflow: hidden; }
+        .table-head-light thead th { background: var(--color-surface-alt); color: var(--color-text-muted); }
+        .table-head-dark thead th { background: var(--color-primary); color: var(--color-primary-text); position: sticky; top: 0; }
+
+        .stat-card { border: 1px solid var(--color-border); border-radius: 1rem; padding: 1.1rem; background: var(--color-surface); }
+        .stat-icon { width: 2.25rem; height: 2.25rem; border-radius: .7rem; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: .6rem; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 999px; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+
+    <div class="max-w-4xl w-full rounded-[28px] overflow-hidden fade-in" id="app-container">
+        <div class="accent-strip"></div>
+
+        <!-- HEADER -->
+        <div class="header-banner p-6 sm:p-8 text-white">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="cross-badge" aria-hidden="true">⇄</span>
+                <span class="eyebrow-pill">TKA 2026 &middot; Surakarta</span>
+            </div>
+            <h1 class="font-display text-2xl sm:text-3xl font-semibold tracking-tight">Jadwal Pengawas Silang</h1>
+            <p class="text-[#C9D0E4] text-sm mt-1.5">Tes Kemampuan Akademik &mdash; koordinasi pengawas antar SMA/MA se-Surakarta</p>
+        </div>
+
+        <div class="p-5 sm:p-8">
+
+            <!-- WIZARD STEPS -->
+            <div id="wizard-steps" class="flex items-center gap-1.5 sm:gap-2 mb-8 max-w-2xl mx-auto">
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-0">1</span>
+                    <span class="step-label" id="step-label-0">Masuk</span>
+                </div>
+                <span class="step-line" id="step-line-0"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-1">2</span>
+                    <span class="step-label" id="step-label-1">Akun</span>
+                </div>
+                <span class="step-line" id="step-line-1"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-2">3</span>
+                    <span class="step-label" id="step-label-2">Atur</span>
+                </div>
+                <span class="step-line" id="step-line-2"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-3">4</span>
+                    <span class="step-label" id="step-label-3">Review</span>
+                </div>
+                <span class="step-line" id="step-line-3"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-4">5</span>
+                    <span class="step-label" id="step-label-4">Selesai</span>
+                </div>
+            </div>
+
+            <!-- HALAMAN 1: OTENTIKASI -->
+            <div id="page-auth" class="block fade-in max-w-md mx-auto">
+
+                <div id="school-auth-section" class="block">
+                    <div class="tab-seg mb-6">
+                        <button type="button" id="tab-register" onclick="switchAuthTab('register')" class="tab-seg-btn is-active">1. Registrasi Awal</button>
+                        <button type="button" id="tab-login" onclick="switchAuthTab('login')" class="tab-seg-btn">2. Login Akun</button>
+                    </div>
+
+                    <!-- Form Registrasi -->
+                    <div id="form-register" class="space-y-4 block">
+                        <div class="notice-panel p-3.5 text-sm">
+                            Pilih nama sekolah Anda dan gunakan password <b>test123</b> untuk mulai membuat akun.
+                        </div>
+                        <div>
+                            <label class="field-label">Nama sekolah</label>
+                            <select id="input-school-dropdown" class="input-field">
+                                <option value="">&mdash; Pilih Sekolah &mdash;</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label">Password default</label>
+                            <input type="password" id="input-password-default" value="test123" class="input-field">
+                        </div>
+                        <button onclick="handleRegisterAuth()" class="btn btn-primary w-full mt-2">Mulai registrasi</button>
+                    </div>
+
+                    <!-- Form Login -->
+                    <div id="form-login" class="space-y-4 hidden">
+                        <div class="notice-success p-3.5 text-sm">
+                            Gunakan NPSN dan password yang telah Anda buat sebelumnya.
+                        </div>
+                        <div>
+                            <label class="field-label">NPSN sekolah</label>
+                            <input type="text" id="input-npsn-login" placeholder="Masukkan NPSN" class="input-field">
+                        </div>
+                        <div>
+                            <label class="field-label">Password</label>
+                            <input type="password" id="input-password-login" placeholder="Masukkan password" class="input-field">
+                        </div>
+                        <button onclick="handleLogin()" class="btn btn-success w-full mt-2">Masuk</button>
+                    </div>
+                </div>
+
+                <!-- Form Login Admin -->
+                <div id="admin-auth-section" class="hidden">
+                    <div class="text-center mb-6">
+                        <span class="cross-badge mx-auto mb-3" style="background:var(--color-accent-tint); border-color:var(--color-border); color:var(--color-accent)">&#128274;</span>
+                        <h2 class="font-display text-xl font-semibold">Portal Admin MKKS</h2>
+                        <p class="help-text mt-1.5">Masuk untuk melihat rekap data dan mengacak jadwal pengawas silang.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="field-label">Username admin</label>
+                            <input type="text" id="input-admin-user" placeholder="Ketik username admin" class="input-field">
+                        </div>
+                        <div>
+                            <label class="field-label">Password</label>
+                            <input type="password" id="input-admin-pass" placeholder="Ketik password admin" class="input-field">
+                        </div>
+                        <button onclick="handleAdminLogin()" class="btn btn-dark w-full mt-2">Login admin</button>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center pt-4" style="border-top:1px solid var(--color-border)">
+                    <button id="toggle-admin-btn" onclick="toggleAdminLogin()" class="help-text hover:underline font-medium transition-colors">Masuk sebagai Admin MKKS</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 1.5: BUAT AKUN -->
+            <div id="page-create-account" class="hidden fade-in max-w-md mx-auto">
+                <div class="text-center mb-6">
+                    <h2 class="font-display text-2xl font-semibold">Buat akun sekolah</h2>
+                    <p class="font-medium mt-1" style="color:var(--color-accent)" id="display-school-name">Nama Sekolah</p>
+                    <p class="help-text mt-2">Lengkapi data di bawah ini sebagai akses masuk Anda selanjutnya.</p>
+                </div>
+
+                <div class="space-y-4 notice-panel p-6">
+                    <div>
+                        <label class="field-label">NPSN sekolah</label>
+                        <input type="text" id="setup-npsn" placeholder="Masukkan NPSN" class="input-field">
+                    </div>
+                    <div>
+                        <label class="field-label">Password baru</label>
+                        <input type="password" id="setup-password" placeholder="Buat password rahasia" class="input-field">
+                    </div>
+                    <button onclick="saveAccountAndProceed()" class="btn btn-primary w-full mt-2">Simpan akun &amp; lanjut</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 2: SETUP JADWAL -->
+            <div id="page-setup-jadwal" class="hidden fade-in max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-5 pb-3" style="border-bottom:1px solid var(--color-border)">
+                    <h2 class="font-display text-xl font-semibold">Pengaturan TKA sekolah</h2>
+                    <span class="badge badge-primary" id="header-school-npsn"></span>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="field-label mb-2.5">1. Pilih gelombang pelaksanaan</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="checkbox" id="wave-1" class="peer sr-only">
+                                <span class="wave-card-body">
+                                    <span class="block font-display font-medium text-[15px]">Gelombang 1</span>
+                                    <span class="block help-text mt-1">26&ndash;29 Okt 2026</span>
+                                </span>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="checkbox" id="wave-2" class="peer sr-only">
+                                <span class="wave-card-body">
+                                    <span class="block font-display font-medium text-[15px]">Gelombang 2</span>
+                                    <span class="block help-text mt-1">2&ndash;5 Nov 2026</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="field-label">2. Berapa lab yang digunakan tiap hari?</label>
+                        <input type="number" id="input-lab-count" min="1" max="10" placeholder="0" class="input-field w-28" onchange="generateDefaultLabConfig()">
+                    </div>
+                    <div id="default-lab-config" class="surface-alt p-4 hidden space-y-3">
+                        <p class="field-label mb-0">3. Atur ketersediaan sesi untuk masing-masing lab</p>
+                        <div id="lab-rows" class="space-y-2"></div>
+                    </div>
+                    <div class="flex justify-end pt-4" style="border-top:1px solid var(--color-border)">
+                        <button onclick="goToReview()" class="btn btn-primary">Lanjut ke pengecekan &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HALAMAN 3: REVIEW -->
+            <div id="page-review" class="hidden fade-in max-w-2xl mx-auto">
+                <h2 class="font-display text-xl font-semibold mb-1">Pengecekan jadwal harian</h2>
+                <p class="help-text mb-4">Periksa kembali jumlah lab dan sesi sebelum mengirim data.</p>
+                <div id="review-container" class="space-y-3 max-h-96 overflow-y-auto pr-2 mb-6"></div>
+                <div class="flex justify-between items-center pt-4" style="border-top:1px solid var(--color-border)">
+                    <button onclick="editScheduleSetup()" class="btn btn-secondary">Edit gelombang, lab, dan sesi</button>
+                    <button onclick="submitFinalData()" class="btn btn-success">Kirim data jadwal</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 4: REKAP KESELURUHAN (SEKOLAH) -->
+            <div id="page-final-rekap" class="hidden fade-in mx-auto">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3 text-2xl" style="background:var(--color-success-bg); color:var(--color-success)">&#10003;</div>
+                    <h2 class="font-display text-2xl font-semibold">Data berhasil dikirim!</h2>
+                </div>
+                <div class="notice-warning p-4 mb-6 flex items-start gap-4 mx-auto max-w-2xl">
+                    <div class="mt-0.5"><svg class="w-6 h-6" style="color:var(--color-warning)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                    <div>
+                        <h4 class="font-semibold" style="color:var(--color-warning)">Status: Menunggu Admin MKKS</h4>
+                        <p class="text-sm mt-1" style="color:var(--color-text-muted)">Jadwal dan lokasi pengawas silang akan muncul di sini setelah Admin MKKS melakukan proses pengacakan.</p>
+                    </div>
+                </div>
+                <div class="table-wrap max-w-2xl mx-auto">
+                    <div class="px-4 py-3" style="background:var(--color-surface-alt); border-bottom:1px solid var(--color-border)">
+                        <h3 class="font-display font-semibold" style="color:var(--color-primary)" id="rekap-school-name">Nama Sekolah</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="table-elegant table-head-light">
+                            <thead>
+                                <tr><th class="w-1/3">Tanggal</th><th class="text-center w-1/4">Lab aktif</th><th>Rincian sesi</th></tr>
+                            </thead>
+                            <tbody id="rekap-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Keluar (Logout)</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 5: DASHBOARD ADMIN MKKS -->
+            <div id="page-admin-dashboard" class="hidden fade-in mx-auto w-full">
+                <div class="flex flex-wrap justify-between items-center gap-3 mb-6 pb-4" style="border-bottom:1px solid var(--color-border)">
+                    <div>
+                        <h2 class="font-display text-2xl font-semibold">Dashboard admin MKKS</h2>
+                        <p class="help-text mt-1">Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.</p>
+                    </div>
+                    <button onclick="acakJadwalSilang()" class="btn btn-accent">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        Acak pengawas silang
+                    </button>
+                </div>
+
+                <!-- Statistik Mini -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:var(--color-accent-tint); color:var(--color-primary)">&#127979;</div>
+                        <div class="help-text font-semibold">Total sekolah</div>
+                        <div class="font-display text-2xl font-semibold" id="stat-total-school">38</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:var(--color-success-bg); color:var(--color-success)">&#10003;</div>
+                        <div class="help-text font-semibold">Sudah submit jadwal</div>
+                        <div class="font-display text-2xl font-semibold" style="color:var(--color-success)" id="stat-submitted">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:var(--color-warning-bg); color:var(--color-warning)">&#8987;</div>
+                        <div class="help-text font-semibold">Belum submit</div>
+                        <div class="font-display text-2xl font-semibold" style="color:var(--color-warning)" id="stat-pending">38</div>
+                    </div>
+                </div>
+
+                <!-- Tabel Rekap Admin -->
+                <div class="table-wrap">
+                    <div class="overflow-x-auto max-h-96">
+                        <table class="table-elegant table-head-dark">
+                            <thead>
+                                <tr>
+                                    <th>Nama sekolah</th>
+                                    <th>NPSN</th>
+                                    <th>Gelombang</th>
+                                    <th>Total titik pengawas</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Tutup dashboard admin</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIKA -->
+    <script type="module">
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Konfigurasi Firebase harus diisi dengan project yang aktif.
+        // Jika masih memakai placeholder, aplikasi akan menampilkan peringatan
+        // dan tidak akan mencoba akses Firestore yang tidak valid.
+        const firebaseConfig = {
+           apiKey: "AIzaSyAMSYphcdbiEWRZugjuM-VfzVPK4LlCsoo",
+  authDomain: "pengawas-tka26.firebaseapp.com",
+  projectId: "pengawas-tka26",
+  storageBucket: "pengawas-tka26.firebasestorage.app",
+  messagingSenderId: "1022678996761",
+  appId: "1:1022678996761:web:fb86c297737a6fc6fc1788"
+        };
+
+        const isFirebaseConfigured = () => {
+            return !!(
+                firebaseConfig.apiKey &&
+                firebaseConfig.apiKey !== "YOUR_API_KEY" &&
+                firebaseConfig.projectId &&
+                firebaseConfig.projectId !== "YOUR_PROJECT_ID" &&
+                firebaseConfig.appId &&
+                firebaseConfig.appId !== "YOUR_APP_ID"
+            );
+        };
+
+        let db = null;
+        try {
+            if (isFirebaseConfigured()) {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+            }
+        } catch (error) {
+            console.warn('Firebase tidak berhasil diinisialisasi.', error);
+            db = null;
+        }
+
+        const ensureFirebaseReady = (action) => {
+            if (!db) {
+                alert(`Firebase belum dikonfigurasi untuk ${action}.\n\nSilakan isi config Firebase yang benar di file ini lalu refresh halaman.`);
+                return false;
+            }
+            return true;
+        };
+
+        const schoolList = [
+            "SMA Negeri 1 Surakarta", "SMA Negeri 2 Surakarta", "SMA Negeri 3 Surakarta", "SMA Negeri 4 Surakarta",
+            "SMA Negeri 5 Surakarta", "SMA Negeri 6 Surakarta", "SMA Negeri 7 Surakarta", "SMA Negeri 8 Surakarta",
+            "SMA Negeri 9 Surakarta", "MA Negeri 1 Surakarta", "MA Negeri 2 Surakarta", "SMA Al-Azhar Syifa Budi Solo",
+            "SMA Al-Islam 1 Surakarta", "SMA Batik 1 Surakarta", "SMA Batik 2 Surakarta", "SMA Islam 1 Surakarta",
+            "SMA Islam Diponegoro Surakarta", "SMA Al-Muayyad Surakarta", "SMA Muhammadiyah 1 Surakarta", "SMA Muhammadiyah 2 Surakarta",
+            "SMA Muhammadiyah 3 Surakarta", "SMA Muhammadiyah 6 Surakarta", "SMA Muhammadiyah PK Kottabarat Surakarta", "SMA Pangudi Luhur Santo Yosef Surakarta",
+            "SMA Regina Pacis Surakarta", "SMA Kristen 1 Surakarta", "SMA Tujuh Belas Surakarta", "SMA Widya Wacana Surakarta",
+            "SMA Warga Surakarta", "SMA Kristen PNK Surakarta", "SMA ABBS Surakarta", "SMA Bina Widya Surakarta",
+            "SMA MTA Surakarta", "SMA Budi Utomo Surakarta", "MA Al-Islam Surakarta", "MA Al-Muayyad Surakarta",
+            "MA Al-Kahfi Surakarta", "MA Muhammadiyah Muallimin Surakarta"
+        ];
+
+        let currentSchoolName = "";
+        let currentNPSN = "";
+        window.scheduleData = {};
+        window.defaultConfig = { count: 0, sessions: [] };
+
+        const wizardOrder = ['page-auth', 'page-create-account', 'page-setup-jadwal', 'page-review', 'page-final-rekap'];
+
+        window.updateWizardSteps = (pageId) => {
+            const wizard = document.getElementById('wizard-steps');
+            const idx = wizardOrder.indexOf(pageId);
+            if (idx === -1) { wizard.classList.add('hidden'); return; }
+            wizard.classList.remove('hidden');
+            wizardOrder.forEach((_, i) => {
+                const dot = document.getElementById(`step-dot-${i}`);
+                const lbl = document.getElementById(`step-label-${i}`);
+                dot.classList.remove('is-active', 'is-done');
+                lbl.classList.remove('is-active');
+                if (i < idx) dot.classList.add('is-done');
+                else if (i === idx) { dot.classList.add('is-active'); lbl.classList.add('is-active'); }
+                const line = document.getElementById(`step-line-${i}`);
+                if (line) line.classList.toggle('is-done', i < idx);
+            });
+        };
+
+        window.onload = () => {
+            const dropdown = document.getElementById('input-school-dropdown');
+            [...schoolList].sort().forEach(school => {
+                dropdown.innerHTML += `<option value="${school}">${school}</option>`;
+            });
+            updateWizardSteps('page-auth');
+        };
+
+        window.switchPage = (hideId, showId) => {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+            updateWizardSteps(showId);
+        }
+
+        window.logoutToHome = () => {
+            currentSchoolName = "";
+            currentNPSN = "";
+            window.switchPage('page-final-rekap', 'page-auth');
+            window.switchPage('page-admin-dashboard', 'page-auth');
+            document.getElementById('school-auth-section').classList.remove('hidden');
+            document.getElementById('admin-auth-section').classList.add('hidden');
+            document.getElementById('toggle-admin-btn').innerText = "Masuk sebagai Admin MKKS";
+        }
+
+        // --- TOGGLE ADMIN & SEKOLAH LOGIN ---
+        window.toggleAdminLogin = () => {
+            const schoolSection = document.getElementById('school-auth-section');
+            const adminSection = document.getElementById('admin-auth-section');
+            const btn = document.getElementById('toggle-admin-btn');
+
+            if (schoolSection.classList.contains('hidden')) {
+                schoolSection.classList.remove('hidden');
+                adminSection.classList.add('hidden');
+                btn.innerText = "Masuk sebagai Admin MKKS";
+            } else {
+                schoolSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+                btn.innerText = "Kembali ke Login Sekolah";
+            }
+        }
+
+        window.switchAuthTab = (type) => {
+            const tReg = document.getElementById('tab-register');
+            const tLog = document.getElementById('tab-login');
+            const fReg = document.getElementById('form-register');
+            const fLog = document.getElementById('form-login');
+
+            if (type === 'register') {
+                tReg.classList.add('is-active'); tLog.classList.remove('is-active');
+                fReg.classList.remove('hidden'); fReg.classList.add('block');
+                fLog.classList.remove('block'); fLog.classList.add('hidden');
+            } else {
+                tLog.classList.add('is-active'); tReg.classList.remove('is-active');
+                fLog.classList.remove('hidden'); fLog.classList.add('block');
+                fReg.classList.remove('block'); fReg.classList.add('hidden');
+            }
+        }
+
+        // --- ALUR LOGIN ADMIN MKKS ---
+        window.handleAdminLogin = async () => {
+            const user = document.getElementById('input-admin-user').value.trim();
+            const pass = document.getElementById('input-admin-pass').value;
+
+            if (!user || !pass) return alert("Username dan Password wajib diisi!");
+            if (!ensureFirebaseReady('login admin MKKS')) return;
+
+            try {
+                const adminSnapshot = await getDoc(doc(db, 'admin', user));
+
+                if (!adminSnapshot.exists()) {
+                    alert("Username atau Password Admin salah!");
+                    return;
+                }
+
+                const adminData = adminSnapshot.data();
+                if (adminData.role !== 'admin_mkks' || adminData.active === false || adminData.password !== pass) {
+                    alert("Username atau Password Admin salah!");
+                    return;
+                }
+
+                await loadAdminDashboardData();
+                window.switchPage('page-auth', 'page-admin-dashboard');
+            } catch (error) {
+                console.error('Gagal login admin melalui Firestore:', error);
+                alert('Login admin gagal. Cek koneksi, konfigurasi Firebase, dan Rules Firestore.');
+            }
+        }
+
+        // --- MEMUAT DATA UNTUK ADMIN ---
+        window.loadAdminDashboardData = async () => {
+            const tbody = document.getElementById('admin-table-body');
+            tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Memuat data dari server...</td></tr>';
+
+            if (!ensureFirebaseReady('memuat dashboard admin')) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Firebase belum dikonfigurasi. Silakan isi config Firebase yang valid.</td></tr>';
+                return;
+            }
+
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                const schoolsData = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    schoolsData.push({
+                        nama_sekolah: data.nama_sekolah || 'Sekolah tidak diketahui',
+                        npsn: data.npsn || '-',
+                        status: data.status || 'Menunggu Admin MKKS',
+                        jadwal_harian: data.jadwal_harian || {}
+                    });
+                });
+
+                const totalSubmitted = schoolsData.length;
+                document.getElementById('stat-submitted').innerText = totalSubmitted;
+                document.getElementById('stat-pending').innerText = Math.max(0, schoolList.length - totalSubmitted);
+
+                tbody.innerHTML = '';
+                if (schoolsData.length > 0) {
+                    schoolsData.forEach(s => {
+                        let totalTitik = 0;
+                        let gelombangStr = new Set();
+
+                        Object.keys(s.jadwal_harian).forEach(date => {
+                            const d = new Date(date);
+                            if (d.getMonth() === 9) gelombangStr.add('Gel 1');
+                            if (d.getMonth() === 10) gelombangStr.add('Gel 2');
+                            (s.jadwal_harian[date].sessions || []).forEach(ses => totalTitik += ses);
+                        });
+
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="font-medium">${s.nama_sekolah}</td>
+                                <td style="color:var(--color-text-muted)">${s.npsn}</td>
+                                <td><span class="badge badge-primary">${Array.from(gelombangStr).join(' & ') || 'Belum dipilih'}</span></td>
+                                <td class="font-semibold">${totalTitik} Slot</td>
+                                <td class="text-center"><span class="badge badge-warning">${s.status}</span></td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Belum ada sekolah yang mengirimkan jadwal.</td></tr>';
+                }
+            } catch (error) {
+                console.error('Gagal memuat dashboard admin dari Firestore:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Gagal memuat data dari Firestore. Cek konfigurasi Firebase dan Rules.</td></tr>';
+            }
+        }
+
+        window.acakJadwalSilang = () => {
+            const yakin = confirm("Apakah Anda yakin ingin MENGACAK jadwal sekarang?\nPastikan semua sekolah sudah submit data!");
+            if (yakin) {
+                alert("Simulasi: Jadwal berhasil diacak dan didistribusikan ke masing-masing sekolah!");
+            }
+        }
+
+        // --- ALUR SEKOLAH ---
+        window.handleRegisterAuth = async () => {
+            const school = document.getElementById('input-school-dropdown').value;
+            const pass = document.getElementById('input-password-default').value;
+            if (!school) return alert("Silakan pilih nama sekolah Anda.");
+            if (pass !== "test123") return alert("Password default salah.");
+
+            if (db) {
+                try {
+                    const schoolRef = doc(db, 'schools', school);
+                    const schoolSnap = await getDoc(schoolRef);
+                    if (schoolSnap.exists() && schoolSnap.data().isRegistered) {
+                        alert(`⚠️ GAGAL: ${school} sudah pernah melakukan registrasi.\n\nSilakan gunakan menu Login Akun.`);
+                        switchAuthTab('login');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Gagal memeriksa registrasi sekolah di Firestore:', error);
+                }
+            }
+
+            currentSchoolName = school;
+            document.getElementById('display-school-name').innerText = currentSchoolName;
+            window.switchPage('page-auth', 'page-create-account');
+        }
+
+        window.saveAccountAndProceed = async () => {
+            const npsn = document.getElementById('setup-npsn').value;
+            const pass = document.getElementById('setup-password').value;
+            if (!npsn || !pass) return alert("Mohon isi NPSN dan Password Baru.");
+
+            if (!ensureFirebaseReady('menyimpan akun sekolah')) return;
+
+            try {
+                await setDoc(doc(db, 'schools', currentSchoolName), {
+                    nama_sekolah: currentSchoolName,
+                    npsn: npsn,
+                    password: pass,
+                    isRegistered: true,
+                    created_at: new Date()
+                });
+            } catch (error) {
+                console.error('Gagal menyimpan akun sekolah ke Firestore:', error);
+                alert('Gagal menyimpan akun ke Firestore. Cek konfigurasi Firebase dan Rulesnya.');
+                return;
+            }
+
+            currentNPSN = npsn;
+            document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
+            window.switchPage('page-create-account', 'page-setup-jadwal');
+        }
+
+        window.handleLogin = async () => {
+            const npsn = document.getElementById('input-npsn-login').value;
+            const pass = document.getElementById('input-password-login').value;
+            if (!npsn || !pass) return alert("NPSN dan Password wajib diisi.");
+
+            if (!ensureFirebaseReady('login akun sekolah')) return;
+
+            try {
+                const q = query(collection(db, 'schools'), where('npsn', '==', npsn));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    alert('NPSN tidak ditemukan. Apakah Anda sudah registrasi awal?');
+                    return;
+                }
+
+                let matched = null;
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data.password === pass) matched = data;
+                });
+
+                if (!matched) {
+                    alert('Password salah.');
+                    return;
+                }
+
+                currentNPSN = npsn;
+                currentSchoolName = matched.nama_sekolah;
+                document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
+                window.switchPage('page-auth', 'page-setup-jadwal');
+            } catch (error) {
+                console.error('Gagal login ke Firestore:', error);
+                alert('Login gagal. Cek konfigurasi Firebase dan Rulesnya.');
+            }
+        }
+
+        window.generateDefaultLabConfig = () => {
+            const count = parseInt(document.getElementById('input-lab-count').value);
+            const container = document.getElementById('default-lab-config');
+            const rows = document.getElementById('lab-rows');
+            if (count > 0) {
+                container.classList.remove('hidden');
+                rows.innerHTML = '';
+                for (let i = 1; i <= count; i++) {
+                    rows.innerHTML += `<div class="flex justify-between items-center px-3 py-2 rounded-lg" style="background:var(--color-surface); border:1px solid var(--color-border)"><span class="text-sm font-medium">Lab ${i}</span><select id="default-lab-${i}-session" class="input-field w-auto py-1.5 text-sm"><option value="1">1 Sesi</option><option value="2">2 Sesi</option><option value="3" selected>3 Sesi</option></select></div>`;
+                }
+            } else { container.classList.add('hidden'); }
+        }
+
+        window.goToReview = () => {
+            const w1 = document.getElementById('wave-1').checked;
+            const w2 = document.getElementById('wave-2').checked;
+            const labCount = parseInt(document.getElementById('input-lab-count').value);
+            if (!w1 && !w2) return alert("Mohon pilih minimal 1 gelombang TKA.");
+            if (!labCount || labCount < 1) return alert("Jumlah lab tidak boleh kosong.");
+
+            if (!document.getElementById(`default-lab-1-session`)) {
+                window.generateDefaultLabConfig();
+            }
+
+            let dates = [];
+            if (w1) dates.push("2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29");
+            if (w2) dates.push("2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05");
+            window.defaultConfig.count = labCount;
+            window.defaultConfig.sessions = [];
+            for (let i = 1; i <= labCount; i++) {
+                const sessionSelect = document.getElementById(`default-lab-${i}-session`);
+                if (!sessionSelect) {
+                    alert(`Lab ${i} belum siap. Silakan atur ulang jumlah lab lalu klik tombol ini kembali.`);
+                    return;
+                }
+                window.defaultConfig.sessions.push(parseInt(sessionSelect.value || '3', 10));
+            }
+            window.scheduleData = {};
+            dates.forEach(d => { window.scheduleData[d] = { labCount: window.defaultConfig.count, sessions: [...window.defaultConfig.sessions] }; });
+            window.renderReviewData();
+            window.switchPage('page-setup-jadwal', 'page-review');
+        }
+
+        window.renderReviewData = () => {
+            const container = document.getElementById('review-container');
+            container.innerHTML = '';
+            Object.keys(window.scheduleData).forEach(date => {
+                const data = window.scheduleData[date];
+                const dateObj = new Date(date);
+                const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+                let sessionHtml = '';
+                for (let i = 0; i < data.labCount; i++) {
+                    sessionHtml += `<div class="flex justify-between items-center px-3 py-2 rounded-lg mt-2" style="background:var(--color-surface); border:1px solid var(--color-border)"><span class="text-sm font-medium">Lab ${i + 1}</span><select onchange="updateSession('${date}', ${i}, this.value)" class="input-field w-auto py-1.5 text-sm"><option value="1" ${data.sessions[i] == 1 ? 'selected' : ''}>1 Sesi</option><option value="2" ${data.sessions[i] == 2 ? 'selected' : ''}>2 Sesi</option><option value="3" ${data.sessions[i] == 3 ? 'selected' : ''}>3 Sesi</option></select></div>`;
+                }
+                container.innerHTML += `<div class="surface-card overflow-hidden"><div class="p-4 flex justify-between items-center"><h3 class="font-display font-semibold" style="color:var(--color-primary)">${dateStr}</h3><button onclick="toggleEditPanel('${date}')" class="btn btn-secondary btn-sm">Ubah detail</button></div><div id="edit-panel-${date}" class="hidden p-4 pt-0"><div class="mb-3 flex gap-2 items-center pt-4" style="border-top:1px solid var(--color-border)"><label class="text-sm font-medium">Jumlah lab:</label><input type="number" min="0" max="10" value="${data.labCount}" id="input-lab-${date}" class="input-field w-16 text-center py-1.5"><button onclick="updateDailyLabCount('${date}')" class="btn btn-secondary btn-sm">Set</button></div><div>${sessionHtml}</div></div></div>`;
+            });
+        }
+
+        window.toggleEditPanel = (date) => document.getElementById(`edit-panel-${date}`).classList.toggle('hidden');
+        window.updateDailyLabCount = (date) => {
+            let newCount = Math.max(0, parseInt(document.getElementById(`input-lab-${date}`).value));
+            const data = window.scheduleData[date];
+            const old = data.sessions;
+            data.labCount = newCount;
+            data.sessions = [];
+            for (let i = 0; i < newCount; i++) data.sessions.push(i < old.length ? old[i] : 3);
+            window.renderReviewData();
+            document.getElementById(`edit-panel-${date}`).classList.remove('hidden');
+        }
+        window.updateSession = (date, idx, val) => window.scheduleData[date].sessions[idx] = parseInt(val);
+
+        window.editScheduleSetup = () => {
+            const dates = Object.keys(window.scheduleData);
+            if (dates.length === 0) {
+                window.switchPage('page-review', 'page-setup-jadwal');
+                return;
+            }
+
+            const hasWave1 = dates.some(date => date.startsWith('2026-10-'));
+            const hasWave2 = dates.some(date => date.startsWith('2026-11-'));
+            document.getElementById('wave-1').checked = hasWave1;
+            document.getElementById('wave-2').checked = hasWave2;
+
+            const firstDay = window.scheduleData[dates[0]];
+            document.getElementById('input-lab-count').value = firstDay.labCount;
+            window.generateDefaultLabConfig();
+            firstDay.sessions.forEach((sessionCount, index) => {
+                const sessionSelect = document.getElementById(`default-lab-${index + 1}-session`);
+                if (sessionSelect) sessionSelect.value = sessionCount;
+            });
+
+            window.switchPage('page-review', 'page-setup-jadwal');
+        }
+
+        window.submitFinalData = async () => {
+            if (!ensureFirebaseReady('menyimpan jadwal sekolah')) return;
+
+            try {
+                await setDoc(doc(db, 'schedules', currentNPSN), {
+                    nama_sekolah: currentSchoolName,
+                    npsn: currentNPSN,
+                    jadwal_harian: window.scheduleData,
+                    status: 'Menunggu Admin MKKS',
+                    updated_at: new Date()
+                });
+            } catch (error) {
+                console.error('Gagal menyimpan jadwal ke Firestore:', error);
+                alert('Gagal menyimpan jadwal ke Firestore. Cek konfigurasi Firebase dan Rulesnya.');
+                return;
+            }
+
+            const tbody = document.getElementById('rekap-table-body');
+            document.getElementById('rekap-school-name').innerText = currentSchoolName || `Sekolah (NPSN: ${currentNPSN})`;
+            tbody.innerHTML = '';
+            const dates = Object.keys(window.scheduleData);
+            if (dates.length > 0) {
+                dates.forEach(date => {
+                    const data = window.scheduleData[date];
+                    const dateObj = new Date(date);
+                    const dateStr = isNaN(dateObj) ? date : dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                    let trHtml = '';
+                    if (data.labCount === 0) {
+                        trHtml = `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-semibold" style="color:var(--color-text-muted)">0</td><td class="italic" style="color:var(--color-text-muted)">Libur / Tidak ada ujian</td></tr>`;
+                    } else {
+                        const sessionBadges = data.sessions.map((ses, idx) => `<span class="badge badge-primary mr-1 mb-1">Lab ${idx + 1} (${ses} Sesi)</span>`).join('');
+                        trHtml = `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-display font-semibold text-lg" style="color:var(--color-primary)">${data.labCount}</td><td>${sessionBadges}</td></tr>`;
+                    }
+                    tbody.innerHTML += trHtml;
+                });
+            }
+            window.switchPage('page-review', 'page-final-rekap');
+        }
+    </script>
+</body>
+</html>
