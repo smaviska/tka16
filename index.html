@@ -418,6 +418,7 @@
                     </div>
                 </div>
                 <div class="mt-8 text-center">
+                    <button onclick="editSubmittedSchedule()" class="btn btn-secondary text-sm mr-2">Edit gelombang, lab, dan sesi</button>
                     <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Keluar (Logout)</button>
                 </div>
             </div>
@@ -800,7 +801,23 @@
                 currentNPSN = npsn;
                 currentSchoolName = matched.nama_sekolah;
                 document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
-                window.switchPage('page-auth', 'page-setup-jadwal');
+
+                const scheduleSnapshot = await getDoc(doc(db, 'schedules', currentNPSN));
+                const savedSchedule = scheduleSnapshot.exists() ? scheduleSnapshot.data().jadwal_harian : null;
+                const scheduleDates = savedSchedule && typeof savedSchedule === 'object' ? Object.keys(savedSchedule) : [];
+                const hasCompleteSchedule = scheduleDates.length > 0 && scheduleDates.every(date => {
+                    const day = savedSchedule[date];
+                    return day && Number(day.labCount) > 0 && Array.isArray(day.sessions) && day.sessions.length >= Number(day.labCount);
+                });
+
+                if (hasCompleteSchedule) {
+                    window.scheduleData = savedSchedule;
+                    window.renderFinalRekap();
+                    window.switchPage('page-auth', 'page-final-rekap');
+                } else {
+                    window.scheduleData = {};
+                    window.switchPage('page-auth', 'page-setup-jadwal');
+                }
             } catch (error) {
                 console.error('Gagal login ke Firestore:', error);
                 alert('Login gagal. Cek konfigurasi Firebase dan Rulesnya.');
@@ -901,6 +918,43 @@
             window.switchPage('page-review', 'page-setup-jadwal');
         }
 
+        window.editSubmittedSchedule = () => {
+            const dates = Object.keys(window.scheduleData);
+            if (dates.length === 0) {
+                window.switchPage('page-final-rekap', 'page-setup-jadwal');
+                return;
+            }
+
+            const hasWave1 = dates.some(date => date.startsWith('2026-10-'));
+            const hasWave2 = dates.some(date => date.startsWith('2026-11-'));
+            document.getElementById('wave-1').checked = hasWave1;
+            document.getElementById('wave-2').checked = hasWave2;
+
+            const firstDay = window.scheduleData[dates[0]];
+            document.getElementById('input-lab-count').value = firstDay.labCount;
+            window.generateDefaultLabConfig();
+            firstDay.sessions.forEach((sessionCount, index) => {
+                const sessionSelect = document.getElementById(`default-lab-${index + 1}-session`);
+                if (sessionSelect) sessionSelect.value = sessionCount;
+            });
+
+            window.switchPage('page-final-rekap', 'page-setup-jadwal');
+        }
+
+        window.renderFinalRekap = () => {
+            const tbody = document.getElementById('rekap-table-body');
+            document.getElementById('rekap-school-name').innerText = currentSchoolName || `Sekolah (NPSN: ${currentNPSN})`;
+            tbody.innerHTML = '';
+
+            Object.keys(window.scheduleData).forEach(date => {
+                const data = window.scheduleData[date];
+                const dateObj = new Date(date);
+                const dateStr = isNaN(dateObj) ? date : dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                const sessionBadges = data.sessions.map((ses, idx) => `<span class="badge badge-primary mr-1 mb-1">Lab ${idx + 1} (${ses} Sesi)</span>`).join('');
+                tbody.innerHTML += `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-display font-semibold text-lg" style="color:var(--color-primary)">${data.labCount}</td><td>${sessionBadges}</td></tr>`;
+            });
+        }
+
         window.submitFinalData = async () => {
             if (!ensureFirebaseReady('menyimpan jadwal sekolah')) return;
 
@@ -918,25 +972,7 @@
                 return;
             }
 
-            const tbody = document.getElementById('rekap-table-body');
-            document.getElementById('rekap-school-name').innerText = currentSchoolName || `Sekolah (NPSN: ${currentNPSN})`;
-            tbody.innerHTML = '';
-            const dates = Object.keys(window.scheduleData);
-            if (dates.length > 0) {
-                dates.forEach(date => {
-                    const data = window.scheduleData[date];
-                    const dateObj = new Date(date);
-                    const dateStr = isNaN(dateObj) ? date : dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                    let trHtml = '';
-                    if (data.labCount === 0) {
-                        trHtml = `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-semibold" style="color:var(--color-text-muted)">0</td><td class="italic" style="color:var(--color-text-muted)">Libur / Tidak ada ujian</td></tr>`;
-                    } else {
-                        const sessionBadges = data.sessions.map((ses, idx) => `<span class="badge badge-primary mr-1 mb-1">Lab ${idx + 1} (${ses} Sesi)</span>`).join('');
-                        trHtml = `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-display font-semibold text-lg" style="color:var(--color-primary)">${data.labCount}</td><td>${sessionBadges}</td></tr>`;
-                    }
-                    tbody.innerHTML += trHtml;
-                });
-            }
+            window.renderFinalRekap();
             window.switchPage('page-review', 'page-final-rekap');
         }
     </script>
