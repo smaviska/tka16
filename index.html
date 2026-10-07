@@ -220,7 +220,7 @@
                 <span class="eyebrow-pill">TKA 2026 &middot; Surakarta</span>
             </div>
             <h1 class="font-display text-2xl sm:text-3xl font-semibold tracking-tight">Jadwal Pengawas Silang</h1>
-            <p class="text-[#C9D0E4] text-sm mt-1.5">Tes Kemampuan Akademik &mdash; koordinasi pengawas antar SMA/MA se-Surakarta</p>
+            <p class="text-[#C9D0E4] text-sm mt-1.5">Tes Kemampuan Akademik &mdash; Koordinasi pengawas antar SMA/MA se-Surakarta</p>
         </div>
 
         <div class="p-5 sm:p-8">
@@ -476,12 +476,14 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
                         Download Excel
                     </button>
-                    <button onclick="acakJadwalSilang()" class="btn btn-accent">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                        Acak pengawas silang
-                    </button>
                     </div>
                 </div>
+                <div class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin MKKS">
+                    <button type="button" id="admin-tab-overview" onclick="showAdminSection('overview')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Rekap jadwal</button>
+                    <button type="button" id="admin-tab-slots" onclick="showAdminSection('slots')" class="tab-seg-btn" role="tab" aria-selected="false">Status slot pengawas</button>
+                    <button type="button" id="admin-tab-download" onclick="showAdminSection('download')" class="tab-seg-btn" role="tab" aria-selected="false">Download data pengawas</button>
+                </div>
+                <div id="admin-overview-content">
                 <input id="admin-mapping-file" type="file" accept=".xlsx,.xls" class="hidden" onchange="importManualMapping(event)">
 
                 <!-- Statistik Mini -->
@@ -528,6 +530,88 @@
                         </table>
                     </div>
                 </div>
+                </div>
+
+                <section id="admin-slot-status-page" class="hidden fade-in" aria-labelledby="admin-slot-status-title">
+                    <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+                        <div>
+                            <h3 id="admin-slot-status-title" class="font-display text-xl font-semibold">Kelengkapan slot pengawas</h3>
+                            <p class="help-text mt-1">Sekolah dinyatakan selesai jika seluruh slot penugasan keluar sudah memiliki nama pengawas.</p>
+                        </div>
+                        <button type="button" onclick="loadAdminDashboardData()" class="btn btn-secondary btn-sm" aria-label="Muat ulang status slot pengawas">Muat ulang data</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Selesai mengisi</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-success)" id="slot-stat-complete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Belum lengkap</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-warning)" id="slot-stat-incomplete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Total sekolah</div>
+                            <div class="font-display text-2xl font-semibold" id="slot-stat-total">0</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                        <input id="admin-slot-search" type="search" class="input-field" placeholder="Cari nama sekolah atau NPSN" oninput="filterAdminSlotStatus()" aria-label="Cari sekolah atau NPSN">
+                        <select id="admin-slot-filter" class="input-field sm:max-w-xs" onchange="filterAdminSlotStatus()" aria-label="Filter status pengisian">
+                            <option value="all">Semua status</option>
+                            <option value="complete">Selesai mengisi</option>
+                            <option value="incomplete">Belum lengkap</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <div class="overflow-x-auto max-h-[32rem]">
+                            <table class="table-elegant table-head-dark min-w-[620px]">
+                                <thead>
+                                    <tr><th>Nama sekolah</th><th>NPSN</th><th class="text-center">Slot terisi</th><th class="text-center">Kelengkapan</th><th class="text-center">Status</th></tr>
+                                </thead>
+                                <tbody id="admin-slot-status-body">
+                                    <tr><td colspan="5" class="py-6 text-center help-text">Memuat data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="admin-supervisor-download-page" class="hidden fade-in" aria-labelledby="admin-supervisor-download-title">
+                    <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+                        <div>
+                            <h3 id="admin-supervisor-download-title" class="font-display text-xl font-semibold">Data seluruh pengawas</h3>
+                            <p class="help-text mt-1">Slot yang belum memiliki nama tetap ditampilkan dengan kolom Nama dan NIP kosong. Data dipisahkan menurut gelombang.</p>
+                        </div>
+                        <button type="button" onclick="downloadAllSupervisorsExcel()" class="btn btn-success btn-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                            Download Excel
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-display font-semibold mb-2">Gelombang 1</h4>
+                            <div class="table-wrap overflow-x-auto">
+                                <table class="table-elegant table-head-light min-w-[760px]">
+                                    <thead><tr><th>No</th><th>Sekolah Asal</th><th>Tanggal</th><th>Nama</th><th>NIP</th><th>Lab</th><th>Sekolah Tempat Mengawas</th></tr></thead>
+                                    <tbody id="admin-supervisor-wave1-body"><tr><td colspan="7" class="py-5 text-center help-text">Memuat data...</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-display font-semibold mb-2">Gelombang 2</h4>
+                            <div class="table-wrap overflow-x-auto">
+                                <table class="table-elegant table-head-light min-w-[760px]">
+                                    <thead><tr><th>No</th><th>Sekolah Asal</th><th>Tanggal</th><th>Nama</th><th>NIP</th><th>Lab</th><th>Sekolah Tempat Mengawas</th></tr></thead>
+                                    <tbody id="admin-supervisor-wave2-body"><tr><td colspan="7" class="py-5 text-center help-text">Memuat data...</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <div class="mt-8 text-center">
                     <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Tutup dashboard admin</button>
@@ -700,6 +784,20 @@
             updateWizardSteps(showId);
         }
 
+        window.showAdminSection = (section) => {
+            const showSlots = section === 'slots';
+            const showDownload = section === 'download';
+            document.getElementById('admin-overview-content').classList.toggle('hidden', showSlots || showDownload);
+            document.getElementById('admin-slot-status-page').classList.toggle('hidden', !showSlots);
+            document.getElementById('admin-supervisor-download-page').classList.toggle('hidden', !showDownload);
+            document.getElementById('admin-tab-overview').classList.toggle('is-active', !showSlots && !showDownload);
+            document.getElementById('admin-tab-overview').setAttribute('aria-selected', String(!showSlots && !showDownload));
+            document.getElementById('admin-tab-slots').classList.toggle('is-active', showSlots);
+            document.getElementById('admin-tab-slots').setAttribute('aria-selected', String(showSlots));
+            document.getElementById('admin-tab-download').classList.toggle('is-active', showDownload);
+            document.getElementById('admin-tab-download').setAttribute('aria-selected', String(showDownload));
+        }
+
         window.logoutToHome = () => {
             currentSchoolName = "";
             currentNPSN = "";
@@ -785,6 +883,9 @@
             if (!ensureFirebaseReady('memuat dashboard admin')) {
                 tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Firebase belum dikonfigurasi. Silakan isi config Firebase yang valid.</td></tr>';
                 missingLabsList.innerText = 'Data jumlah lab tidak dapat diperiksa karena Firebase belum dikonfigurasi.';
+                document.getElementById('admin-slot-status-body').innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Status slot tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                document.getElementById('admin-supervisor-wave1-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Data tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                document.getElementById('admin-supervisor-wave2-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Data tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
                 return;
             }
 
@@ -803,6 +904,8 @@
                     });
                 });
                 window.adminSchoolData = schoolsData;
+                window.renderAdminSlotStatus(schoolsData);
+                window.renderAdminSupervisorTables(schoolsData);
 
                 const totalSubmitted = schoolsData.length;
                 document.getElementById('stat-submitted').innerText = totalSubmitted;
@@ -851,7 +954,157 @@
                 console.error('Gagal memuat dashboard admin dari Firestore:', error);
                 tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Gagal memuat data dari Firestore. Cek konfigurasi Firebase dan Rules.</td></tr>';
                 missingLabsList.innerText = 'Gagal memuat rekap jumlah lab. Periksa koneksi dan izin Firestore.';
+                document.getElementById('admin-slot-status-body').innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Gagal memuat status slot. Periksa koneksi dan izin Firestore, lalu muat ulang.</td></tr>';
+                document.getElementById('admin-supervisor-wave1-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Gagal memuat data. Periksa koneksi dan izin Firestore.</td></tr>';
+                document.getElementById('admin-supervisor-wave2-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Gagal memuat data. Periksa koneksi dan izin Firestore.</td></tr>';
             }
+        }
+
+        window.renderAdminSlotStatus = (schoolsData = window.adminSchoolData || []) => {
+            const schoolByName = new Map(schoolsData.map(school => [school.nama_sekolah, school]));
+            const rows = schoolList.map(schoolName => {
+                const school = schoolByName.get(schoolName);
+                const assignments = normalizeOutgoingAssignments(school?.penugasan_keluar);
+                const filledCount = assignments.filter(item => (item.nama_pengawas || '').trim()).length;
+                const totalSlots = assignments.length;
+                const complete = totalSlots > 0 && filledCount === totalSlots;
+                return {
+                    schoolName,
+                    npsn: school?.npsn || '-',
+                    filledCount,
+                    totalSlots,
+                    complete,
+                    percent: totalSlots > 0 ? Math.round((filledCount / totalSlots) * 100) : 0
+                };
+            });
+            const completeCount = rows.filter(row => row.complete).length;
+            document.getElementById('slot-stat-complete').innerText = completeCount;
+            document.getElementById('slot-stat-incomplete').innerText = rows.length - completeCount;
+            document.getElementById('slot-stat-total').innerText = rows.length;
+
+            const tbody = document.getElementById('admin-slot-status-body');
+            tbody.innerHTML = '';
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.dataset.status = row.complete ? 'complete' : 'incomplete';
+                tr.dataset.search = `${row.schoolName} ${row.npsn}`.toLowerCase();
+                const statusText = row.complete ? 'Selesai mengisi' : row.totalSlots === 0 ? 'Belum ada slot' : 'Belum lengkap';
+                const statusClass = row.complete ? 'badge-success' : 'badge-warning';
+                [row.schoolName, row.npsn].forEach((value, index) => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    if (index === 0) cell.className = 'font-medium';
+                    else cell.style.color = 'var(--color-text-muted)';
+                    tr.appendChild(cell);
+                });
+                const slotCell = document.createElement('td');
+                slotCell.className = 'text-center font-semibold';
+                slotCell.textContent = row.totalSlots > 0 ? `${row.filledCount}/${row.totalSlots}` : '0 slot';
+                tr.appendChild(slotCell);
+                const percentCell = document.createElement('td');
+                percentCell.className = 'text-center';
+                percentCell.textContent = row.totalSlots > 0 ? `${row.percent}%` : '—';
+                tr.appendChild(percentCell);
+                const statusCell = document.createElement('td');
+                statusCell.className = 'text-center';
+                const badge = document.createElement('span');
+                badge.className = `badge ${statusClass}`;
+                badge.textContent = statusText;
+                statusCell.appendChild(badge);
+                tr.appendChild(statusCell);
+                tbody.appendChild(tr);
+            });
+            window.filterAdminSlotStatus();
+        }
+
+        window.filterAdminSlotStatus = () => {
+            const search = (document.getElementById('admin-slot-search')?.value || '').trim().toLowerCase();
+            const status = document.getElementById('admin-slot-filter')?.value || 'all';
+            document.querySelectorAll('#admin-slot-status-body tr[data-status]').forEach(row => {
+                const matchesSearch = row.dataset.search.includes(search);
+                const matchesStatus = status === 'all' || row.dataset.status === status;
+                row.classList.toggle('hidden', !matchesSearch || !matchesStatus);
+            });
+        }
+
+        window.getAdminSupervisorWaveRows = (schoolsData = window.adminSchoolData || []) => {
+            const waveDates = {
+                'Gelombang 1': new Set(['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29']),
+                'Gelombang 2': new Set(['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05'])
+            };
+            const orderedSchools = [...schoolsData].sort((left, right) => {
+                const leftIndex = schoolList.indexOf(left.nama_sekolah);
+                const rightIndex = schoolList.indexOf(right.nama_sekolah);
+                return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex)
+                    || left.nama_sekolah.localeCompare(right.nama_sekolah);
+            });
+            const rowsByWave = { 'Gelombang 1': [], 'Gelombang 2': [] };
+
+            orderedSchools.forEach(school => {
+                normalizeOutgoingAssignments(school.penugasan_keluar).forEach(item => {
+                    const wave = Object.keys(waveDates).find(name => waveDates[name].has(item.date));
+                    if (!wave) return;
+                    rowsByWave[wave].push({
+                        sekolahAsal: school.nama_sekolah || 'Sekolah tidak diketahui',
+                        date: item.date,
+                        tanggal: new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+                        nama: (item.nama_pengawas || '').trim(),
+                        nip: (item.nip || '').trim(),
+                        lab: item.lab ? `Lab ${item.lab}` : '',
+                        sekolahTujuan: item.tujuan || ''
+                    });
+                });
+            });
+
+            Object.values(rowsByWave).forEach(rows => rows.sort((left, right) =>
+                left.sekolahAsal.localeCompare(right.sekolahAsal, 'id')
+                    || left.date.localeCompare(right.date)
+                    || left.lab.localeCompare(right.lab, 'id', { numeric: true })
+            ));
+            return rowsByWave;
+        }
+
+        window.renderAdminSupervisorTables = (schoolsData = window.adminSchoolData || []) => {
+            const rowsByWave = window.getAdminSupervisorWaveRows(schoolsData);
+            [
+                ['Gelombang 1', 'admin-supervisor-wave1-body'],
+                ['Gelombang 2', 'admin-supervisor-wave2-body']
+            ].forEach(([wave, elementId]) => {
+                const tbody = document.getElementById(elementId);
+                tbody.innerHTML = '';
+                if (rowsByWave[wave].length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Belum ada slot penugasan untuk gelombang ini.</td></tr>';
+                    return;
+                }
+                rowsByWave[wave].forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    [index + 1, row.sekolahAsal, row.tanggal, row.nama, row.nip, row.lab, row.sekolahTujuan].forEach(value => {
+                        const td = document.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+        window.downloadAllSupervisorsExcel = () => {
+            if (!window.XLSX) return alert('Pustaka Excel belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.');
+            const rowsByWave = window.getAdminSupervisorWaveRows();
+            const headers = ['No', 'Sekolah Asal', 'Tanggal', 'Nama', 'NIP', 'Lab', 'Sekolah Tempat Mengawas'];
+            const workbook = window.XLSX.utils.book_new();
+
+            Object.entries(rowsByWave).forEach(([wave, rows]) => {
+                const sheetRows = [headers, ...rows.map((row, index) => [
+                    index + 1, row.sekolahAsal, row.tanggal, row.nama, row.nip, row.lab, row.sekolahTujuan
+                ])];
+                const worksheet = window.XLSX.utils.aoa_to_sheet(sheetRows);
+                worksheet['!cols'] = [{ wch: 7 }, { wch: 38 }, { wch: 16 }, { wch: 30 }, { wch: 20 }, { wch: 12 }, { wch: 38 }];
+                worksheet['!autofilter'] = { ref: `A1:G${Math.max(1, sheetRows.length)}` };
+                window.XLSX.utils.book_append_sheet(workbook, worksheet, wave);
+            });
+
+            window.XLSX.writeFile(workbook, 'data-seluruh-pengawas-tka-2026.xlsx');
         }
 
         window.importManualMapping = async (event) => {
@@ -1463,12 +1716,13 @@
             saveButton.disabled = true;
             saveButton.innerText = 'Menyimpan...';
             try {
+                const isComplete = window.outgoingAssignments.length > 0 && filled.length === window.outgoingAssignments.length;
                 await setDoc(doc(db, 'schedules', currentNPSN), {
                     nama_sekolah: currentSchoolName,
                     npsn: currentNPSN,
                     jadwal_harian: window.scheduleData,
                     penugasan_keluar: window.outgoingAssignments,
-                    status: 'Data pengawas tersimpan',
+                    status: isComplete ? 'Data pengawas tersimpan' : 'Pengisian pengawas belum lengkap',
                     updated_at: new Date()
                 }, { merge: true });
                 const filledCount = window.outgoingAssignments.filter(item => (item.nama_pengawas || '').trim()).length;
