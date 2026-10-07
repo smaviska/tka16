@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 
     <style>
         :root {
@@ -388,24 +389,24 @@
 
             <!-- HALAMAN 4: REKAP KESELURUHAN (SEKOLAH) -->
             <div id="page-final-rekap" class="hidden fade-in mx-auto">
-                <div class="text-center mb-6">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3 text-2xl" style="background:var(--color-success-bg); color:var(--color-success)">&#10003;</div>
-                    <h2 class="font-display text-2xl font-semibold">Data berhasil dikirim!</h2>
+                <div class="notice-success p-4 mb-6 mx-auto max-w-2xl">
+                    <h2 class="font-display font-semibold">Pengisian nama pengawas</h2>
+                    <p class="text-sm mt-1" style="color:var(--color-text-muted)">Pemetaan sudah tersedia. Isi atau timpa nama pengawas pada slot yang sesuai, lalu simpan perubahan.</p>
                 </div>
-                <div class="notice-warning p-4 mb-6 flex items-start gap-4 mx-auto max-w-2xl">
-                    <div class="mt-0.5"><svg class="w-6 h-6" style="color:var(--color-warning)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                <div class="notice-success p-4 mb-6 flex items-start gap-4 mx-auto max-w-2xl">
+                    <div class="mt-0.5"><svg class="w-6 h-6" style="color:var(--color-success)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
                     <div>
-                        <h4 class="font-semibold" style="color:var(--color-warning)">Status: Menunggu Admin MKKS</h4>
-                        <p class="text-sm mt-1" style="color:var(--color-text-muted)">Jadwal dan lokasi pengawas silang akan muncul di sini setelah Admin MKKS melakukan proses pengacakan.</p>
+                        <h4 class="font-semibold" style="color:var(--color-success)">Pemetaan pengawas siap diisi</h4>
+                        <p class="text-sm mt-1" style="color:var(--color-text-muted)">Daftar pengawas keluar dapat dilengkapi atau diperbarui oleh admin sekolah. Rekap pengawas masuk dapat digunakan untuk menyiapkan daftar hadir.</p>
                     </div>
                 </div>
                 <div id="supervisor-assignment-panel" class="max-w-2xl mx-auto mb-6 hidden">
                     <div class="flex justify-between items-center gap-3 mb-3">
                         <div>
-                            <h3 class="font-display font-semibold">Penempatan pengawas keluar</h3>
-                            <p class="help-text mt-1">Jumlah pengawas yang dikirim setiap hari harus sama dengan jumlah lab aktif hari itu.</p>
+                            <h3 class="font-display font-semibold">Rekap daftar pengawas keluar</h3>
+                            <p class="help-text mt-1">Isi nama pengawas sesuai slot. Perubahan nama dan NIP akan menimpa data pada slot tersebut.</p>
                         </div>
-                        <span class="badge badge-primary" id="assignment-status">Menunggu hasil acak</span>
+                        <span class="badge badge-primary" id="assignment-status">Siap diisi</span>
                     </div>
                     <div id="assignment-slot-summary" class="notice-success p-3 mb-3 text-sm"></div>
                     <div class="table-wrap overflow-x-auto">
@@ -417,7 +418,27 @@
                         </table>
                     </div>
                     <div class="flex justify-end mt-4">
-                        <button onclick="saveSupervisorAssignments()" class="btn btn-success btn-sm">Simpan pengawas</button>
+                        <button id="save-supervisor-assignments" onclick="saveSupervisorAssignments()" class="btn btn-success btn-sm">Simpan pengawas</button>
+                    </div>
+                </div>
+                <div id="incoming-assignment-panel" class="max-w-2xl mx-auto mb-6">
+                    <div class="flex flex-wrap justify-between items-center gap-3 mb-3">
+                        <div>
+                            <h3 class="font-display font-semibold">Rekap daftar pengawas masuk</h3>
+                            <p class="help-text mt-1">Daftar pengawas dari sekolah lain yang bertugas di sekolah ini.</p>
+                        </div>
+                        <button onclick="refreshIncomingAssignments()" class="btn btn-secondary btn-sm" title="Muat ulang rekap pengawas masuk">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 00-14.9-4M4 4v4h4m-4 5a8.1 8.1 0 0014.9 4M20 20v-4h-4"></path></svg>
+                            Muat ulang
+                        </button>
+                    </div>
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="table-elegant table-head-light assignment-table min-w-[680px]">
+                            <thead>
+                                <tr><th class="w-10">No.</th><th>Tanggal</th><th>Sekolah asal</th><th>Lab</th><th>Nama pengawas</th><th>NIP</th></tr>
+                            </thead>
+                            <tbody id="incoming-assignment-list"></tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="table-wrap max-w-2xl mx-auto">
@@ -446,11 +467,22 @@
                         <h2 class="font-display text-2xl font-semibold">Dashboard admin MKKS</h2>
                         <p class="help-text mt-1">Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.</p>
                     </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="document.getElementById('admin-mapping-file').click()" class="btn btn-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 0L8 8m4-4l4 4M4 16v4h16v-4"></path></svg>
+                        Import pemetaan Excel
+                    </button>
+                    <button onclick="downloadAdminExcel()" class="btn btn-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                        Download Excel
+                    </button>
                     <button onclick="acakJadwalSilang()" class="btn btn-accent">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         Acak pengawas silang
                     </button>
+                    </div>
                 </div>
+                <input id="admin-mapping-file" type="file" accept=".xlsx,.xls" class="hidden" onchange="importManualMapping(event)">
 
                 <!-- Statistik Mini -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -508,7 +540,7 @@
     <!-- SCRIPT LOGIKA -->
     <script type="module">
           import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, writeBatch, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // Konfigurasi Firebase harus diisi dengan project yang aktif.
         // Jika masih memakai placeholder, aplikasi akan menampilkan peringatan
@@ -569,6 +601,8 @@
         let currentNPSN = "";
         window.scheduleData = {};
         window.outgoingAssignments = [];
+        window.incomingAssignments = [];
+        window.incomingAssignmentsError = '';
         const getDayLabCount = (day) => {
             if (day && Object.prototype.hasOwnProperty.call(day, 'labCount') && Number.isFinite(Number(day.labCount))) {
                 return Math.max(0, Math.floor(Number(day.labCount)));
@@ -598,6 +632,39 @@
             return [...uniqueAssignments.values()].sort((left, right) =>
                 left.date.localeCompare(right.date) || Number(left.lab) - Number(right.lab)
             );
+        };
+
+        window.loadIncomingAssignments = async () => {
+            window.incomingAssignments = [];
+            window.incomingAssignmentsError = '';
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                snapshot.forEach(docSnap => {
+                    const source = docSnap.data();
+                    normalizeOutgoingAssignments(source.penugasan_keluar).forEach(item => {
+                        const destinationNpsn = item.tujuanNpsn || item.tujuan_npsn || '';
+                        if (String(destinationNpsn) !== String(currentNPSN) && item.tujuan !== currentSchoolName) return;
+                        window.incomingAssignments.push({
+                            ...item,
+                            sekolah_asal: source.nama_sekolah || docSnap.id,
+                            lab_masuk: item.lab
+                        });
+                    });
+                });
+                window.incomingAssignments.sort((left, right) =>
+                    left.date.localeCompare(right.date) || left.sekolah_asal.localeCompare(right.sekolah_asal) || Number(left.lab_masuk) - Number(right.lab_masuk)
+                );
+            } catch (error) {
+                console.error('Gagal memuat rekap pengawas masuk:', error);
+                window.incomingAssignmentsError = 'Rekap pengawas masuk gagal dimuat. Muat ulang atau periksa izin baca Firestore.';
+            }
+            return window.incomingAssignments;
+        };
+
+        window.refreshIncomingAssignments = async () => {
+            if (!ensureFirebaseReady('memuat rekap pengawas masuk')) return;
+            await window.loadIncomingAssignments();
+            window.renderIncomingAssignmentTable();
         };
 
         const wizardOrder = ['page-auth', 'page-create-account', 'page-setup-jadwal', 'page-review', 'page-final-rekap'];
@@ -712,6 +779,7 @@
             const tbody = document.getElementById('admin-table-body');
             const missingLabsCount = document.getElementById('schools-missing-labs-count');
             const missingLabsList = document.getElementById('schools-missing-labs-list');
+            window.adminSchoolData = [];
             tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Memuat data dari server...</td></tr>';
 
             if (!ensureFirebaseReady('memuat dashboard admin')) {
@@ -726,12 +794,15 @@
                 snapshot.forEach(docSnap => {
                     const data = docSnap.data();
                     schoolsData.push({
+                        ...data,
+                        docId: docSnap.id,
                         nama_sekolah: data.nama_sekolah || 'Sekolah tidak diketahui',
                         npsn: data.npsn || '-',
                         status: data.status || 'Menunggu Admin MKKS',
                         jadwal_harian: data.jadwal_harian || {}
                     });
                 });
+                window.adminSchoolData = schoolsData;
 
                 const totalSubmitted = schoolsData.length;
                 document.getElementById('stat-submitted').innerText = totalSubmitted;
@@ -781,6 +852,254 @@
                 tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Gagal memuat data dari Firestore. Cek konfigurasi Firebase dan Rules.</td></tr>';
                 missingLabsList.innerText = 'Gagal memuat rekap jumlah lab. Periksa koneksi dan izin Firestore.';
             }
+        }
+
+        window.importManualMapping = async (event) => {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            if (!ensureFirebaseReady('mengimpor pemetaan manual')) {
+                event.target.value = '';
+                return;
+            }
+
+            try {
+                if (!window.XLSX) throw new Error('Pustaka pembaca Excel belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.');
+                if (!Array.isArray(window.adminSchoolData) || window.adminSchoolData.length === 0) {
+                    throw new Error('Data sekolah belum tersedia. Muat ulang dashboard admin lalu coba lagi.');
+                }
+
+                const workbook = window.XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: false });
+                const schoolByName = new Map(window.adminSchoolData.map(school => [school.nama_sekolah.trim(), school]));
+                const waveConfigs = [
+                    { name: 'Gel 1', dates: ['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29'] },
+                    { name: 'Gel 2', dates: ['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05'] }
+                ];
+                const assignmentsBySchool = new Map();
+                const waveSummaries = [];
+                const errors = [];
+                let totalSlots = 0;
+
+                const parseDateHeader = value => {
+                    if (typeof value === 'number') {
+                        const parsed = window.XLSX.SSF.parse_date_code(value);
+                        return parsed ? `${parsed.y}-${String(parsed.m).padStart(2, '0')}-${String(parsed.d).padStart(2, '0')}` : '';
+                    }
+                    const normalized = String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const labels = {
+                        '26okt': '2026-10-26', '27okt': '2026-10-27', '28okt': '2026-10-28', '29okt': '2026-10-29',
+                        '02nov': '2026-11-02', '2nov': '2026-11-02', '03nov': '2026-11-03', '3nov': '2026-11-03',
+                        '04nov': '2026-11-04', '4nov': '2026-11-04', '05nov': '2026-11-05', '5nov': '2026-11-05'
+                    };
+                    return labels[normalized] || '';
+                };
+
+                for (const wave of waveConfigs) {
+                    const sheetName = workbook.SheetNames.find(name => name.trim().toLowerCase() === wave.name.toLowerCase());
+                    if (!sheetName) {
+                        errors.push(`Sheet "${wave.name}" tidak ditemukan.`);
+                        continue;
+                    }
+
+                    const rows = window.XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, raw: true, defval: '' });
+                    const firstWorksheetRow = window.XLSX.utils.decode_range(workbook.Sheets[sheetName]['!ref']).s.r;
+                    const headerRowIndex = 4 - firstWorksheetRow;
+                    const firstDataRowIndex = 5 - firstWorksheetRow;
+                    const headerDates = (rows[headerRowIndex] || []).slice(3, 7).map(parseDateHeader);
+                    if (wave.dates.some((date, index) => headerDates[index] !== date)) {
+                        errors.push(`Header tanggal di sheet "${wave.name}" tidak sesuai jadwal gelombang.`);
+                        continue;
+                    }
+
+                    const waveRoutes = [];
+                    const sourceTotals = new Map();
+                    let currentSource = '';
+                    let currentJml = 0;
+                    let sourceSlot = 0;
+                    for (const row of rows.slice(firstDataRowIndex)) {
+                        const sourceName = String(row[1] || '').trim();
+                        if (sourceName) {
+                            currentSource = sourceName;
+                            currentJml = Number(row[2]);
+                            sourceSlot = 0;
+                            if (!Number.isInteger(currentJml) || currentJml < 1) errors.push(`${wave.name}: JML tidak valid untuk ${currentSource}.`);
+                            sourceTotals.set(currentSource, { jml: currentJml, rows: 0 });
+                        }
+
+                        const destinationName = String(row[7] || '').trim();
+                        if (!destinationName) continue;
+                        if (!currentSource || !Number.isInteger(currentJml) || currentJml < 1) {
+                            errors.push(`${wave.name}: tujuan ${destinationName} tidak memiliki sekolah asal/JML.`);
+                            continue;
+                        }
+
+                        sourceSlot++;
+                        sourceTotals.get(currentSource).rows++;
+                        waveRoutes.push({
+                            sourceName: currentSource,
+                            sourceSlot,
+                            destinationName,
+                            supervisors: row.slice(3, 7).map(value => String(value || '').trim())
+                        });
+                    }
+
+                    if (waveRoutes.length === 0) errors.push(`Tidak ada pemetaan pada sheet "${wave.name}".`);
+                    waveSummaries.push(`${wave.name}: ${sourceTotals.size} sekolah, ${waveRoutes.length} slot`);
+                    sourceTotals.forEach((entry, schoolName) => {
+                        if (entry.rows !== entry.jml) errors.push(`${wave.name}: ${schoolName} memiliki ${entry.rows} baris tujuan, tetapi JML tertulis ${entry.jml}.`);
+                        if (!schoolByName.has(schoolName)) errors.push(`${wave.name}: sekolah asal "${schoolName}" tidak ditemukan pada data sekolah tersimpan.`);
+                    });
+
+                    const waveParticipants = new Set(sourceTotals.keys());
+                    wave.dates.forEach((date, dateIndex) => {
+                        for (const school of window.adminSchoolData) {
+                            const active = getDayLabCount(school.jadwal_harian?.[date]) > 0;
+                            if (active !== waveParticipants.has(school.nama_sekolah)) {
+                                errors.push(`${date}: peserta aktif ${school.nama_sekolah} tidak cocok dengan sheet ${wave.name}.`);
+                            }
+                        }
+
+                        const destinationSlots = new Map();
+                        for (const route of waveRoutes) {
+                            const source = schoolByName.get(route.sourceName);
+                            const destination = schoolByName.get(route.destinationName);
+                            if (!destination) {
+                                errors.push(`${wave.name}: sekolah tujuan "${route.destinationName}" tidak ditemukan pada data tersimpan.`);
+                                continue;
+                            }
+                            if (route.sourceName === route.destinationName) {
+                                errors.push(`${wave.name}: ${route.sourceName} dipetakan ke sekolahnya sendiri.`);
+                                continue;
+                            }
+                            if (!source) continue;
+
+                            const expectedLabs = sourceTotals.get(route.sourceName).jml;
+                            if (getDayLabCount(source.jadwal_harian?.[date]) !== expectedLabs) {
+                                errors.push(`${date}: JML ${route.sourceName} di Excel (${expectedLabs}) berbeda dari jumlah lab pada jadwal tersimpan.`);
+                            }
+
+                            const targetSlot = (destinationSlots.get(route.destinationName) || 0) + 1;
+                            destinationSlots.set(route.destinationName, targetSlot);
+
+                            const targetLabs = getDayLabCount(destination.jadwal_harian?.[date]);
+                            if (targetSlot > targetLabs) errors.push(`${date}: tujuan ${route.destinationName} menerima lebih banyak pengawas daripada jumlah lab tersimpan (${targetLabs}).`);
+
+                            const sourceAssignments = assignmentsBySchool.get(route.sourceName) || [];
+                            sourceAssignments.push({
+                                date,
+                                tujuan: route.destinationName,
+                                tujuanNpsn: destination.npsn || destination.docId,
+                                lab: targetSlot,
+                                slot_asal_lab: route.sourceSlot,
+                                nama_pengawas: route.supervisors[dateIndex],
+                                nip: ''
+                            });
+                            assignmentsBySchool.set(route.sourceName, sourceAssignments);
+                            totalSlots++;
+                        }
+
+                        waveParticipants.forEach(schoolName => {
+                            const school = schoolByName.get(schoolName);
+                            if (!school) return;
+                            const targetCount = destinationSlots.get(schoolName) || 0;
+                            const expectedLabs = getDayLabCount(school.jadwal_harian?.[date]);
+                            if (targetCount !== expectedLabs) errors.push(`${date}: ${schoolName} menerima ${targetCount} penempatan, tetapi jumlah lab tersimpan ${expectedLabs}.`);
+                        });
+                    });
+                }
+
+                if (errors.length > 0) {
+                    throw new Error(`Pemetaan belum diterapkan karena ditemukan ${errors.length} masalah:\n\n${errors.slice(0, 12).join('\n')}${errors.length > 12 ? '\n...dan masalah lainnya.' : ''}`);
+                }
+
+                const confirmation = `Ganti penempatan acak dengan pemetaan dari "${file.name}"?\n\n${waveSummaries.join('\n')}\n\nJumlah lab dan jadwal sesi tidak akan diubah. Nama pengawas pada file yang kosong tetap dapat diisi sekolah melalui aplikasinya.`;
+                if (!confirm(confirmation)) return;
+
+                const batch = writeBatch(db);
+                assignmentsBySchool.forEach((assignments, schoolName) => {
+                    const school = schoolByName.get(schoolName);
+                    const { docId, ...schoolData } = school;
+                    batch.set(doc(db, 'schedules', school.docId || school.npsn), {
+                        ...schoolData,
+                        penugasan_keluar: assignments,
+                        status: 'Penempatan tersedia',
+                        updated_at: new Date()
+                    });
+                });
+                await batch.commit();
+                await window.loadAdminDashboardData();
+                alert(`Pemetaan manual berhasil diterapkan. ${assignmentsBySchool.size} sekolah diperbarui dan ${totalSlots} slot penugasan untuk seluruh tanggal disiapkan. Jadwal lab dan sesi tetap.`);
+            } catch (error) {
+                console.error('Gagal mengimpor pemetaan manual:', error);
+                alert(error.message || 'Gagal membaca atau menerapkan file pemetaan.');
+            } finally {
+                event.target.value = '';
+            }
+        }
+
+        window.downloadAdminExcel = () => {
+            const dates = [
+                { value: '2026-10-26', label: '26 Okt' },
+                { value: '2026-10-27', label: '27 Okt' },
+                { value: '2026-10-28', label: '28 Okt' },
+                { value: '2026-10-29', label: '29 Okt' },
+                { value: '2026-11-02', label: '02-Nov' },
+                { value: '2026-11-03', label: '03-Nov' },
+                { value: '2026-11-04', label: '04-Nov' },
+                { value: '2026-11-05', label: '05-Nov' }
+            ];
+            const submittedByName = new Map((window.adminSchoolData || []).map(school => [school.nama_sekolah, school]));
+            const rows = [
+                ['No', 'Nama Sekolah', 'Jumlah lab Aktif', '', '', '', '', '', '', ''],
+                ['', '', ...dates.map(date => date.label)]
+            ];
+            schoolList.forEach((schoolName, index) => {
+                const schedule = submittedByName.get(schoolName)?.jadwal_harian || {};
+                const labCells = dates.map(date => {
+                    const value = Object.prototype.hasOwnProperty.call(schedule, date.value)
+                        ? getDayLabCount(schedule[date.value])
+                        : '';
+                    return value;
+                });
+                rows.push([index + 1, schoolName, ...labCells]);
+            });
+
+            const worksheet = window.XLSX.utils.aoa_to_sheet(rows);
+            worksheet['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
+                { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },
+                { s: { r: 0, c: 2 }, e: { r: 0, c: 9 } }
+            ];
+            worksheet['!cols'] = [{ wch: 6 }, { wch: 40 }, ...dates.map(() => ({ wch: 12 }))];
+            worksheet['!rows'] = [{ hpt: 22 }, { hpt: 20 }];
+            const border = {
+                top: { style: 'thin', color: { rgb: '000000' } },
+                right: { style: 'thin', color: { rgb: '000000' } },
+                bottom: { style: 'thin', color: { rgb: '000000' } },
+                left: { style: 'thin', color: { rgb: '000000' } }
+            };
+            rows.forEach((row, rowIndex) => row.forEach((_, columnIndex) => {
+                const address = window.XLSX.utils.encode_cell({ r: rowIndex, c: columnIndex });
+                worksheet[address] ||= { t: 's', v: '' };
+                worksheet[address].s = {
+                    border,
+                    alignment: { horizontal: rowIndex < 2 || columnIndex !== 1 ? 'center' : 'left', vertical: 'center' },
+                    ...(rowIndex < 2 ? { font: { bold: true } } : {})
+                };
+            }));
+
+            const excelBook = window.XLSX.utils.book_new();
+            window.XLSX.utils.book_append_sheet(excelBook, worksheet, 'Rekap Lab');
+            const file = new Blob([window.XLSX.write(excelBook, { bookType: 'xlsx', type: 'array' })], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+            const url = URL.createObjectURL(file);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rekap-jumlah-lab-aktif-tka-2026.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         window.acakJadwalSilang = async () => {
@@ -984,6 +1303,7 @@
                 const storedSchedule = scheduleSnapshot.exists() ? scheduleSnapshot.data().jadwal_harian : null;
                 const savedSchedule = storedSchedule ? normalizeScheduleData(storedSchedule) : null;
                 const savedAssignments = scheduleSnapshot.exists() ? normalizeOutgoingAssignments(scheduleSnapshot.data().penugasan_keluar) : [];
+                await window.loadIncomingAssignments();
                 const scheduleDates = savedSchedule && typeof savedSchedule === 'object' ? Object.keys(savedSchedule) : [];
                 const hasCompleteSchedule = scheduleDates.length > 0 && scheduleDates.every(date => {
                     const day = savedSchedule[date];
@@ -1025,7 +1345,7 @@
         window.renderReviewData = () => {
             const container = document.getElementById('review-container');
             container.innerHTML = '';
-            Object.keys(window.scheduleData).forEach(date => {
+            Object.keys(window.scheduleData).sort().forEach(date => {
                 const data = window.scheduleData[date];
                 const dateObj = new Date(`${date}T00:00:00`);
                 const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
@@ -1068,8 +1388,13 @@
 
             if (window.outgoingAssignments.length > 0) {
                 assignmentPanel.classList.remove('hidden');
-                document.getElementById('assignment-status').innerText = window.outgoingAssignments.some(item => item.nama_pengawas) ? 'Sebagian terisi' : 'Perlu diisi';
-                const dailyAssignmentSummary = Object.entries(window.scheduleData).map(([date, day]) => {
+                const filledCount = window.outgoingAssignments.filter(item => (item.nama_pengawas || '').trim()).length;
+                document.getElementById('assignment-status').innerText = filledCount === 0
+                    ? 'Siap diisi'
+                    : filledCount === window.outgoingAssignments.length
+                        ? 'Lengkap'
+                        : `${filledCount}/${window.outgoingAssignments.length} terisi`;
+                const dailyAssignmentSummary = Object.entries(window.scheduleData).sort(([left], [right]) => left.localeCompare(right)).map(([date, day]) => {
                     const sent = window.outgoingAssignments.filter(item => item.date === date).length;
                     const expected = getDayLabCount(day);
                     const dateText = new Date(`${date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
@@ -1084,7 +1409,9 @@
                 assignmentPanel.classList.add('hidden');
             }
 
-            Object.keys(window.scheduleData).forEach(date => {
+            window.renderIncomingAssignmentTable();
+
+            Object.keys(window.scheduleData).sort().forEach(date => {
                 const dateObj = new Date(`${date}T00:00:00`);
                 const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
                 tbody.innerHTML += `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-display font-semibold text-lg" style="color:var(--color-primary)">${getDayLabCount(window.scheduleData[date])}</td></tr>`;
@@ -1093,6 +1420,30 @@
 
         window.updateAssignmentField = (index, field, value) => {
             if (window.outgoingAssignments[index]) window.outgoingAssignments[index][field] = value.trim();
+        }
+
+        window.renderIncomingAssignmentTable = () => {
+            const tbody = document.getElementById('incoming-assignment-list');
+            tbody.innerHTML = '';
+            if (window.incomingAssignmentsError) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center help-text">${window.incomingAssignmentsError}</td></tr>`;
+                return;
+            }
+            if (window.incomingAssignments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center help-text">Belum ada penugasan pengawas masuk.</td></tr>';
+                return;
+            }
+
+            window.incomingAssignments.forEach((item, index) => {
+                const dateText = new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                const row = document.createElement('tr');
+                [index + 1, dateText, item.sekolah_asal, `Lab ${item.lab_masuk}`, item.nama_pengawas || 'Belum diisi', item.nip || '-'].forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                tbody.appendChild(row);
+            });
         }
 
         window.saveSupervisorAssignments = async () => {
@@ -1108,6 +1459,9 @@
             }
             if (duplicateLocations.size > 0) return alert('Pengawas yang sama tidak boleh ditempatkan di dua sekolah pada tanggal yang sama.');
             if (!ensureFirebaseReady('menyimpan nama pengawas')) return;
+            const saveButton = document.getElementById('save-supervisor-assignments');
+            saveButton.disabled = true;
+            saveButton.innerText = 'Menyimpan...';
             try {
                 await setDoc(doc(db, 'schedules', currentNPSN), {
                     nama_sekolah: currentSchoolName,
@@ -1116,12 +1470,16 @@
                     penugasan_keluar: window.outgoingAssignments,
                     status: 'Data pengawas tersimpan',
                     updated_at: new Date()
-                });
-                document.getElementById('assignment-status').innerText = 'Tersimpan';
-                alert('Data pengawas berhasil disimpan.');
+                }, { merge: true });
+                const filledCount = window.outgoingAssignments.filter(item => (item.nama_pengawas || '').trim()).length;
+                document.getElementById('assignment-status').innerText = `${filledCount}/${window.outgoingAssignments.length} terisi`;
+                alert(`Data pengawas berhasil disimpan ke Firestore (${filledCount}/${window.outgoingAssignments.length} slot terisi).`);
             } catch (error) {
                 console.error('Gagal menyimpan nama pengawas:', error);
                 alert('Data pengawas gagal disimpan. Cek koneksi Firebase dan Rules.');
+            } finally {
+                saveButton.disabled = false;
+                saveButton.innerText = 'Simpan pengawas';
             }
         }
 
@@ -1135,9 +1493,9 @@
                     nama_sekolah: currentSchoolName,
                     npsn: currentNPSN,
                     jadwal_harian: window.scheduleData,
-                    status: 'Menunggu Admin MKKS',
+                    status: 'Penempatan tersedia',
                     updated_at: new Date()
-                });
+                }, { merge: true });
             } catch (error) {
                 console.error('Gagal menyimpan jadwal ke Firestore:', error);
                 alert('Gagal menyimpan jadwal ke Firestore. Cek konfigurasi Firebase dan Rulesnya.');
