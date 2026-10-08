@@ -197,6 +197,10 @@
         .table-wrap { border: 1px solid var(--color-border); border-radius: .875rem; overflow: hidden; }
         .table-head-light thead th { background: var(--color-surface-alt); color: var(--color-text-muted); }
         .table-head-dark thead th { background: var(--color-primary); color: var(--color-primary-text); position: sticky; top: 0; }
+        #school-slot-status-body tr.is-current-school td { background: var(--color-accent-tint); }
+        .slot-progress { height: .375rem; overflow: hidden; border-radius: 999px; background: var(--color-border); }
+        .slot-progress-fill { height: 100%; border-radius: inherit; background: var(--color-accent); transition: width .2s ease; }
+        .slot-progress-fill.is-complete { background: var(--color-success); }
         .assignment-table { font-size: .75rem; }
         .assignment-table th, .assignment-table td { padding: .45rem .55rem; }
         .assignment-table .input-field { min-width: 8rem; padding: .35rem .5rem; font-size: .75rem; border-radius: .5rem; }
@@ -215,12 +219,21 @@
 
         <!-- HEADER -->
         <div class="header-banner p-6 sm:p-8 text-white">
-            <div class="flex items-center gap-3 mb-4">
-                <span class="cross-badge" aria-hidden="true">⇄</span>
-                <span class="eyebrow-pill">TKA 2026 &middot; Surakarta</span>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-5">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="cross-badge" aria-hidden="true">⇄</span>
+                        <span class="eyebrow-pill">TKA 2026 &middot; Surakarta</span>
+                    </div>
+                    <h1 class="font-display text-2xl sm:text-3xl font-semibold tracking-tight">Jadwal Pengawas Silang</h1>
+                    <p class="text-[#C9D0E4] text-sm mt-1.5">Tes Kemampuan Akademik &mdash; Koordinasi pengawas antar SMA/MA se-Surakarta</p>
+                </div>
+                <div id="header-school-identity" class="hidden sm:shrink-0 sm:max-w-[18rem] rounded-xl border border-white/20 bg-white/10 px-4 py-3" aria-live="polite">
+                    <p class="text-xs text-[#C9D0E4]">Login sebagai</p>
+                    <p id="header-school-name" class="font-semibold text-sm mt-1 break-words"></p>
+                    <p id="header-school-identity-npsn" class="text-xs text-[#C9D0E4] mt-1"></p>
+                </div>
             </div>
-            <h1 class="font-display text-2xl sm:text-3xl font-semibold tracking-tight">Jadwal Pengawas Silang</h1>
-            <p class="text-[#C9D0E4] text-sm mt-1.5">Tes Kemampuan Akademik &mdash; Koordinasi pengawas antar SMA/MA se-Surakarta</p>
         </div>
 
         <div class="p-5 sm:p-8">
@@ -254,46 +267,51 @@
             </div>
 
             <!-- HALAMAN 1: OTENTIKASI -->
-            <div id="page-auth" class="block fade-in max-w-md mx-auto">
+            <div id="page-auth" class="block fade-in max-w-4xl mx-auto">
 
                 <div id="school-auth-section" class="block">
-                    <div class="tab-seg mb-6">
-                        <button type="button" id="tab-register" onclick="switchAuthTab('register')" class="tab-seg-btn is-active">1. Registrasi Awal</button>
-                        <button type="button" id="tab-login" onclick="switchAuthTab('login')" class="tab-seg-btn">2. Login Akun</button>
+                    <div class="tab-seg mb-5 max-w-md mx-auto" role="tablist" aria-label="Akses sekolah">
+                        <button type="button" id="tab-login" onclick="switchAuthTab('login')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Login</button>
+                        <button type="button" id="tab-register" onclick="switchAuthTab('register')" class="tab-seg-btn" role="tab" aria-selected="false">Registrasi</button>
                     </div>
+                    <div class="grid grid-cols-1 max-w-md mx-auto">
+                        <section id="school-login-panel" class="surface-card p-5 sm:p-6" aria-labelledby="school-login-title">
+                            <h2 id="school-login-title" class="font-display text-xl font-semibold mb-4">Login sekolah</h2>
+                            <div id="form-login" class="space-y-4">
+                                <div class="notice-success p-3.5 text-sm">
+                                    Gunakan NPSN dan password akun sekolah Anda.
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-npsn-login">NPSN sekolah</label>
+                                    <input type="text" id="input-npsn-login" placeholder="Masukkan NPSN" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-password-login">Password</label>
+                                    <input type="password" id="input-password-login" placeholder="Masukkan password" class="input-field">
+                                </div>
+                                <button onclick="handleLogin()" class="btn btn-success w-full mt-2">Masuk</button>
+                            </div>
+                        </section>
 
-                    <!-- Form Registrasi -->
-                    <div id="form-register" class="space-y-4 block">
-                        <div class="notice-panel p-3.5 text-sm">
-                            Pilih nama sekolah Anda dan gunakan password <b>test123</b> untuk mulai membuat akun.
-                        </div>
-                        <div>
-                            <label class="field-label">Nama sekolah</label>
-                            <select id="input-school-dropdown" class="input-field">
-                                <option value="">&mdash; Pilih Sekolah &mdash;</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="field-label">Password default</label>
-                            <input type="password" id="input-password-default" value="test123" class="input-field">
-                        </div>
-                        <button onclick="handleRegisterAuth()" class="btn btn-primary w-full mt-2">Mulai registrasi</button>
-                    </div>
-
-                    <!-- Form Login -->
-                    <div id="form-login" class="space-y-4 hidden">
-                        <div class="notice-success p-3.5 text-sm">
-                            Gunakan NPSN dan password yang telah Anda buat sebelumnya.
-                        </div>
-                        <div>
-                            <label class="field-label">NPSN sekolah</label>
-                            <input type="text" id="input-npsn-login" placeholder="Masukkan NPSN" class="input-field">
-                        </div>
-                        <div>
-                            <label class="field-label">Password</label>
-                            <input type="password" id="input-password-login" placeholder="Masukkan password" class="input-field">
-                        </div>
-                        <button onclick="handleLogin()" class="btn btn-success w-full mt-2">Masuk</button>
+                        <section id="school-register-panel" class="surface-card p-5 sm:p-6 hidden" aria-labelledby="school-register-title">
+                            <h2 id="school-register-title" class="font-display text-xl font-semibold mb-4">Registrasi sekolah</h2>
+                            <div id="form-register" class="space-y-4">
+                                <div class="notice-panel p-3.5 text-sm">
+                                    Registrasi awal sebagian besar sekolah sudah selesai. Jika sekolah Anda belum memiliki akun, buat akun melalui panel ini.
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-school-dropdown">Nama sekolah</label>
+                                    <select id="input-school-dropdown" class="input-field">
+                                        <option value="">&mdash; Pilih Sekolah &mdash;</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-password-default">Password default</label>
+                                    <input type="password" id="input-password-default" value="test123" class="input-field">
+                                </div>
+                                <button onclick="handleRegisterAuth()" class="btn btn-primary w-full mt-2">Mulai registrasi</button>
+                            </div>
+                        </section>
                     </div>
                 </div>
 
@@ -370,7 +388,8 @@
                             </label>
                         </div>
                     </div>
-                    <div class="flex justify-end pt-4" style="border-top:1px solid var(--color-border)">
+                    <div class="flex justify-between items-center pt-4" style="border-top:1px solid var(--color-border)">
+                        <button id="cancel-schedule-edit" onclick="cancelSubmittedScheduleEdit()" class="btn btn-secondary hidden">Batal</button>
                         <button onclick="goToReview()" class="btn btn-primary">Atur jumlah lab per hari &rarr;</button>
                     </div>
                 </div>
@@ -389,6 +408,14 @@
 
             <!-- HALAMAN 4: REKAP KESELURUHAN (SEKOLAH) -->
             <div id="page-final-rekap" class="hidden fade-in mx-auto">
+                <div id="schedule-mapping-review-notice" class="notice-warning p-4 mb-6 mx-auto max-w-2xl hidden" role="alert">
+                    Jadwal sudah berubah. Pemetaan pengawas lama tetap tersimpan, tetapi perlu diperiksa ulang oleh Admin MKKS.
+                </div>
+                <div class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin sekolah">
+                    <button type="button" id="school-admin-tab-assignment" onclick="showSchoolAdminSection('assignment')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Pengisian pengawas</button>
+                    <button type="button" id="school-admin-tab-slots" onclick="showSchoolAdminSection('slots')" class="tab-seg-btn" role="tab" aria-selected="false">Kelengkapan slot pengawas</button>
+                </div>
+                <div id="school-admin-assignment-content">
                 <div class="notice-success p-4 mb-6 mx-auto max-w-2xl">
                     <h2 class="font-display font-semibold">Pengisian nama pengawas</h2>
                     <p class="text-sm mt-1" style="color:var(--color-text-muted)">Pemetaan sudah tersedia. Isi atau timpa nama pengawas pada slot yang sesuai, lalu simpan perubahan.</p>
@@ -454,6 +481,55 @@
                         </table>
                     </div>
                 </div>
+                </div>
+                <section id="school-slot-status-page" class="hidden fade-in" aria-labelledby="school-slot-status-title">
+                    <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+                        <div>
+                            <h3 id="school-slot-status-title" class="font-display text-xl font-semibold">Kelengkapan slot pengawas</h3>
+                            <p class="help-text mt-1">Status pengisian slot penugasan keluar seluruh sekolah di Surakarta.</p>
+                            <p id="school-slot-last-loaded" class="help-text mt-1" aria-live="polite">Data belum dimuat.</p>
+                        </div>
+                        <button type="button" onclick="loadSchoolSlotStatus()" class="btn btn-secondary btn-sm" aria-label="Muat ulang status slot seluruh sekolah">Muat ulang data</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Selesai mengisi</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-success)" id="school-slot-stat-complete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Belum lengkap</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-warning)" id="school-slot-stat-incomplete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Total sekolah</div>
+                            <div class="font-display text-2xl font-semibold" id="school-slot-stat-total">0</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                        <input id="school-slot-search" type="search" class="input-field" placeholder="Cari nama sekolah atau NPSN" oninput="filterSchoolSlotStatus()" aria-label="Cari sekolah atau NPSN">
+                        <select id="school-slot-filter" class="input-field sm:max-w-xs" onchange="filterSchoolSlotStatus()" aria-label="Filter status pengisian">
+                            <option value="all">Semua status</option>
+                            <option value="complete">Selesai mengisi</option>
+                            <option value="incomplete">Belum lengkap</option>
+                            <option value="no-slots">Belum ada slot</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <div class="overflow-x-auto max-h-[32rem]">
+                            <table class="table-elegant table-head-dark min-w-[620px]">
+                                <thead>
+                                    <tr><th>Nama sekolah</th><th>NPSN</th><th class="text-center">Slot terisi</th><th class="text-center">Kelengkapan</th><th class="text-center">Status</th></tr>
+                                </thead>
+                                <tbody id="school-slot-status-body">
+                                    <tr><td colspan="5" class="py-6 text-center help-text">Pilih menu ini untuk memuat data.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
                 <div class="mt-8 text-center">
                     <button onclick="editSubmittedSchedule()" class="btn btn-secondary text-sm mr-2">Edit jadwal</button>
                     <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Keluar (Logout)</button>
@@ -477,7 +553,7 @@
                         Download Excel
                     </button>
                     </div>
-                </div>
+                </section>
                 <div class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin MKKS">
                     <button type="button" id="admin-tab-overview" onclick="showAdminSection('overview')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Rekap jadwal</button>
                     <button type="button" id="admin-tab-slots" onclick="showAdminSection('slots')" class="tab-seg-btn" role="tab" aria-selected="false">Status slot pengawas</button>
@@ -683,6 +759,9 @@
 
         let currentSchoolName = "";
         let currentNPSN = "";
+        let submittedScheduleSnapshot = null;
+        let isEditingSubmittedSchedule = false;
+        let scheduleMappingNeedsReview = false;
         window.scheduleData = {};
         window.outgoingAssignments = [];
         window.incomingAssignments = [];
@@ -770,6 +849,13 @@
             });
         };
 
+        const setSchoolHeaderIdentity = (name, npsn) => {
+            const identity = document.getElementById('header-school-identity');
+            identity.classList.toggle('hidden', !name);
+            document.getElementById('header-school-name').textContent = name || '';
+            document.getElementById('header-school-identity-npsn').textContent = npsn ? `NPSN: ${npsn}` : '';
+        };
+
         window.onload = () => {
             const dropdown = document.getElementById('input-school-dropdown');
             [...schoolList].sort().forEach(school => {
@@ -798,9 +884,56 @@
             document.getElementById('admin-tab-download').setAttribute('aria-selected', String(showDownload));
         }
 
+        window.showSchoolAdminSection = async (section) => {
+            const showSlots = section === 'slots';
+            document.getElementById('school-admin-assignment-content').classList.toggle('hidden', showSlots);
+            document.getElementById('school-slot-status-page').classList.toggle('hidden', !showSlots);
+            document.getElementById('school-admin-tab-assignment').classList.toggle('is-active', !showSlots);
+            document.getElementById('school-admin-tab-assignment').setAttribute('aria-selected', String(!showSlots));
+            document.getElementById('school-admin-tab-slots').classList.toggle('is-active', showSlots);
+            document.getElementById('school-admin-tab-slots').setAttribute('aria-selected', String(showSlots));
+            if (showSlots) await window.loadSchoolSlotStatus();
+        }
+
+        window.loadSchoolSlotStatus = async () => {
+            const tbody = document.getElementById('school-slot-status-body');
+            ['school-slot-stat-complete', 'school-slot-stat-incomplete', 'school-slot-stat-total'].forEach(id => {
+                document.getElementById(id).innerText = '—';
+            });
+            tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Memuat data seluruh sekolah...</td></tr>';
+            if (!ensureFirebaseReady('memuat status slot seluruh sekolah')) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Data tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                return;
+            }
+
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                const schoolsData = snapshot.docs.map(docSnap => {
+                    const data = docSnap.data();
+                    return {
+                        ...data,
+                        docId: docSnap.id,
+                        nama_sekolah: data.nama_sekolah || 'Sekolah tidak diketahui',
+                        npsn: data.npsn || '-'
+                    };
+                });
+                window.renderSchoolSlotStatus(schoolsData);
+                document.getElementById('school-slot-last-loaded').innerText = `Terakhir dimuat ${new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}`;
+            } catch (error) {
+                console.error('Gagal memuat status slot seluruh sekolah:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Gagal memuat status slot. Periksa koneksi dan izin Firestore, lalu muat ulang.</td></tr>';
+            }
+        }
+
         window.logoutToHome = () => {
             currentSchoolName = "";
             currentNPSN = "";
+            setSchoolHeaderIdentity('', '');
+            submittedScheduleSnapshot = null;
+            isEditingSubmittedSchedule = false;
+            scheduleMappingNeedsReview = false;
+            document.getElementById('cancel-schedule-edit').classList.add('hidden');
+            window.showSchoolAdminSection('assignment');
             window.switchPage('page-final-rekap', 'page-auth');
             window.switchPage('page-admin-dashboard', 'page-auth');
             document.getElementById('school-auth-section').classList.remove('hidden');
@@ -826,20 +959,19 @@
         }
 
         window.switchAuthTab = (type) => {
-            const tReg = document.getElementById('tab-register');
-            const tLog = document.getElementById('tab-login');
-            const fReg = document.getElementById('form-register');
-            const fLog = document.getElementById('form-login');
-
-            if (type === 'register') {
-                tReg.classList.add('is-active'); tLog.classList.remove('is-active');
-                fReg.classList.remove('hidden'); fReg.classList.add('block');
-                fLog.classList.remove('block'); fLog.classList.add('hidden');
-            } else {
-                tLog.classList.add('is-active'); tReg.classList.remove('is-active');
-                fLog.classList.remove('hidden'); fLog.classList.add('block');
-                fReg.classList.remove('block'); fReg.classList.add('hidden');
-            }
+            const showRegister = type === 'register';
+            const registerPanel = document.getElementById('school-register-panel');
+            const loginPanel = document.getElementById('school-login-panel');
+            const registerTab = document.getElementById('tab-register');
+            const loginTab = document.getElementById('tab-login');
+            registerPanel.classList.toggle('hidden', !showRegister);
+            loginPanel.classList.toggle('hidden', showRegister);
+            registerTab.classList.toggle('is-active', showRegister);
+            registerTab.setAttribute('aria-selected', String(showRegister));
+            loginTab.classList.toggle('is-active', !showRegister);
+            loginTab.setAttribute('aria-selected', String(!showRegister));
+            const input = document.getElementById(type === 'register' ? 'input-school-dropdown' : 'input-npsn-login');
+            input.focus();
         }
 
         // --- ALUR LOGIN ADMIN MKKS ---
@@ -960,9 +1092,9 @@
             }
         }
 
-        window.renderAdminSlotStatus = (schoolsData = window.adminSchoolData || []) => {
+        const renderSlotStatusTable = (schoolsData, audience) => {
             const schoolByName = new Map(schoolsData.map(school => [school.nama_sekolah, school]));
-            const rows = schoolList.map(schoolName => {
+            const rows = schoolList.map((schoolName, schoolIndex) => {
                 const school = schoolByName.get(schoolName);
                 const assignments = normalizeOutgoingAssignments(school?.penugasan_keluar);
                 const filledCount = assignments.filter(item => (item.nama_pengawas || '').trim()).length;
@@ -974,27 +1106,46 @@
                     filledCount,
                     totalSlots,
                     complete,
-                    percent: totalSlots > 0 ? Math.round((filledCount / totalSlots) * 100) : 0
+                    percent: totalSlots > 0 ? Math.round((filledCount / totalSlots) * 100) : 0,
+                    schoolIndex
                 };
+            }).sort((left, right) => {
+                const urgency = row => row.complete ? 2 : row.totalSlots === 0 ? 1 : 0;
+                return urgency(left) - urgency(right) || left.schoolIndex - right.schoolIndex;
             });
             const completeCount = rows.filter(row => row.complete).length;
-            document.getElementById('slot-stat-complete').innerText = completeCount;
-            document.getElementById('slot-stat-incomplete').innerText = rows.length - completeCount;
-            document.getElementById('slot-stat-total').innerText = rows.length;
+            const isAdmin = audience === 'admin';
+            const statPrefix = isAdmin ? '' : 'school-';
+            document.getElementById(`${statPrefix}slot-stat-complete`).innerText = completeCount;
+            document.getElementById(`${statPrefix}slot-stat-incomplete`).innerText = rows.length - completeCount;
+            document.getElementById(`${statPrefix}slot-stat-total`).innerText = rows.length;
 
-            const tbody = document.getElementById('admin-slot-status-body');
+            const tbodyId = isAdmin ? 'admin-slot-status-body' : 'school-slot-status-body';
+            const tbody = document.getElementById(tbodyId);
             tbody.innerHTML = '';
             rows.forEach(row => {
                 const tr = document.createElement('tr');
-                tr.dataset.status = row.complete ? 'complete' : 'incomplete';
+                tr.dataset.status = row.complete ? 'complete' : row.totalSlots === 0 ? 'no-slots' : 'incomplete';
                 tr.dataset.search = `${row.schoolName} ${row.npsn}`.toLowerCase();
+                const isCurrentSchool = audience === 'school' && row.schoolName === currentSchoolName;
+                tr.classList.toggle('is-current-school', isCurrentSchool);
                 const statusText = row.complete ? 'Selesai mengisi' : row.totalSlots === 0 ? 'Belum ada slot' : 'Belum lengkap';
-                const statusClass = row.complete ? 'badge-success' : 'badge-warning';
+                const statusClass = row.complete ? 'badge-success' : row.totalSlots === 0 ? 'badge-primary' : 'badge-warning';
                 [row.schoolName, row.npsn].forEach((value, index) => {
                     const cell = document.createElement('td');
-                    cell.textContent = value;
-                    if (index === 0) cell.className = 'font-medium';
-                    else cell.style.color = 'var(--color-text-muted)';
+                    if (index === 0 && isCurrentSchool) {
+                        cell.className = 'font-medium';
+                        const schoolName = document.createElement('span');
+                        schoolName.textContent = value;
+                        const ownSchoolBadge = document.createElement('span');
+                        ownSchoolBadge.className = 'badge badge-primary ml-2';
+                        ownSchoolBadge.textContent = 'Sekolah Anda';
+                        cell.append(schoolName, ownSchoolBadge);
+                    } else {
+                        cell.textContent = value;
+                        if (index === 0) cell.className = 'font-medium';
+                        else cell.style.color = 'var(--color-text-muted)';
+                    }
                     tr.appendChild(cell);
                 });
                 const slotCell = document.createElement('td');
@@ -1003,7 +1154,21 @@
                 tr.appendChild(slotCell);
                 const percentCell = document.createElement('td');
                 percentCell.className = 'text-center';
-                percentCell.textContent = row.totalSlots > 0 ? `${row.percent}%` : '—';
+                const progressLabel = document.createElement('span');
+                progressLabel.textContent = row.totalSlots > 0 ? `${row.percent}%` : '—';
+                percentCell.appendChild(progressLabel);
+                const progressTrack = document.createElement('div');
+                progressTrack.className = 'slot-progress mt-1.5';
+                progressTrack.setAttribute('role', 'progressbar');
+                progressTrack.setAttribute('aria-label', `Kelengkapan ${row.schoolName}`);
+                progressTrack.setAttribute('aria-valuemin', '0');
+                progressTrack.setAttribute('aria-valuemax', '100');
+                progressTrack.setAttribute('aria-valuenow', String(row.percent));
+                const progressFill = document.createElement('div');
+                progressFill.className = `slot-progress-fill${row.complete ? ' is-complete' : ''}`;
+                progressFill.style.width = `${row.percent}%`;
+                progressTrack.appendChild(progressFill);
+                percentCell.appendChild(progressTrack);
                 tr.appendChild(percentCell);
                 const statusCell = document.createElement('td');
                 statusCell.className = 'text-center';
@@ -1014,18 +1179,35 @@
                 tr.appendChild(statusCell);
                 tbody.appendChild(tr);
             });
-            window.filterAdminSlotStatus();
+            filterSlotStatus(audience);
         }
 
-        window.filterAdminSlotStatus = () => {
-            const search = (document.getElementById('admin-slot-search')?.value || '').trim().toLowerCase();
-            const status = document.getElementById('admin-slot-filter')?.value || 'all';
-            document.querySelectorAll('#admin-slot-status-body tr[data-status]').forEach(row => {
+        window.renderAdminSlotStatus = (schoolsData = window.adminSchoolData || []) => {
+            renderSlotStatusTable(schoolsData, 'admin');
+        }
+
+        window.renderSchoolSlotStatus = (schoolsData) => {
+            renderSlotStatusTable(schoolsData, 'school');
+        }
+
+        const filterSlotStatus = (audience) => {
+            const isAdmin = audience === 'admin';
+            const searchId = isAdmin ? 'admin-slot-search' : 'school-slot-search';
+            const filterId = isAdmin ? 'admin-slot-filter' : 'school-slot-filter';
+            const tbodyId = isAdmin ? 'admin-slot-status-body' : 'school-slot-status-body';
+            const search = (document.getElementById(searchId)?.value || '').trim().toLowerCase();
+            const status = document.getElementById(filterId)?.value || 'all';
+            document.querySelectorAll(`#${tbodyId} tr[data-status]`).forEach(row => {
                 const matchesSearch = row.dataset.search.includes(search);
-                const matchesStatus = status === 'all' || row.dataset.status === status;
+                const matchesStatus = status === 'all'
+                    || row.dataset.status === status
+                    || (status === 'incomplete' && row.dataset.status === 'no-slots');
                 row.classList.toggle('hidden', !matchesSearch || !matchesStatus);
             });
         }
+
+        window.filterAdminSlotStatus = () => filterSlotStatus('admin');
+        window.filterSchoolSlotStatus = () => filterSlotStatus('school');
 
         window.getAdminSupervisorWaveRows = (schoolsData = window.adminSchoolData || []) => {
             const waveDates = {
@@ -1518,6 +1700,7 @@
 
             currentNPSN = npsn;
             document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
+            setSchoolHeaderIdentity(currentSchoolName, currentNPSN);
             window.switchPage('page-create-account', 'page-setup-jadwal');
         }
 
@@ -1551,11 +1734,14 @@
                 currentNPSN = npsn;
                 currentSchoolName = matched.nama_sekolah;
                 document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
+                setSchoolHeaderIdentity(currentSchoolName, currentNPSN);
 
                 const scheduleSnapshot = await getDoc(doc(db, 'schedules', currentNPSN));
                 const storedSchedule = scheduleSnapshot.exists() ? scheduleSnapshot.data().jadwal_harian : null;
                 const savedSchedule = storedSchedule ? normalizeScheduleData(storedSchedule) : null;
                 const savedAssignments = scheduleSnapshot.exists() ? normalizeOutgoingAssignments(scheduleSnapshot.data().penugasan_keluar) : [];
+                scheduleMappingNeedsReview = scheduleSnapshot.exists()
+                    && scheduleSnapshot.data().status === 'Jadwal berubah - pemetaan perlu dicek';
                 await window.loadIncomingAssignments();
                 const scheduleDates = savedSchedule && typeof savedSchedule === 'object' ? Object.keys(savedSchedule) : [];
                 const hasCompleteSchedule = scheduleDates.length > 0 && scheduleDates.every(date => {
@@ -1621,6 +1807,9 @@
         }
 
         window.editSubmittedSchedule = () => {
+            submittedScheduleSnapshot = normalizeScheduleData(window.scheduleData);
+            isEditingSubmittedSchedule = true;
+            document.getElementById('cancel-schedule-edit').classList.remove('hidden');
             const dates = Object.keys(window.scheduleData);
             if (dates.length > 0) {
                 document.getElementById('wave-1').checked = dates.some(date => date.startsWith('2026-10-'));
@@ -1630,11 +1819,25 @@
             window.switchPage('page-final-rekap', 'page-setup-jadwal');
         }
 
+        window.cancelSubmittedScheduleEdit = () => {
+            if (!isEditingSubmittedSchedule || !submittedScheduleSnapshot) return;
+            window.scheduleData = normalizeScheduleData(submittedScheduleSnapshot);
+            const dates = Object.keys(window.scheduleData);
+            document.getElementById('wave-1').checked = dates.some(date => date.startsWith('2026-10-'));
+            document.getElementById('wave-2').checked = dates.some(date => date.startsWith('2026-11-'));
+            submittedScheduleSnapshot = null;
+            isEditingSubmittedSchedule = false;
+            document.getElementById('cancel-schedule-edit').classList.add('hidden');
+            window.renderFinalRekap();
+            window.switchPage('page-setup-jadwal', 'page-final-rekap');
+        }
+
         window.renderFinalRekap = () => {
             const tbody = document.getElementById('rekap-table-body');
             const assignmentPanel = document.getElementById('supervisor-assignment-panel');
             const assignmentList = document.getElementById('supervisor-assignment-list');
             window.outgoingAssignments = normalizeOutgoingAssignments(window.outgoingAssignments);
+            document.getElementById('schedule-mapping-review-notice').classList.toggle('hidden', !scheduleMappingNeedsReview);
             document.getElementById('rekap-school-name').innerText = currentSchoolName || `Sekolah (NPSN: ${currentNPSN})`;
             tbody.innerHTML = '';
             assignmentList.innerHTML = '';
@@ -1742,12 +1945,21 @@
             if (invalidDate) return alert(`Jumlah lab tanggal ${invalidDate[0]} harus diisi antara 1 sampai 10.`);
             if (!ensureFirebaseReady('menyimpan jadwal sekolah')) return;
 
+            const scheduleChanged = isEditingSubmittedSchedule && submittedScheduleSnapshot
+                && (Object.keys(submittedScheduleSnapshot).length !== Object.keys(window.scheduleData).length
+                    || Object.keys(submittedScheduleSnapshot).some(date =>
+                        getDayLabCount(submittedScheduleSnapshot[date]) !== getDayLabCount(window.scheduleData[date])
+                    ));
+            const mappingNeedsReview = scheduleChanged && window.outgoingAssignments.length > 0;
+            if (mappingNeedsReview && !confirm('Jadwal berubah. Pemetaan pengawas yang sudah ada akan tetap disimpan, tetapi mungkin tidak lagi sesuai dengan gelombang atau jumlah lab terbaru dan perlu diperiksa ulang oleh Admin MKKS. Lanjutkan menyimpan jadwal?')) return;
+            const needsReviewAfterSave = mappingNeedsReview || scheduleMappingNeedsReview;
+
             try {
                 await setDoc(doc(db, 'schedules', currentNPSN), {
                     nama_sekolah: currentSchoolName,
                     npsn: currentNPSN,
                     jadwal_harian: window.scheduleData,
-                    status: 'Penempatan tersedia',
+                    status: needsReviewAfterSave ? 'Jadwal berubah - pemetaan perlu dicek' : 'Penempatan tersedia',
                     updated_at: new Date()
                 }, { merge: true });
             } catch (error) {
@@ -1756,9 +1968,13 @@
                 return;
             }
 
-            window.outgoingAssignments = [];
+            submittedScheduleSnapshot = null;
+            isEditingSubmittedSchedule = false;
+            scheduleMappingNeedsReview = needsReviewAfterSave;
+            document.getElementById('cancel-schedule-edit').classList.add('hidden');
             window.renderFinalRekap();
             window.switchPage('page-review', 'page-final-rekap');
+            if (mappingNeedsReview) alert('Jadwal tersimpan. Pemetaan lama tetap dipertahankan; mohon minta Admin MKKS memeriksanya kembali.');
         }
     </script>
 </body>
