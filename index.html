@@ -150,6 +150,9 @@
         .btn-secondary:hover { color: var(--color-text); border-color: var(--color-text-muted); }
         .btn-success { background: var(--color-success); color: #fff; }
         .btn-success:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn-download-excel { background: #217346; color: #fff; border-color: #1B5E39; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+        .btn-download-excel:hover { background: #185C37; transform: translateY(-1px); box-shadow: 0 6px 14px -6px rgba(33,115,70,.55); }
+        .btn-download-excel:focus-visible { outline: 3px solid rgba(33,115,70,.35); outline-offset: 2px; }
         .btn-ghost { background: transparent; color: var(--color-text-muted); }
         .btn-ghost:hover { color: var(--color-text); }
         .btn-dark { background: #14192E; color: #fff; }
@@ -320,7 +323,7 @@
                     <div class="text-center mb-6">
                         <span class="cross-badge mx-auto mb-3" style="background:var(--color-accent-tint); border-color:var(--color-border); color:var(--color-accent)">&#128274;</span>
                         <h2 class="font-display text-xl font-semibold">Portal Admin MKKS</h2>
-                        <p class="help-text mt-1.5">Masuk untuk melihat rekap data dan mengacak jadwal pengawas silang.</p>
+                        <p class="help-text mt-1.5">Masuk dengan akun Admin MKKS atau Admin Cabdin.</p>
                     </div>
 
                     <div class="space-y-4">
@@ -337,7 +340,7 @@
                 </div>
 
                 <div class="mt-8 text-center pt-4" style="border-top:1px solid var(--color-border)">
-                    <button id="toggle-admin-btn" onclick="toggleAdminLogin()" class="help-text hover:underline font-medium transition-colors">Masuk sebagai Admin MKKS</button>
+                    <button id="toggle-admin-btn" onclick="toggleAdminLogin()" class="help-text hover:underline font-medium transition-colors">Masuk sebagai Admin MKKS / Cabdin</button>
                 </div>
             </div>
 
@@ -428,12 +431,18 @@
                     </div>
                 </div>
                 <div id="supervisor-assignment-panel" class="max-w-2xl mx-auto mb-6 hidden">
-                    <div class="flex justify-between items-center gap-3 mb-3">
+                    <div class="flex flex-wrap justify-between items-center gap-3 mb-3">
                         <div>
                             <h3 class="font-display font-semibold">Rekap daftar pengawas keluar</h3>
                             <p class="help-text mt-1">Isi nama pengawas sesuai slot. Perubahan nama dan NIP akan menimpa data pada slot tersebut.</p>
                         </div>
-                        <span class="badge badge-primary" id="assignment-status">Siap diisi</span>
+                        <div class="flex items-center gap-2">
+                            <span class="badge badge-primary" id="assignment-status">Siap diisi</span>
+                            <button type="button" onclick="downloadSchoolSupervisorExcel('outgoing')" class="btn btn-download-excel btn-sm" aria-label="Download Excel pengawas keluar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                                Download Excel
+                            </button>
+                        </div>
                     </div>
                     <div id="assignment-slot-summary" class="notice-success p-3 mb-3 text-sm"></div>
                     <div class="table-wrap overflow-x-auto">
@@ -454,10 +463,16 @@
                             <h3 class="font-display font-semibold">Rekap daftar pengawas masuk</h3>
                             <p class="help-text mt-1">Daftar pengawas dari sekolah lain yang bertugas di sekolah ini.</p>
                         </div>
-                        <button onclick="refreshIncomingAssignments()" class="btn btn-secondary btn-sm" title="Muat ulang rekap pengawas masuk">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 00-14.9-4M4 4v4h4m-4 5a8.1 8.1 0 0014.9 4M20 20v-4h-4"></path></svg>
-                            Muat ulang
-                        </button>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="refreshIncomingAssignments()" class="btn btn-secondary btn-sm" title="Muat ulang rekap pengawas masuk">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 00-14.9-4M4 4v4h4m-4 5a8.1 8.1 0 0014.9 4M20 20v-4h-4"></path></svg>
+                                Muat ulang
+                            </button>
+                            <button type="button" onclick="downloadSchoolSupervisorExcel('incoming')" class="btn btn-download-excel btn-sm" aria-label="Download Excel pengawas masuk">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                                Download Excel
+                            </button>
+                        </div>
                     </div>
                     <div class="table-wrap overflow-x-auto">
                         <table class="table-elegant table-head-light assignment-table min-w-[680px]">
@@ -531,7 +546,7 @@
                     </div>
                 </section>
                 <div class="mt-8 text-center">
-                    <button onclick="editSubmittedSchedule()" class="btn btn-secondary text-sm mr-2">Edit jadwal</button>
+                    <button type="button" class="btn btn-secondary text-sm mr-2 opacity-50 cursor-not-allowed" disabled aria-disabled="true" title="Edit jadwal sementara dinonaktifkan">Edit jadwal</button>
                     <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Keluar (Logout)</button>
                 </div>
             </div>
@@ -540,10 +555,10 @@
             <div id="page-admin-dashboard" class="hidden fade-in mx-auto w-full">
                 <div class="flex flex-wrap justify-between items-center gap-3 mb-6 pb-4" style="border-bottom:1px solid var(--color-border)">
                     <div>
-                        <h2 class="font-display text-2xl font-semibold">Dashboard admin MKKS</h2>
-                        <p class="help-text mt-1">Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.</p>
+                        <h2 id="admin-dashboard-title" class="font-display text-2xl font-semibold">Dashboard admin MKKS</h2>
+                        <p id="admin-dashboard-description" class="help-text mt-1">Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-2">
+                    <div id="admin-dashboard-actions" class="flex flex-wrap items-center gap-2">
                     <button onclick="document.getElementById('admin-mapping-file').click()" class="btn btn-secondary">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 0L8 8m4-4l4 4M4 16v4h16v-4"></path></svg>
                         Import pemetaan Excel
@@ -554,7 +569,7 @@
                     </button>
                     </div>
                 </section>
-                <div class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin MKKS">
+                <div id="admin-dashboard-tabs" class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin MKKS">
                     <button type="button" id="admin-tab-overview" onclick="showAdminSection('overview')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Rekap jadwal</button>
                     <button type="button" id="admin-tab-slots" onclick="showAdminSection('slots')" class="tab-seg-btn" role="tab" aria-selected="false">Status slot pengawas</button>
                     <button type="button" id="admin-tab-download" onclick="showAdminSection('download')" class="tab-seg-btn" role="tab" aria-selected="false">Download data pengawas</button>
@@ -661,7 +676,7 @@
                             <h3 id="admin-supervisor-download-title" class="font-display text-xl font-semibold">Data seluruh pengawas</h3>
                             <p class="help-text mt-1">Slot yang belum memiliki nama tetap ditampilkan dengan kolom Nama dan NIP kosong. Data dipisahkan menurut gelombang.</p>
                         </div>
-                        <button type="button" onclick="downloadAllSupervisorsExcel()" class="btn btn-success btn-sm">
+                        <button type="button" id="admin-supervisor-download-button" onclick="downloadAllSupervisorsExcel()" class="btn btn-success btn-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
                             Download Excel
                         </button>
@@ -759,6 +774,7 @@
 
         let currentSchoolName = "";
         let currentNPSN = "";
+        let currentAdminRole = "";
         let submittedScheduleSnapshot = null;
         let isEditingSubmittedSchedule = false;
         let scheduleMappingNeedsReview = false;
@@ -884,6 +900,31 @@
             document.getElementById('admin-tab-download').setAttribute('aria-selected', String(showDownload));
         }
 
+        const configureAdminDashboard = (role) => {
+            currentAdminRole = role;
+            const isCabdin = role === 'admin_cabdin';
+            document.getElementById('admin-dashboard-title').innerText = isCabdin
+                ? 'Dashboard admin Cabdin'
+                : 'Dashboard admin MKKS';
+            document.getElementById('admin-dashboard-description').innerText = isCabdin
+                ? 'Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta. Akses hanya untuk melihat data.'
+                : 'Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.';
+            document.getElementById('admin-dashboard-actions').classList.toggle('hidden', isCabdin);
+            document.getElementById('admin-dashboard-tabs').classList.remove('hidden');
+            document.getElementById('admin-tab-slots').classList.remove('hidden');
+            document.getElementById('admin-tab-download').classList.remove('hidden');
+            document.getElementById('admin-supervisor-download-button').classList.remove('hidden');
+            document.getElementById('admin-slot-status-page').classList.add('hidden');
+            document.getElementById('admin-supervisor-download-page').classList.add('hidden');
+            document.getElementById('admin-overview-content').classList.remove('hidden');
+            document.getElementById('admin-tab-overview').classList.add('is-active');
+            document.getElementById('admin-tab-overview').setAttribute('aria-selected', 'true');
+            document.getElementById('admin-tab-slots').classList.remove('is-active');
+            document.getElementById('admin-tab-slots').setAttribute('aria-selected', 'false');
+            document.getElementById('admin-tab-download').classList.remove('is-active');
+            document.getElementById('admin-tab-download').setAttribute('aria-selected', 'false');
+        }
+
         window.showSchoolAdminSection = async (section) => {
             const showSlots = section === 'slots';
             document.getElementById('school-admin-assignment-content').classList.toggle('hidden', showSlots);
@@ -928,6 +969,7 @@
         window.logoutToHome = () => {
             currentSchoolName = "";
             currentNPSN = "";
+            currentAdminRole = "";
             setSchoolHeaderIdentity('', '');
             submittedScheduleSnapshot = null;
             isEditingSubmittedSchedule = false;
@@ -938,7 +980,7 @@
             window.switchPage('page-admin-dashboard', 'page-auth');
             document.getElementById('school-auth-section').classList.remove('hidden');
             document.getElementById('admin-auth-section').classList.add('hidden');
-            document.getElementById('toggle-admin-btn').innerText = "Masuk sebagai Admin MKKS";
+            document.getElementById('toggle-admin-btn').innerText = "Masuk sebagai Admin MKKS / Cabdin";
         }
 
         // --- TOGGLE ADMIN & SEKOLAH LOGIN ---
@@ -950,7 +992,7 @@
             if (schoolSection.classList.contains('hidden')) {
                 schoolSection.classList.remove('hidden');
                 adminSection.classList.add('hidden');
-                btn.innerText = "Masuk sebagai Admin MKKS";
+                btn.innerText = "Masuk sebagai Admin MKKS / Cabdin";
             } else {
                 schoolSection.classList.add('hidden');
                 adminSection.classList.remove('hidden');
@@ -983,19 +1025,38 @@
             if (!ensureFirebaseReady('login admin MKKS')) return;
 
             try {
-                const adminSnapshot = await getDoc(doc(db, 'admin', user));
+                let adminSnapshot = await getDoc(doc(db, 'admin', user));
 
                 if (!adminSnapshot.exists()) {
-                    alert("Username atau Password Admin salah!");
-                    return;
+                    const adminQuery = query(collection(db, 'admin'), where('username', '==', user));
+                    const matchingAdmins = await getDocs(adminQuery);
+                    if (matchingAdmins.size > 1) {
+                        alert('Username ditemukan pada lebih dari satu akun admin. Pastikan hanya ada satu dokumen dengan username tersebut.');
+                        return;
+                    }
+                    if (matchingAdmins.empty) {
+                        alert('Akun tidak ditemukan. Username harus sama dengan ID dokumen di koleksi admin atau field username pada dokumen.');
+                        return;
+                    }
+                    adminSnapshot = matchingAdmins.docs[0];
                 }
 
                 const adminData = adminSnapshot.data();
-                if (adminData.role !== 'admin_mkks' || adminData.active === false || adminData.password !== pass) {
-                    alert("Username atau Password Admin salah!");
+                const role = typeof adminData.role === 'string' ? adminData.role.trim().toLowerCase() : '';
+                if (!['admin_mkks', 'admin_cabdin'].includes(role)) {
+                    alert('Role akun tidak sesuai. Isi field role dengan admin_cabdin atau admin_mkks.');
+                    return;
+                }
+                if (adminData.active === false) {
+                    alert('Akun admin ini nonaktif. Ubah field active menjadi true di Firestore.');
+                    return;
+                }
+                if (typeof adminData.password !== 'string' || adminData.password !== pass) {
+                    alert('Password admin salah. Periksa nilai dan tipe field password di Firestore.');
                     return;
                 }
 
+                configureAdminDashboard(role);
                 await loadAdminDashboardData();
                 window.switchPage('page-auth', 'page-admin-dashboard');
             } catch (error) {
@@ -1290,6 +1351,10 @@
         }
 
         window.importManualMapping = async (event) => {
+            if (currentAdminRole === 'admin_cabdin') {
+                event.target.value = '';
+                return alert('Akun Admin Cabdin hanya memiliki akses lihat.');
+            }
             const file = event.target.files?.[0];
             if (!file) return;
             if (!ensureFirebaseReady('mengimpor pemetaan manual')) {
@@ -1472,6 +1537,7 @@
         }
 
         window.downloadAdminExcel = () => {
+            if (currentAdminRole === 'admin_cabdin') return;
             const dates = [
                 { value: '2026-10-26', label: '26 Okt' },
                 { value: '2026-10-27', label: '27 Okt' },
@@ -1900,6 +1966,46 @@
                 });
                 tbody.appendChild(row);
             });
+        }
+
+        window.downloadSchoolSupervisorExcel = (direction) => {
+            if (!window.XLSX) return alert('Pustaka Excel belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.');
+            if (direction !== 'outgoing' && direction !== 'incoming') {
+                return alert('Jenis daftar pengawas tidak valid.');
+            }
+            if (direction === 'incoming' && window.incomingAssignmentsError) {
+                return alert(window.incomingAssignmentsError);
+            }
+
+            const isOutgoing = direction === 'outgoing';
+            const headers = isOutgoing
+                ? ['No', 'Tanggal', 'Tempat Mengawas', 'Lab', 'Nama Pengawas', 'NIP']
+                : ['No', 'Tanggal', 'Sekolah Asal', 'Lab', 'Nama Pengawas', 'NIP'];
+            const assignments = isOutgoing
+                ? normalizeOutgoingAssignments(window.outgoingAssignments)
+                : window.incomingAssignments;
+            const rows = assignments.map((item, index) => [
+                index + 1,
+                new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+                isOutgoing ? (item.tujuan || '') : (item.sekolah_asal || ''),
+                `Lab ${isOutgoing ? item.lab : item.lab_masuk}`,
+                (item.nama_pengawas || '').trim() || (isOutgoing ? '' : 'Belum diisi'),
+                (item.nip || '').trim() || (isOutgoing ? '' : '-')
+            ]);
+            const worksheet = window.XLSX.utils.aoa_to_sheet([headers, ...rows]);
+            worksheet['!cols'] = [{ wch: 7 }, { wch: 16 }, { wch: 38 }, { wch: 12 }, { wch: 30 }, { wch: 20 }];
+            worksheet['!autofilter'] = { ref: `A1:F${Math.max(1, rows.length + 1)}` };
+            const workbook = window.XLSX.utils.book_new();
+            window.XLSX.utils.book_append_sheet(workbook, worksheet, isOutgoing ? 'Pengawas Keluar' : 'Pengawas Masuk');
+            const schoolName = (currentSchoolName || currentNPSN || 'sekolah').replace(/[\\/:*?"<>|]/g, '-').trim();
+            const fileName = `daftar-pengawas-${direction}-${schoolName}.xlsx`;
+
+            try {
+                window.XLSX.writeFile(workbook, fileName);
+            } catch (error) {
+                console.error(`Gagal mengunduh Excel pengawas ${direction}:`, error);
+                alert('File Excel gagal dibuat. Silakan coba lagi.');
+            }
         }
 
         window.saveSupervisorAssignments = async () => {
