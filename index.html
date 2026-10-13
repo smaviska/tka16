@@ -1,129 +1,2170 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f3f7fc">
-    <meta name="description" content="Web Pengaturan Pengawas sedang dalam perbaikan. Kami akan segera hadir kembali.">
-    <title>Dalam Perbaikan | Pengaturan Pengawas TKA</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Sistem Jadwal Pengawas Silang TKA 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
     <style>
-      :root {
-        color-scheme: light;
-        font-family: "Segoe UI", Arial, sans-serif;
-        color: #17324d;
-        background: #f3f7fc;
-      }
+        :root {
+            --color-bg: #F6F2E8;
+            --color-bg-dot: rgba(30, 42, 74, 0.07);
+            --color-surface: #FFFFFF;
+            --color-surface-alt: #FAF6EC;
+            --color-border: #E7DFCB;
+            --color-text: #23273A;
+            --color-text-muted: #75798A;
+            --color-primary: #1E2A4A;
+            --color-primary-hover: #141C33;
+            --color-primary-text: #FFFFFF;
+            --color-accent: #B4842C;
+            --color-accent-tint: rgba(180, 132, 44, 0.12);
+            --color-success: #2F7A50;
+            --color-success-bg: #E8F3EC;
+            --color-danger: #B14B36;
+            --color-danger-bg: #FBEAE6;
+            --color-warning: #B4682C;
+            --color-warning-bg: #FBEEE1;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+        html { scroll-padding-top: env(safe-area-inset-top, 0px); }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        display: grid;
-        min-height: 100vh;
-        margin: 0;
-        padding: 24px;
-        place-items: center;
-        background:
-          radial-gradient(ellipse at 15% 15%, #e2efff 0, transparent 38%),
-          radial-gradient(ellipse at 90% 85%, #e8f4f3 0, transparent 34%),
-          #f3f7fc;
-      }
-
-      main {
-        width: min(100%, 620px);
-        padding: clamp(32px, 8vw, 64px);
-        text-align: center;
-        background: rgb(255 255 255 / 92%);
-        border: 1px solid #e4ebf3;
-        border-radius: 24px;
-        box-shadow: 0 24px 70px rgb(33 65 99 / 10%);
-      }
-
-      .illustration {
-        display: grid;
-        width: 104px;
-        height: 104px;
-        margin: 0 auto 28px;
-        place-items: center;
-        color: #1769aa;
-        background: #eaf3fc;
-        border-radius: 50%;
-      }
-
-      .illustration svg {
-        width: 54px;
-        height: 54px;
-      }
-
-      .eyebrow {
-        margin: 0 0 12px;
-        color: #1769aa;
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-      }
-
-      h1 {
-        margin: 0;
-        color: #17324d;
-        font-size: clamp(2rem, 7vw, 3rem);
-        line-height: 1.15;
-      }
-
-      .message {
-        max-width: 420px;
-        margin: 18px auto 0;
-        color: #52677b;
-        font-size: 1.08rem;
-        line-height: 1.7;
-      }
-
-      .divider {
-        width: 48px;
-        height: 3px;
-        margin: 28px auto;
-        background: #b8d6f2;
-        border: 0;
-        border-radius: 999px;
-      }
-
-      .thanks {
-        margin: 0;
-        color: #718396;
-        font-size: 0.92rem;
-      }
-
-      @media (prefers-reduced-motion: no-preference) {
-        .illustration svg {
-          animation: gentle-turn 8s linear infinite;
-          transform-origin: center;
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --color-bg: #14161F;
+                --color-bg-dot: rgba(255, 255, 255, 0.05);
+                --color-surface: #1C1F2A;
+                --color-surface-alt: #21242F;
+                --color-border: #343849;
+                --color-text: #EDEAE0;
+                --color-text-muted: #9BA0B2;
+                --color-primary: #2C3D6B;
+                --color-primary-hover: #354A82;
+                --color-primary-text: #FFFFFF;
+                --color-accent: #D9A94F;
+                --color-accent-tint: rgba(217, 169, 79, 0.16);
+                --color-success: #5FBE8A;
+                --color-success-bg: #1C2C22;
+                --color-danger: #E08A73;
+                --color-danger-bg: #2E1E1B;
+                --color-warning: #D9A94F;
+                --color-warning-bg: #2E2718;
+            }
+        }
+        :root[data-theme="dark"] {
+            --color-bg: #14161F; --color-bg-dot: rgba(255, 255, 255, 0.05);
+            --color-surface: #1C1F2A; --color-surface-alt: #21242F; --color-border: #343849;
+            --color-text: #EDEAE0; --color-text-muted: #9BA0B2;
+            --color-primary: #2C3D6B; --color-primary-hover: #354A82; --color-primary-text: #FFFFFF;
+            --color-accent: #D9A94F; --color-accent-tint: rgba(217, 169, 79, 0.16);
+            --color-success: #5FBE8A; --color-success-bg: #1C2C22;
+            --color-danger: #E08A73; --color-danger-bg: #2E1E1B;
+            --color-warning: #D9A94F; --color-warning-bg: #2E2718;
         }
 
-        @keyframes gentle-turn {
-          to {
-            transform: rotate(360deg);
-          }
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--color-bg);
+            background-image: radial-gradient(var(--color-bg-dot) 1.4px, transparent 1.4px);
+            background-size: 20px 20px;
+            color: var(--color-text);
+            font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
         }
-      }
+
+        .font-display { font-family: 'Fraunces', ui-serif, Georgia, serif; }
+
+        .fade-in { animation: fadeIn .35s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        #app-container {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            box-shadow: 0 1px 2px rgba(20, 20, 30, .04), 0 20px 40px -18px rgba(20, 20, 30, .28);
+        }
+        .accent-strip { height: 4px; background: linear-gradient(90deg, var(--color-accent), var(--color-primary) 65%); }
+
+        .header-banner { position: relative; overflow: hidden; background: linear-gradient(135deg, #1E2A4A 0%, #2E3C68 100%); }
+        .header-banner::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,.09) 1.2px, transparent 1.2px);
+            background-size: 16px 16px; opacity: .6;
+        }
+        .header-banner > * { position: relative; z-index: 1; }
+        .cross-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 2.5rem; height: 2.5rem; border-radius: 999px;
+            background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+            font-size: 1.1rem;
+        }
+        .eyebrow-pill {
+            display: inline-flex; align-items: center; gap: .4rem;
+            padding: .25rem .75rem; border-radius: 999px;
+            background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+            font-size: .75rem; color: #E9DFC3;
+        }
+
+        .step-dot {
+            width: 1.9rem; height: 1.9rem; border-radius: 999px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: .75rem; font-weight: 600;
+            border: 1px solid var(--color-border); color: var(--color-text-muted);
+            background: var(--color-surface); transition: all .2s ease; flex-shrink: 0;
+        }
+        .step-dot.is-active { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-text); }
+        .step-dot.is-done { background: var(--color-accent-tint); border-color: var(--color-accent); color: var(--color-accent); }
+        .step-line { flex: 1; height: 1px; background: var(--color-border); transition: background .2s ease; }
+        .step-line.is-done { background: var(--color-accent); }
+        .step-label { font-size: .65rem; color: var(--color-text-muted); }
+        .step-label.is-active { color: var(--color-text); font-weight: 600; }
+
+        label.field-label { display:block; font-size:.8125rem; font-weight:500; color:var(--color-text-muted); margin-bottom:.375rem; }
+        .input-field {
+            width: 100%; padding: .625rem .875rem;
+            border: 1px solid var(--color-border); border-radius: .75rem;
+            background: var(--color-surface); color: var(--color-text);
+            font-size: .9375rem; transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        .input-field:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-tint); }
+        .input-field::placeholder { color: var(--color-text-muted); }
+        .help-text { font-size: .75rem; color: var(--color-text-muted); }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+            padding: .7rem 1.25rem; border-radius: .75rem;
+            font-weight: 600; font-size: .9375rem;
+            border: 1px solid transparent; cursor: pointer; transition: all .15s ease;
+        }
+        .btn-primary { background: var(--color-primary); color: var(--color-primary-text); box-shadow: 0 1px 2px rgba(0,0,0,.1); }
+        .btn-primary:hover { background: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 8px 20px -8px rgba(0,0,0,.35); }
+        .btn-secondary { background: transparent; color: var(--color-text-muted); border-color: var(--color-border); }
+        .btn-secondary:hover { color: var(--color-text); border-color: var(--color-text-muted); }
+        .btn-success { background: var(--color-success); color: #fff; }
+        .btn-success:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn-download-excel { background: #217346; color: #fff; border-color: #1B5E39; box-shadow: 0 1px 2px rgba(0,0,0,.12); }
+        .btn-download-excel:hover { background: #185C37; transform: translateY(-1px); box-shadow: 0 6px 14px -6px rgba(33,115,70,.55); }
+        .btn-download-excel:focus-visible { outline: 3px solid rgba(33,115,70,.35); outline-offset: 2px; }
+        .btn-ghost { background: transparent; color: var(--color-text-muted); }
+        .btn-ghost:hover { color: var(--color-text); }
+        .btn-dark { background: #14192E; color: #fff; }
+        .btn-dark:hover { background: #0C0F1D; transform: translateY(-1px); }
+        .btn-accent { background: var(--color-accent); color: #fff; }
+        .btn-accent:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn-sm { padding: .4rem .8rem; font-size: .8125rem; border-radius: .6rem; }
+
+        .tab-seg { display: flex; gap: .25rem; padding: .25rem; border-radius: 999px; background: var(--color-surface-alt); border: 1px solid var(--color-border); }
+        .tab-seg-btn { flex: 1; text-align: center; padding: .55rem .75rem; border-radius: 999px; font-size: .8125rem; font-weight: 600; color: var(--color-text-muted); cursor: pointer; transition: all .15s ease; border: none; background: transparent; }
+        .tab-seg-btn.is-active { background: var(--color-surface); color: var(--color-primary); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+
+        .wave-card-body {
+            display: block; position: relative;
+            border: 1px solid var(--color-border); border-radius: 1rem;
+            padding: 1rem 2.5rem 1rem 1rem; background: var(--color-surface); cursor: pointer;
+            transition: all .15s ease;
+        }
+        .wave-card-body::after {
+            content: ''; position: absolute; top: 1rem; right: 1rem;
+            width: 1.1rem; height: 1.1rem; border-radius: 999px;
+            border: 1.5px solid var(--color-border); background: var(--color-surface);
+            transition: all .15s ease;
+        }
+        .peer:checked ~ .wave-card-body { border-color: var(--color-primary); background: var(--color-accent-tint); box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+        .peer:checked ~ .wave-card-body::after { background: var(--color-primary); border-color: var(--color-primary); box-shadow: inset 0 0 0 3px var(--color-surface); }
+
+        .surface-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 1rem; }
+        .surface-alt { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: .875rem; }
+        .notice-panel { border: 1px solid var(--color-border); border-left: 3px solid var(--color-accent); border-radius: .875rem; background: var(--color-accent-tint); }
+        .notice-success { border: 1px solid var(--color-border); border-left: 3px solid var(--color-success); border-radius: .875rem; background: var(--color-success-bg); }
+        .notice-warning { border: 1px solid var(--color-border); border-left: 3px solid var(--color-warning); border-radius: .875rem; background: var(--color-warning-bg); }
+
+        .badge { display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .65rem; border-radius: 999px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+        .badge-success { background: var(--color-success-bg); color: var(--color-success); }
+        .badge-danger { background: var(--color-danger-bg); color: var(--color-danger); }
+        .badge-warning { background: var(--color-warning-bg); color: var(--color-warning); }
+        .badge-primary { background: var(--color-accent-tint); color: var(--color-primary); }
+
+        .table-elegant { width: 100%; border-collapse: separate; border-spacing: 0; font-size: .8125rem; }
+        .table-elegant thead th { text-align: left; padding: .6rem .8rem; font-weight: 600; border-bottom: 1px solid var(--color-border); }
+        .table-elegant tbody td { padding: .65rem .8rem; border-bottom: 1px solid var(--color-border); color: var(--color-text); vertical-align: middle; }
+        .table-elegant tbody tr:last-child td { border-bottom: none; }
+        .table-elegant tbody tr:hover td { background: var(--color-surface-alt); }
+        .table-wrap { border: 1px solid var(--color-border); border-radius: .875rem; overflow: hidden; }
+        .table-head-light thead th { background: var(--color-surface-alt); color: var(--color-text-muted); }
+        .table-head-dark thead th { background: var(--color-primary); color: var(--color-primary-text); position: sticky; top: 0; }
+        #school-slot-status-body tr.is-current-school td { background: var(--color-accent-tint); }
+        .slot-progress { height: .375rem; overflow: hidden; border-radius: 999px; background: var(--color-border); }
+        .slot-progress-fill { height: 100%; border-radius: inherit; background: var(--color-accent); transition: width .2s ease; }
+        .slot-progress-fill.is-complete { background: var(--color-success); }
+        .assignment-table { font-size: .75rem; }
+        .assignment-table th, .assignment-table td { padding: .45rem .55rem; }
+        .assignment-table .input-field { min-width: 8rem; padding: .35rem .5rem; font-size: .75rem; border-radius: .5rem; }
+
+        .stat-card { border: 1px solid var(--color-border); border-radius: 1rem; padding: 1.1rem; background: var(--color-surface); }
+        .stat-icon { width: 2.25rem; height: 2.25rem; border-radius: .7rem; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: .6rem; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 999px; }
     </style>
-  </head>
-  <body>
-    <main>
-      <div class="illustration" aria-hidden="true">
-        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M25.5 12.5 28 7h8l2.5 5.5 5.1 2.1 5.5-2.4 5.7 5.7-2.4 5.5 2.1 5.1L60 31v8l-5.5 2.5-2.1 5.1 2.4 5.5-5.7 5.7-5.5-2.4-5.1 2.1L36 63h-8l-2.5-5.5-5.1-2.1-5.5 2.4-5.7-5.7 2.4-5.5-2.1-5.1L4 39v-8l5.5-2.5 2.1-5.1-2.4-5.5 5.7-5.7 5.5 2.4 5.1-2.1Z" fill="currentColor" opacity=".18"/>
-          <path d="M25.5 12.5 28 7h8l2.5 5.5 5.1 2.1 5.5-2.4 5.7 5.7-2.4 5.5 2.1 5.1L60 31v8l-5.5 2.5-2.1 5.1 2.4 5.5-5.7 5.7-5.5-2.4-5.1 2.1L36 63h-8l-2.5-5.5-5.1-2.1-5.5 2.4-5.7-5.7 2.4-5.5-2.1-5.1L4 39v-8l5.5-2.5 2.1-5.1-2.4-5.5 5.7-5.7 5.5 2.4 5.1-2.1Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="32" cy="35" r="10" stroke="currentColor" stroke-width="3"/>
-          <circle cx="32" cy="35" r="3.5" fill="currentColor"/>
-        </svg>
-      </div>
-      <p class="eyebrow">Pengaturan Pengawas TKA</p>
-      <h1>Sedang Dalam Perbaikan</h1>
-      <p class="message">Web Pengaturan Pengawas TKA sedang dalam perbaikan. Kami akan segera hadir kembali.</p>
-      <hr class="divider">
-      <p class="thanks">Terima kasih atas pengertian dan kesabaran Anda.</p>
-    </main>
-  </body>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6">
+
+    <div class="max-w-4xl w-full rounded-[28px] overflow-hidden fade-in" id="app-container">
+        <div class="accent-strip"></div>
+
+        <!-- HEADER -->
+        <div class="header-banner p-6 sm:p-8 text-white">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-5">
+                <div class="min-w-0">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="cross-badge" aria-hidden="true">⇄</span>
+                        <span class="eyebrow-pill">TKA 2026 &middot; Surakarta</span>
+                    </div>
+                    <h1 class="font-display text-2xl sm:text-3xl font-semibold tracking-tight">Jadwal Pengawas Silang</h1>
+                    <p class="text-[#C9D0E4] text-sm mt-1.5">Tes Kemampuan Akademik &mdash; Koordinasi pengawas antar SMA/MA se-Surakarta</p>
+                </div>
+                <div id="header-school-identity" class="hidden sm:shrink-0 sm:max-w-[18rem] rounded-xl border border-white/20 bg-white/10 px-4 py-3" aria-live="polite">
+                    <p class="text-xs text-[#C9D0E4]">Login sebagai</p>
+                    <p id="header-school-name" class="font-semibold text-sm mt-1 break-words"></p>
+                    <p id="header-school-identity-npsn" class="text-xs text-[#C9D0E4] mt-1"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-5 sm:p-8">
+
+            <!-- WIZARD STEPS -->
+            <div id="wizard-steps" class="flex items-center gap-1.5 sm:gap-2 mb-8 max-w-2xl mx-auto">
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-0">1</span>
+                    <span class="step-label" id="step-label-0">Masuk</span>
+                </div>
+                <span class="step-line" id="step-line-0"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-1">2</span>
+                    <span class="step-label" id="step-label-1">Akun</span>
+                </div>
+                <span class="step-line" id="step-line-1"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-2">3</span>
+                    <span class="step-label" id="step-label-2">Atur</span>
+                </div>
+                <span class="step-line" id="step-line-2"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-3">4</span>
+                    <span class="step-label" id="step-label-3">Review</span>
+                </div>
+                <span class="step-line" id="step-line-3"></span>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="step-dot" id="step-dot-4">5</span>
+                    <span class="step-label" id="step-label-4">Selesai</span>
+                </div>
+            </div>
+
+            <!-- HALAMAN 1: OTENTIKASI -->
+            <div id="page-auth" class="block fade-in max-w-4xl mx-auto">
+
+                <div id="school-auth-section" class="block">
+                    <div class="tab-seg mb-5 max-w-md mx-auto" role="tablist" aria-label="Akses sekolah">
+                        <button type="button" id="tab-login" onclick="switchAuthTab('login')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Login</button>
+                        <button type="button" id="tab-register" onclick="switchAuthTab('register')" class="tab-seg-btn" role="tab" aria-selected="false">Registrasi</button>
+                    </div>
+                    <div class="grid grid-cols-1 max-w-md mx-auto">
+                        <section id="school-login-panel" class="surface-card p-5 sm:p-6" aria-labelledby="school-login-title">
+                            <h2 id="school-login-title" class="font-display text-xl font-semibold mb-4">Login sekolah</h2>
+                            <div id="form-login" class="space-y-4">
+                                <div class="notice-success p-3.5 text-sm">
+                                    Gunakan NPSN dan password akun sekolah Anda.
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-npsn-login">NPSN sekolah</label>
+                                    <input type="text" id="input-npsn-login" placeholder="Masukkan NPSN" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-password-login">Password</label>
+                                    <input type="password" id="input-password-login" placeholder="Masukkan password" class="input-field">
+                                </div>
+                                <button onclick="handleLogin()" class="btn btn-success w-full mt-2">Masuk</button>
+                            </div>
+                        </section>
+
+                        <section id="school-register-panel" class="surface-card p-5 sm:p-6 hidden" aria-labelledby="school-register-title">
+                            <h2 id="school-register-title" class="font-display text-xl font-semibold mb-4">Registrasi sekolah</h2>
+                            <div id="form-register" class="space-y-4">
+                                <div class="notice-panel p-3.5 text-sm">
+                                    Registrasi awal sebagian besar sekolah sudah selesai. Jika sekolah Anda belum memiliki akun, buat akun melalui panel ini.
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-school-dropdown">Nama sekolah</label>
+                                    <select id="input-school-dropdown" class="input-field">
+                                        <option value="">&mdash; Pilih Sekolah &mdash;</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="field-label" for="input-password-default">Password default</label>
+                                    <input type="password" id="input-password-default" value="test123" class="input-field">
+                                </div>
+                                <button onclick="handleRegisterAuth()" class="btn btn-primary w-full mt-2">Mulai registrasi</button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Form Login Admin -->
+                <div id="admin-auth-section" class="hidden">
+                    <div class="text-center mb-6">
+                        <span class="cross-badge mx-auto mb-3" style="background:var(--color-accent-tint); border-color:var(--color-border); color:var(--color-accent)">&#128274;</span>
+                        <h2 class="font-display text-xl font-semibold">Portal Admin MKKS</h2>
+                        <p class="help-text mt-1.5">Gunakan ID Admin dan password pada tabel Admin.</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="field-label">Username admin (ID Admin)</label>
+                            <input type="text" id="input-admin-user" placeholder="Ketik username admin" class="input-field">
+                        </div>
+                        <div>
+                            <label class="field-label">Password</label>
+                            <input type="password" id="input-admin-pass" placeholder="Ketik password admin" class="input-field">
+                        </div>
+                        <button onclick="handleAdminLogin()" class="btn btn-dark w-full mt-2">Login admin</button>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center pt-4" style="border-top:1px solid var(--color-border)">
+                    <button id="toggle-admin-btn" onclick="toggleAdminLogin()" class="help-text hover:underline font-medium transition-colors">Masuk sebagai Admin MKKS / Cabdin</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 1.5: BUAT AKUN -->
+            <div id="page-create-account" class="hidden fade-in max-w-md mx-auto">
+                <div class="text-center mb-6">
+                    <h2 class="font-display text-2xl font-semibold">Buat akun sekolah</h2>
+                    <p class="font-medium mt-1" style="color:var(--color-accent)" id="display-school-name">Nama Sekolah</p>
+                    <p class="help-text mt-2">Lengkapi data di bawah ini sebagai akses masuk Anda selanjutnya.</p>
+                </div>
+
+                <div class="space-y-4 notice-panel p-6">
+                    <div>
+                        <label class="field-label">NPSN sekolah</label>
+                        <input type="text" id="setup-npsn" placeholder="Masukkan NPSN" class="input-field">
+                    </div>
+                    <div>
+                        <label class="field-label">Password baru</label>
+                        <input type="password" id="setup-password" placeholder="Buat password rahasia" class="input-field">
+                    </div>
+                    <button onclick="saveAccountAndProceed()" class="btn btn-primary w-full mt-2">Simpan akun &amp; lanjut</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 2: SETUP JADWAL -->
+            <div id="page-setup-jadwal" class="hidden fade-in max-w-2xl mx-auto">
+                <div class="flex justify-between items-center mb-5 pb-3" style="border-bottom:1px solid var(--color-border)">
+                    <h2 class="font-display text-xl font-semibold">Pengaturan TKA sekolah</h2>
+                    <span class="badge badge-primary" id="header-school-npsn"></span>
+                </div>
+                <div class="space-y-6">
+                    <div>
+                        <label class="field-label mb-2.5">1. Pilih gelombang pelaksanaan</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="checkbox" id="wave-1" class="peer sr-only">
+                                <span class="wave-card-body">
+                                    <span class="block font-display font-medium text-[15px]">Gelombang 1</span>
+                                    <span class="block help-text mt-1">26&ndash;29 Okt 2026</span>
+                                </span>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="checkbox" id="wave-2" class="peer sr-only">
+                                <span class="wave-card-body">
+                                    <span class="block font-display font-medium text-[15px]">Gelombang 2</span>
+                                    <span class="block help-text mt-1">2&ndash;5 Nov 2026</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center pt-4" style="border-top:1px solid var(--color-border)">
+                        <button id="cancel-schedule-edit" onclick="cancelSubmittedScheduleEdit()" class="btn btn-secondary hidden">Batal</button>
+                        <button onclick="goToReview()" class="btn btn-primary">Atur jumlah lab per hari &rarr;</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HALAMAN 3: REVIEW -->
+            <div id="page-review" class="hidden fade-in max-w-2xl mx-auto">
+                <h2 class="font-display text-xl font-semibold mb-1">Pengecekan jadwal harian</h2>
+                <p class="help-text mb-4">Masukkan jumlah lab aktif untuk setiap tanggal. Setiap lab membutuhkan satu pengawas.</p>
+                <div id="review-container" class="space-y-3 max-h-96 overflow-y-auto pr-2 mb-6"></div>
+                <div class="flex justify-between items-center pt-4" style="border-top:1px solid var(--color-border)">
+                    <button onclick="editScheduleSetup()" class="btn btn-secondary">Edit gelombang</button>
+                    <button onclick="submitFinalData()" class="btn btn-success">Kirim data jadwal</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 4: REKAP KESELURUHAN (SEKOLAH) -->
+            <div id="page-final-rekap" class="hidden fade-in mx-auto">
+                <div id="schedule-mapping-review-notice" class="notice-warning p-4 mb-6 mx-auto max-w-2xl hidden" role="alert">
+                    Jadwal sudah berubah. Pemetaan pengawas lama tetap tersimpan, tetapi perlu diperiksa ulang oleh Admin MKKS.
+                </div>
+                <div class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin sekolah">
+                    <button type="button" id="school-admin-tab-assignment" onclick="showSchoolAdminSection('assignment')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Pengisian pengawas</button>
+                    <button type="button" id="school-admin-tab-slots" onclick="showSchoolAdminSection('slots')" class="tab-seg-btn" role="tab" aria-selected="false">Kelengkapan slot pengawas</button>
+                </div>
+                <div id="school-admin-assignment-content">
+                <div class="notice-success p-4 mb-6 mx-auto max-w-2xl">
+                    <h2 class="font-display font-semibold">Pengisian nama pengawas</h2>
+                    <p class="text-sm mt-1" style="color:var(--color-text-muted)">Pemetaan sudah tersedia. Isi atau timpa nama pengawas pada slot yang sesuai, lalu simpan perubahan.</p>
+                </div>
+                <div class="notice-success p-4 mb-6 flex items-start gap-4 mx-auto max-w-2xl">
+                    <div class="mt-0.5"><svg class="w-6 h-6" style="color:var(--color-success)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div>
+                        <h4 class="font-semibold" style="color:var(--color-success)">Pemetaan pengawas siap diisi</h4>
+                        <p class="text-sm mt-1" style="color:var(--color-text-muted)">Daftar pengawas keluar dapat dilengkapi atau diperbarui oleh admin sekolah. Rekap pengawas masuk dapat digunakan untuk menyiapkan daftar hadir.</p>
+                    </div>
+                </div>
+                <div id="supervisor-assignment-panel" class="max-w-2xl mx-auto mb-6 hidden">
+                    <div class="flex flex-wrap justify-between items-center gap-3 mb-3">
+                        <div>
+                            <h3 class="font-display font-semibold">Rekap daftar pengawas keluar</h3>
+                            <p class="help-text mt-1">Isi nama pengawas sesuai slot. Perubahan nama dan NIP akan menimpa data pada slot tersebut.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="badge badge-primary" id="assignment-status">Siap diisi</span>
+                            <button type="button" onclick="refreshOutgoingAssignments()" class="btn btn-secondary btn-sm" title="Muat ulang pemetaan terbaru dari Firestore">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 00-14.9-4M4 4v4h4m-4 5a8.1 8.1 0 0014.9 4M20 20v-4h-4"></path></svg>
+                                Muat ulang
+                            </button>
+                            <button type="button" onclick="downloadSchoolSupervisorExcel('outgoing')" class="btn btn-download-excel btn-sm" aria-label="Download Excel pengawas keluar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                                Download Excel
+                            </button>
+                        </div>
+                    </div>
+                    <div id="assignment-slot-summary" class="notice-success p-3 mb-3 text-sm"></div>
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="table-elegant table-head-light assignment-table min-w-[680px]">
+                            <thead>
+                                <tr><th class="w-10">No.</th><th>Tanggal</th><th>Tempat Mengawas</th><th>Lab</th><th>Nama</th><th>NIP</th></tr>
+                            </thead>
+                            <tbody id="supervisor-assignment-list"></tbody>
+                        </table>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button id="save-supervisor-assignments" onclick="saveSupervisorAssignments()" class="btn btn-success btn-sm">Simpan pengawas</button>
+                    </div>
+                </div>
+                <div id="incoming-assignment-panel" class="max-w-2xl mx-auto mb-6">
+                    <div class="flex flex-wrap justify-between items-center gap-3 mb-3">
+                        <div>
+                            <h3 class="font-display font-semibold">Rekap daftar pengawas masuk</h3>
+                            <p class="help-text mt-1">Daftar pengawas dari sekolah lain yang bertugas di sekolah ini.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="refreshIncomingAssignments()" class="btn btn-secondary btn-sm" title="Muat ulang rekap pengawas masuk">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11a8.1 8.1 0 00-14.9-4M4 4v4h4m-4 5a8.1 8.1 0 0014.9 4M20 20v-4h-4"></path></svg>
+                                Muat ulang
+                            </button>
+                            <button type="button" onclick="downloadSchoolSupervisorExcel('incoming')" class="btn btn-download-excel btn-sm" aria-label="Download Excel pengawas masuk">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                                Download Excel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-wrap overflow-x-auto">
+                        <table class="table-elegant table-head-light assignment-table min-w-[680px]">
+                            <thead>
+                                <tr><th class="w-10">No.</th><th>Tanggal</th><th>Sekolah asal</th><th>Lab</th><th>Nama pengawas</th><th>NIP</th></tr>
+                            </thead>
+                            <tbody id="incoming-assignment-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="table-wrap max-w-2xl mx-auto">
+                    <div class="px-4 py-3" style="background:var(--color-surface-alt); border-bottom:1px solid var(--color-border)">
+                        <h3 class="font-display font-semibold" style="color:var(--color-primary)" id="rekap-school-name">Nama Sekolah</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="table-elegant table-head-light">
+                            <thead>
+                                <tr><th>Tanggal</th><th class="text-center">Lab aktif</th></tr>
+                            </thead>
+                            <tbody id="rekap-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <section id="school-slot-status-page" class="hidden fade-in" aria-labelledby="school-slot-status-title">
+                    <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+                        <div>
+                            <h3 id="school-slot-status-title" class="font-display text-xl font-semibold">Kelengkapan slot pengawas</h3>
+                            <p class="help-text mt-1">Status pengisian slot penugasan keluar seluruh sekolah di Surakarta.</p>
+                            <p id="school-slot-last-loaded" class="help-text mt-1" aria-live="polite">Data belum dimuat.</p>
+                        </div>
+                        <button type="button" onclick="loadSchoolSlotStatus()" class="btn btn-secondary btn-sm" aria-label="Muat ulang status slot seluruh sekolah">Muat ulang data</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Selesai mengisi</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-success)" id="school-slot-stat-complete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Belum lengkap</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-warning)" id="school-slot-stat-incomplete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Total sekolah</div>
+                            <div class="font-display text-2xl font-semibold" id="school-slot-stat-total">0</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                        <input id="school-slot-search" type="search" class="input-field" placeholder="Cari nama sekolah atau NPSN" oninput="filterSchoolSlotStatus()" aria-label="Cari sekolah atau NPSN">
+                        <select id="school-slot-filter" class="input-field sm:max-w-xs" onchange="filterSchoolSlotStatus()" aria-label="Filter status pengisian">
+                            <option value="all">Semua status</option>
+                            <option value="complete">Selesai mengisi</option>
+                            <option value="incomplete">Belum lengkap</option>
+                            <option value="no-slots">Belum ada slot</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <div class="overflow-x-auto max-h-[32rem]">
+                            <table class="table-elegant table-head-dark min-w-[620px]">
+                                <thead>
+                                    <tr><th>Nama sekolah</th><th>NPSN</th><th class="text-center">Slot terisi</th><th class="text-center">Kelengkapan</th><th class="text-center">Status</th></tr>
+                                </thead>
+                                <tbody id="school-slot-status-body">
+                                    <tr><td colspan="5" class="py-6 text-center help-text">Pilih menu ini untuk memuat data.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <div class="mt-8 text-center">
+                    <button type="button" class="btn btn-secondary text-sm mr-2 opacity-50 cursor-not-allowed" disabled aria-disabled="true" title="Edit jadwal sementara dinonaktifkan">Edit jadwal</button>
+                    <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Keluar (Logout)</button>
+                </div>
+            </div>
+
+            <!-- HALAMAN 5: DASHBOARD ADMIN MKKS -->
+            <div id="page-admin-dashboard" class="hidden fade-in mx-auto w-full">
+                <div class="flex flex-wrap justify-between items-center gap-3 mb-6 pb-4" style="border-bottom:1px solid var(--color-border)">
+                    <div>
+                        <h2 id="admin-dashboard-title" class="font-display text-2xl font-semibold">Dashboard admin MKKS</h2>
+                        <p id="admin-dashboard-description" class="help-text mt-1">Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.</p>
+                    </div>
+                    <div id="admin-dashboard-actions" class="flex flex-wrap items-center gap-2">
+                    <button onclick="document.getElementById('admin-mapping-file').click()" class="btn btn-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 0L8 8m4-4l4 4M4 16v4h16v-4"></path></svg>
+                        Import pemetaan Excel
+                    </button>
+                    <button onclick="downloadAdminExcel()" class="btn btn-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                        Download Excel
+                    </button>
+                    </div>
+                </section>
+                <div id="admin-dashboard-tabs" class="tab-seg mb-6 max-w-2xl" role="tablist" aria-label="Menu admin MKKS">
+                    <button type="button" id="admin-tab-overview" onclick="showAdminSection('overview')" class="tab-seg-btn is-active" role="tab" aria-selected="true">Rekap jadwal</button>
+                    <button type="button" id="admin-tab-slots" onclick="showAdminSection('slots')" class="tab-seg-btn" role="tab" aria-selected="false">Status slot pengawas</button>
+                    <button type="button" id="admin-tab-download" onclick="showAdminSection('download')" class="tab-seg-btn" role="tab" aria-selected="false">Download data pengawas</button>
+                </div>
+                <div id="admin-overview-content">
+                <input id="admin-mapping-file" type="file" accept=".xlsx,.xls" class="hidden" onchange="importManualMapping(event)">
+
+                <!-- Statistik Mini -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:var(--color-accent-tint); color:var(--color-primary)">&#127979;</div>
+                        <div class="help-text font-semibold">Total sekolah</div>
+                        <div class="font-display text-2xl font-semibold" id="stat-total-school">38</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:var(--color-success-bg); color:var(--color-success)">&#10003;</div>
+                        <div class="help-text font-semibold">Sudah submit jadwal</div>
+                        <div class="font-display text-2xl font-semibold" style="color:var(--color-success)" id="stat-submitted">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:var(--color-warning-bg); color:var(--color-warning)">&#8987;</div>
+                        <div class="help-text font-semibold">Belum submit</div>
+                        <div class="font-display text-2xl font-semibold" style="color:var(--color-warning)" id="stat-pending">38</div>
+                    </div>
+                </div>
+
+                <div id="schools-missing-labs-panel" class="notice-warning p-4 mb-6">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                        <h3 class="font-semibold">Sekolah belum mengisi jumlah lab</h3>
+                        <span class="badge badge-warning" id="schools-missing-labs-count">0 sekolah</span>
+                    </div>
+                    <p id="schools-missing-labs-list" class="text-sm">Memuat data...</p>
+                </div>
+
+                <!-- Tabel Rekap Admin -->
+                <div class="table-wrap">
+                    <div class="overflow-x-auto max-h-96">
+                        <table class="table-elegant table-head-dark">
+                            <thead>
+                                <tr>
+                                    <th>Nama sekolah</th>
+                                    <th>NPSN</th>
+                                    <th>Gelombang</th>
+                                    <th>Total kebutuhan pengawas</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+
+                <section id="admin-slot-status-page" class="hidden fade-in" aria-labelledby="admin-slot-status-title">
+                    <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+                        <div>
+                            <h3 id="admin-slot-status-title" class="font-display text-xl font-semibold">Kelengkapan slot pengawas</h3>
+                            <p class="help-text mt-1">Sekolah dinyatakan selesai jika seluruh slot penugasan keluar sudah memiliki nama pengawas.</p>
+                        </div>
+                        <button type="button" onclick="loadAdminDashboardData()" class="btn btn-secondary btn-sm" aria-label="Muat ulang status slot pengawas">Muat ulang data</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Selesai mengisi</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-success)" id="slot-stat-complete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Belum lengkap</div>
+                            <div class="font-display text-2xl font-semibold" style="color:var(--color-warning)" id="slot-stat-incomplete">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="help-text font-semibold">Total sekolah</div>
+                            <div class="font-display text-2xl font-semibold" id="slot-stat-total">0</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                        <input id="admin-slot-search" type="search" class="input-field" placeholder="Cari nama sekolah atau NPSN" oninput="filterAdminSlotStatus()" aria-label="Cari sekolah atau NPSN">
+                        <select id="admin-slot-filter" class="input-field sm:max-w-xs" onchange="filterAdminSlotStatus()" aria-label="Filter status pengisian">
+                            <option value="all">Semua status</option>
+                            <option value="complete">Selesai mengisi</option>
+                            <option value="incomplete">Belum lengkap</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <div class="overflow-x-auto max-h-[32rem]">
+                            <table class="table-elegant table-head-dark min-w-[620px]">
+                                <thead>
+                                    <tr><th>Nama sekolah</th><th>NPSN</th><th class="text-center">Slot terisi</th><th class="text-center">Kelengkapan</th><th class="text-center">Status</th></tr>
+                                </thead>
+                                <tbody id="admin-slot-status-body">
+                                    <tr><td colspan="5" class="py-6 text-center help-text">Memuat data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="admin-supervisor-download-page" class="hidden fade-in" aria-labelledby="admin-supervisor-download-title">
+                    <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+                        <div>
+                            <h3 id="admin-supervisor-download-title" class="font-display text-xl font-semibold">Data seluruh pengawas</h3>
+                            <p class="help-text mt-1">Slot yang belum memiliki nama tetap ditampilkan dengan kolom Nama dan NIP kosong. Data dipisahkan menurut gelombang.</p>
+                        </div>
+                        <button type="button" id="admin-supervisor-download-button" onclick="downloadAllSupervisorsExcel()" class="btn btn-success btn-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"></path></svg>
+                            Download Excel
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-display font-semibold mb-2">Gelombang 1</h4>
+                            <div class="table-wrap overflow-x-auto">
+                                <table class="table-elegant table-head-light min-w-[760px]">
+                                    <thead><tr><th>No</th><th>Sekolah Asal</th><th>Tanggal</th><th>Nama</th><th>NIP</th><th>Lab</th><th>Sekolah Tempat Mengawas</th></tr></thead>
+                                    <tbody id="admin-supervisor-wave1-body"><tr><td colspan="7" class="py-5 text-center help-text">Memuat data...</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-display font-semibold mb-2">Gelombang 2</h4>
+                            <div class="table-wrap overflow-x-auto">
+                                <table class="table-elegant table-head-light min-w-[760px]">
+                                    <thead><tr><th>No</th><th>Sekolah Asal</th><th>Tanggal</th><th>Nama</th><th>NIP</th><th>Lab</th><th>Sekolah Tempat Mengawas</th></tr></thead>
+                                    <tbody id="admin-supervisor-wave2-body"><tr><td colspan="7" class="py-5 text-center help-text">Memuat data...</td></tr></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="mt-8 text-center">
+                    <button onclick="logoutToHome()" class="btn btn-ghost text-sm">Tutup dashboard admin</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIKA -->
+    <script type="module">
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, writeBatch, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Konfigurasi Firebase harus diisi dengan project yang aktif.
+        // Jika masih memakai placeholder, aplikasi akan menampilkan peringatan
+        // dan tidak akan mencoba akses Firestore yang tidak valid.
+        const firebaseConfig = {
+           apiKey: "AIzaSyDJ-RbC-5jTciNefnIHJmcPmFJVFfJN9ww",
+  authDomain: "tka-mkks-26.firebaseapp.com",
+  projectId: "tka-mkks-26",
+  storageBucket: "tka-mkks-26.firebasestorage.app",
+  messagingSenderId: "842010351741",
+  appId: "1:842010351741:web:a039d36b8e142d06703914"
+        };
+
+        const isFirebaseConfigured = () => {
+            return !!(
+                firebaseConfig.apiKey &&
+                firebaseConfig.apiKey !== "YOUR_API_KEY" &&
+                firebaseConfig.projectId &&
+                firebaseConfig.projectId !== "YOUR_PROJECT_ID" &&
+                firebaseConfig.appId &&
+                firebaseConfig.appId !== "YOUR_APP_ID"
+            );
+        };
+
+        let db = null;
+        try {
+            if (isFirebaseConfigured()) {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+            }
+        } catch (error) {
+            console.warn('Firebase tidak berhasil diinisialisasi.', error);
+            db = null;
+        }
+
+        const ensureFirebaseReady = (action) => {
+            if (!db) {
+                alert(`Firebase belum dikonfigurasi untuk ${action}.\n\nSilakan isi config Firebase yang benar di file ini lalu refresh halaman.`);
+                return false;
+            }
+            return true;
+        };
+
+        const schoolList = [
+            "SMA Negeri 1 Surakarta", "SMA Negeri 2 Surakarta", "SMA Negeri 3 Surakarta", "SMA Negeri 4 Surakarta",
+            "SMA Negeri 5 Surakarta", "SMA Negeri 6 Surakarta", "SMA Negeri 7 Surakarta", "SMA Negeri 8 Surakarta",
+            "SMA Negeri 9 Surakarta", "MA Negeri 1 Surakarta", "MA Negeri 2 Surakarta", "SMA Al-Azhar Syifa Budi Solo",
+            "SMA Al-Islam 1 Surakarta", "SMA Batik 1 Surakarta", "SMA Batik 2 Surakarta", "SMA Islam 1 Surakarta",
+            "SMA Islam Diponegoro Surakarta", "SMA Al-Muayyad Surakarta", "SMA Muhammadiyah 1 Surakarta", "SMA Muhammadiyah 2 Surakarta",
+            "SMA Muhammadiyah 3 Surakarta", "SMA Muhammadiyah 6 Surakarta", "SMA Muhammadiyah PK Kottabarat Surakarta", "SMA Pangudi Luhur Santo Yosef Surakarta",
+            "SMA Regina Pacis Surakarta", "SMA Kristen 1 Surakarta", "SMA Tujuh Belas Surakarta", "SMA Widya Wacana Surakarta",
+            "SMA Warga Surakarta", "SMA Kristen PNK Surakarta", "SMA ABBS Surakarta", "SMA Bina Widya Surakarta",
+            "SMA MTA Surakarta", "SMA Budi Utomo Surakarta", "MA Al-Islam Surakarta", "MA Al-Muayyad Surakarta",
+            "MA Al-Kahfi Surakarta", "MA Muhammadiyah Muallimin Surakarta"
+        ];
+
+        let currentSchoolName = "";
+        let currentNPSN = "";
+        let currentAdminRole = "";
+        let submittedScheduleSnapshot = null;
+        let isEditingSubmittedSchedule = false;
+        let scheduleMappingNeedsReview = false;
+        window.scheduleData = {};
+        window.outgoingAssignments = [];
+        window.incomingAssignments = [];
+        window.incomingAssignmentsError = '';
+        const getDayLabCount = (day) => {
+            if (day && Object.prototype.hasOwnProperty.call(day, 'labCount') && Number.isFinite(Number(day.labCount))) {
+                return Math.max(0, Math.floor(Number(day.labCount)));
+            }
+            return Array.isArray(day?.sessions) ? day.sessions.filter(sessions => Number(sessions) > 0).length : 0;
+        };
+
+        const normalizeScheduleData = (schedule) => Object.fromEntries(
+            Object.entries(schedule || {}).map(([date, day]) => [date, { labCount: getDayLabCount(day) }])
+        );
+
+        const normalizeOutgoingAssignments = (assignments) => {
+            const uniqueAssignments = new Map();
+            (Array.isArray(assignments) ? assignments : []).forEach(item => {
+                const destination = item.tujuanNpsn || item.tujuan || '';
+                const sourceLab = Number(item.slot_asal_lab);
+                const key = Number.isInteger(sourceLab) && sourceLab > 0
+                    ? `${item.date}|asal|${sourceLab}`
+                    : `${item.date}|tujuan|${destination}|${item.lab}`;
+                const existing = uniqueAssignments.get(key);
+                if (!existing || (!(existing.nama_pengawas || '').trim() && (item.nama_pengawas || '').trim())) {
+                    uniqueAssignments.set(key, { ...existing, ...item });
+                } else if (!existing.nip && item.nip) {
+                    existing.nip = item.nip;
+                }
+            });
+            return [...uniqueAssignments.values()].sort((left, right) =>
+                left.date.localeCompare(right.date) || Number(left.lab) - Number(right.lab)
+            );
+        };
+
+        window.loadIncomingAssignments = async () => {
+            window.incomingAssignments = [];
+            window.incomingAssignmentsError = '';
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                const incomingBySlot = new Map();
+                snapshot.forEach(docSnap => {
+                    const source = docSnap.data();
+                    normalizeOutgoingAssignments(source.penugasan_keluar).forEach(item => {
+                        const destinationNpsn = item.tujuanNpsn || item.tujuan_npsn || '';
+                        const matchesDestination = destinationNpsn
+                            ? String(destinationNpsn) === String(currentNPSN)
+                            : item.tujuan === currentSchoolName;
+                        if (!matchesDestination) return;
+
+                        const sourceIdentity = String(source.npsn || source.nama_sekolah || docSnap.id).trim().toLocaleLowerCase('id');
+                        const sourceLab = Number(item.slot_asal_lab);
+                        const destinationLab = Number(item.lab);
+                        const slotIdentity = Number.isInteger(sourceLab) && sourceLab > 0
+                            ? `asal:${sourceLab}`
+                            : `tujuan:${destinationLab}`;
+                        const key = `${sourceIdentity}|${item.date}|${slotIdentity}`;
+                        const incomingAssignment = {
+                            ...item,
+                            sekolah_asal: source.nama_sekolah || docSnap.id,
+                            lab_masuk: item.lab
+                        };
+                        const existing = incomingBySlot.get(key);
+                        if (!existing || (!(existing.nama_pengawas || '').trim() && (incomingAssignment.nama_pengawas || '').trim())) {
+                            incomingBySlot.set(key, incomingAssignment);
+                        } else if (!existing.nip && incomingAssignment.nip) {
+                            existing.nip = incomingAssignment.nip;
+                        }
+                    });
+                });
+                window.incomingAssignments = [...incomingBySlot.values()];
+                window.incomingAssignments.sort((left, right) =>
+                    left.date.localeCompare(right.date) || left.sekolah_asal.localeCompare(right.sekolah_asal) || Number(left.lab_masuk) - Number(right.lab_masuk)
+                );
+            } catch (error) {
+                console.error('Gagal memuat rekap pengawas masuk:', error);
+                window.incomingAssignmentsError = 'Rekap pengawas masuk gagal dimuat. Muat ulang atau periksa izin baca Firestore.';
+            }
+            return window.incomingAssignments;
+        };
+
+        window.refreshIncomingAssignments = async () => {
+            if (!ensureFirebaseReady('memuat rekap pengawas masuk')) return;
+            await window.loadIncomingAssignments();
+            window.renderIncomingAssignmentTable();
+        };
+
+        const wizardOrder = ['page-auth', 'page-create-account', 'page-setup-jadwal', 'page-review', 'page-final-rekap'];
+
+        window.updateWizardSteps = (pageId) => {
+            const wizard = document.getElementById('wizard-steps');
+            const idx = wizardOrder.indexOf(pageId);
+            if (idx === -1) { wizard.classList.add('hidden'); return; }
+            wizard.classList.remove('hidden');
+            wizardOrder.forEach((_, i) => {
+                const dot = document.getElementById(`step-dot-${i}`);
+                const lbl = document.getElementById(`step-label-${i}`);
+                dot.classList.remove('is-active', 'is-done');
+                lbl.classList.remove('is-active');
+                if (i < idx) dot.classList.add('is-done');
+                else if (i === idx) { dot.classList.add('is-active'); lbl.classList.add('is-active'); }
+                const line = document.getElementById(`step-line-${i}`);
+                if (line) line.classList.toggle('is-done', i < idx);
+            });
+        };
+
+        const setSchoolHeaderIdentity = (name, npsn) => {
+            const identity = document.getElementById('header-school-identity');
+            identity.classList.toggle('hidden', !name);
+            document.getElementById('header-school-name').textContent = name || '';
+            document.getElementById('header-school-identity-npsn').textContent = npsn ? `NPSN: ${npsn}` : '';
+        };
+
+        window.onload = () => {
+            const dropdown = document.getElementById('input-school-dropdown');
+            [...schoolList].sort().forEach(school => {
+                dropdown.innerHTML += `<option value="${school}">${school}</option>`;
+            });
+            updateWizardSteps('page-auth');
+        };
+
+        window.switchPage = (hideId, showId) => {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+            updateWizardSteps(showId);
+        }
+
+        window.showAdminSection = (section) => {
+            const showSlots = section === 'slots';
+            const showDownload = section === 'download';
+            document.getElementById('admin-overview-content').classList.toggle('hidden', showSlots || showDownload);
+            document.getElementById('admin-slot-status-page').classList.toggle('hidden', !showSlots);
+            document.getElementById('admin-supervisor-download-page').classList.toggle('hidden', !showDownload);
+            document.getElementById('admin-tab-overview').classList.toggle('is-active', !showSlots && !showDownload);
+            document.getElementById('admin-tab-overview').setAttribute('aria-selected', String(!showSlots && !showDownload));
+            document.getElementById('admin-tab-slots').classList.toggle('is-active', showSlots);
+            document.getElementById('admin-tab-slots').setAttribute('aria-selected', String(showSlots));
+            document.getElementById('admin-tab-download').classList.toggle('is-active', showDownload);
+            document.getElementById('admin-tab-download').setAttribute('aria-selected', String(showDownload));
+        }
+
+        const configureAdminDashboard = (role) => {
+            currentAdminRole = role;
+            const isCabdin = role === 'admin_cabdin';
+            document.getElementById('admin-dashboard-title').innerText = isCabdin
+                ? 'Dashboard admin Cabdin'
+                : 'Dashboard admin MKKS';
+            document.getElementById('admin-dashboard-description').innerText = isCabdin
+                ? 'Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta. Akses hanya untuk melihat data.'
+                : 'Rekapitulasi kesiapan jadwal TKA seluruh sekolah di Surakarta.';
+            document.getElementById('admin-dashboard-actions').classList.toggle('hidden', isCabdin);
+            document.getElementById('admin-dashboard-tabs').classList.remove('hidden');
+            document.getElementById('admin-tab-slots').classList.remove('hidden');
+            document.getElementById('admin-tab-download').classList.remove('hidden');
+            document.getElementById('admin-supervisor-download-button').classList.remove('hidden');
+            document.getElementById('admin-slot-status-page').classList.add('hidden');
+            document.getElementById('admin-supervisor-download-page').classList.add('hidden');
+            document.getElementById('admin-overview-content').classList.remove('hidden');
+            document.getElementById('admin-tab-overview').classList.add('is-active');
+            document.getElementById('admin-tab-overview').setAttribute('aria-selected', 'true');
+            document.getElementById('admin-tab-slots').classList.remove('is-active');
+            document.getElementById('admin-tab-slots').setAttribute('aria-selected', 'false');
+            document.getElementById('admin-tab-download').classList.remove('is-active');
+            document.getElementById('admin-tab-download').setAttribute('aria-selected', 'false');
+        }
+
+        window.showSchoolAdminSection = async (section) => {
+            const showSlots = section === 'slots';
+            document.getElementById('school-admin-assignment-content').classList.toggle('hidden', showSlots);
+            document.getElementById('school-slot-status-page').classList.toggle('hidden', !showSlots);
+            document.getElementById('school-admin-tab-assignment').classList.toggle('is-active', !showSlots);
+            document.getElementById('school-admin-tab-assignment').setAttribute('aria-selected', String(!showSlots));
+            document.getElementById('school-admin-tab-slots').classList.toggle('is-active', showSlots);
+            document.getElementById('school-admin-tab-slots').setAttribute('aria-selected', String(showSlots));
+            if (showSlots) await window.loadSchoolSlotStatus();
+        }
+
+        window.loadSchoolSlotStatus = async () => {
+            const tbody = document.getElementById('school-slot-status-body');
+            ['school-slot-stat-complete', 'school-slot-stat-incomplete', 'school-slot-stat-total'].forEach(id => {
+                document.getElementById(id).innerText = '—';
+            });
+            tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Memuat data seluruh sekolah...</td></tr>';
+            if (!ensureFirebaseReady('memuat status slot seluruh sekolah')) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Data tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                return;
+            }
+
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                const schoolsData = snapshot.docs.map(docSnap => {
+                    const data = docSnap.data();
+                    return {
+                        ...data,
+                        docId: docSnap.id,
+                        nama_sekolah: data.nama_sekolah || 'Sekolah tidak diketahui',
+                        npsn: data.npsn || '-'
+                    };
+                });
+                window.renderSchoolSlotStatus(schoolsData);
+                document.getElementById('school-slot-last-loaded').innerText = `Terakhir dimuat ${new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}`;
+            } catch (error) {
+                console.error('Gagal memuat status slot seluruh sekolah:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Gagal memuat status slot. Periksa koneksi dan izin Firestore, lalu muat ulang.</td></tr>';
+            }
+        }
+
+        window.logoutToHome = () => {
+            currentSchoolName = "";
+            currentNPSN = "";
+            currentAdminRole = "";
+            setSchoolHeaderIdentity('', '');
+            submittedScheduleSnapshot = null;
+            isEditingSubmittedSchedule = false;
+            scheduleMappingNeedsReview = false;
+            document.getElementById('cancel-schedule-edit').classList.add('hidden');
+            window.showSchoolAdminSection('assignment');
+            window.switchPage('page-final-rekap', 'page-auth');
+            window.switchPage('page-admin-dashboard', 'page-auth');
+            document.getElementById('school-auth-section').classList.remove('hidden');
+            document.getElementById('admin-auth-section').classList.add('hidden');
+            document.getElementById('toggle-admin-btn').innerText = "Masuk sebagai Admin MKKS / Cabdin";
+        }
+
+        // --- TOGGLE ADMIN & SEKOLAH LOGIN ---
+        window.toggleAdminLogin = () => {
+            const schoolSection = document.getElementById('school-auth-section');
+            const adminSection = document.getElementById('admin-auth-section');
+            const btn = document.getElementById('toggle-admin-btn');
+
+            if (schoolSection.classList.contains('hidden')) {
+                schoolSection.classList.remove('hidden');
+                adminSection.classList.add('hidden');
+                btn.innerText = "Masuk sebagai Admin MKKS / Cabdin";
+            } else {
+                schoolSection.classList.add('hidden');
+                adminSection.classList.remove('hidden');
+                btn.innerText = "Kembali ke Login Sekolah";
+            }
+        }
+
+        window.switchAuthTab = (type) => {
+            const showRegister = type === 'register';
+            const registerPanel = document.getElementById('school-register-panel');
+            const loginPanel = document.getElementById('school-login-panel');
+            const registerTab = document.getElementById('tab-register');
+            const loginTab = document.getElementById('tab-login');
+            registerPanel.classList.toggle('hidden', !showRegister);
+            loginPanel.classList.toggle('hidden', showRegister);
+            registerTab.classList.toggle('is-active', showRegister);
+            registerTab.setAttribute('aria-selected', String(showRegister));
+            loginTab.classList.toggle('is-active', !showRegister);
+            loginTab.setAttribute('aria-selected', String(!showRegister));
+            const input = document.getElementById(type === 'register' ? 'input-school-dropdown' : 'input-npsn-login');
+            input.focus();
+        }
+
+        // --- ALUR LOGIN ADMIN MKKS ---
+        window.handleAdminLogin = async () => {
+            const user = document.getElementById('input-admin-user').value.trim();
+            const pass = document.getElementById('input-admin-pass').value;
+
+            if (!user || !pass) return alert("Username dan Password wajib diisi!");
+            if (!ensureFirebaseReady('login admin MKKS')) return;
+
+            try {
+                let adminSnapshot = await getDoc(doc(db, 'admin', user));
+
+                if (!adminSnapshot.exists()) {
+                    const matchingAdmins = new Map();
+                    for (const field of ['ID Admin', 'username']) {
+                        const adminQuery = query(collection(db, 'admin'), where(field, '==', user));
+                        const querySnapshot = await getDocs(adminQuery);
+                        querySnapshot.forEach(adminDoc => matchingAdmins.set(adminDoc.id, adminDoc));
+                    }
+
+                    if (matchingAdmins.size > 1) {
+                        alert('Username ditemukan pada lebih dari satu akun admin. Pastikan setiap ID Admin hanya digunakan oleh satu dokumen.');
+                        return;
+                    }
+                    if (matchingAdmins.size === 0) {
+                        alert('Akun tidak ditemukan. Gunakan nilai kolom ID Admin pada tabel Admin dan pastikan dokumen ada di koleksi admin Firestore.');
+                        return;
+                    }
+                    adminSnapshot = matchingAdmins.values().next().value;
+                }
+
+                const adminData = adminSnapshot.data();
+                const storedRole = typeof adminData.role === 'string' ? adminData.role.trim().toLowerCase() : '';
+                const role = storedRole === 'admin' ? 'admin_mkks' : storedRole;
+                if (!['admin_mkks', 'admin_cabdin'].includes(role)) {
+                    alert('Role akun tidak sesuai. Isi field role dengan admin, admin_cabdin, atau admin_mkks.');
+                    return;
+                }
+                if (adminData.active === false) {
+                    alert('Akun admin ini nonaktif. Ubah field active menjadi true di Firestore.');
+                    return;
+                }
+                if (typeof adminData.password !== 'string' || adminData.password !== pass) {
+                    alert('Password admin salah. Periksa nilai dan tipe field password di Firestore.');
+                    return;
+                }
+
+                configureAdminDashboard(role);
+                await loadAdminDashboardData();
+                window.switchPage('page-auth', 'page-admin-dashboard');
+            } catch (error) {
+                console.error('Gagal login admin melalui Firestore:', error);
+                const errorCode = error?.code || error?.message || 'kesalahan tidak diketahui';
+                alert(`Login admin gagal (${errorCode}). Pastikan project Firebase dan Rules Firestore mengizinkan pembacaan dokumen admin.`);
+            }
+        }
+
+        // --- MEMUAT DATA UNTUK ADMIN ---
+        window.loadAdminDashboardData = async () => {
+            const tbody = document.getElementById('admin-table-body');
+            const missingLabsCount = document.getElementById('schools-missing-labs-count');
+            const missingLabsList = document.getElementById('schools-missing-labs-list');
+            window.adminSchoolData = [];
+            tbody.innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Memuat data dari server...</td></tr>';
+
+            if (!ensureFirebaseReady('memuat dashboard admin')) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Firebase belum dikonfigurasi. Silakan isi config Firebase yang valid.</td></tr>';
+                missingLabsList.innerText = 'Data jumlah lab tidak dapat diperiksa karena Firebase belum dikonfigurasi.';
+                document.getElementById('admin-slot-status-body').innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Status slot tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                document.getElementById('admin-supervisor-wave1-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Data tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                document.getElementById('admin-supervisor-wave2-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Data tidak dapat dimuat karena Firebase belum dikonfigurasi.</td></tr>';
+                return;
+            }
+
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                const schoolsData = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    schoolsData.push({
+                        ...data,
+                        docId: docSnap.id,
+                        nama_sekolah: data.nama_sekolah || 'Sekolah tidak diketahui',
+                        npsn: data.npsn || '-',
+                        status: data.status || 'Menunggu Admin MKKS',
+                        jadwal_harian: data.jadwal_harian || {}
+                    });
+                });
+                window.adminSchoolData = schoolsData;
+                window.renderAdminSlotStatus(schoolsData);
+                window.renderAdminSupervisorTables(schoolsData);
+
+                const totalSubmitted = schoolsData.length;
+                document.getElementById('stat-submitted').innerText = totalSubmitted;
+                document.getElementById('stat-pending').innerText = Math.max(0, schoolList.length - totalSubmitted);
+
+                const scheduleBySchool = new Map(schoolsData.map(school => [school.nama_sekolah, school.jadwal_harian]));
+                const missingLabSchools = schoolList.filter(schoolName => {
+                    const days = Object.values(scheduleBySchool.get(schoolName) || {});
+                    return days.length === 0 || days.some(day => getDayLabCount(day) < 1 || getDayLabCount(day) > 10);
+                });
+                missingLabsCount.innerText = `${missingLabSchools.length} sekolah`;
+                missingLabsList.innerText = missingLabSchools.length > 0
+                    ? missingLabSchools.join(', ')
+                    : 'Semua sekolah sudah mengisi jumlah lab.';
+                const missingLabsPanel = document.getElementById('schools-missing-labs-panel');
+                missingLabsPanel.classList.toggle('notice-warning', missingLabSchools.length > 0);
+                missingLabsPanel.classList.toggle('notice-success', missingLabSchools.length === 0);
+
+                tbody.innerHTML = '';
+                if (schoolsData.length > 0) {
+                    schoolsData.forEach(s => {
+                        let totalTitik = 0;
+                        let gelombangStr = new Set();
+
+                        Object.keys(s.jadwal_harian).forEach(date => {
+                            const d = new Date(date);
+                            if (d.getMonth() === 9) gelombangStr.add('Gel 1');
+                            if (d.getMonth() === 10) gelombangStr.add('Gel 2');
+                            totalTitik += getDayLabCount(s.jadwal_harian[date]);
+                        });
+
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="font-medium">${s.nama_sekolah}</td>
+                                <td style="color:var(--color-text-muted)">${s.npsn}</td>
+                                <td><span class="badge badge-primary">${Array.from(gelombangStr).join(' & ') || 'Belum dipilih'}</span></td>
+                                <td class="font-semibold">${totalTitik} Pengawas</td>
+                                <td class="text-center"><span class="badge ${s.status === 'Data pengawas tersimpan' ? 'badge-success' : s.status === 'Penempatan tersedia' ? 'badge-primary' : 'badge-warning'}">${s.status}</span></td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Belum ada sekolah yang mengirimkan jadwal.</td></tr>';
+                }
+            } catch (error) {
+                console.error('Gagal memuat dashboard admin dari Firestore:', error);
+                tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center help-text">Gagal memuat data dari Firestore. Cek konfigurasi Firebase dan Rules.</td></tr>';
+                missingLabsList.innerText = 'Gagal memuat rekap jumlah lab. Periksa koneksi dan izin Firestore.';
+                document.getElementById('admin-slot-status-body').innerHTML = '<tr><td colspan="5" class="py-6 text-center help-text">Gagal memuat status slot. Periksa koneksi dan izin Firestore, lalu muat ulang.</td></tr>';
+                document.getElementById('admin-supervisor-wave1-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Gagal memuat data. Periksa koneksi dan izin Firestore.</td></tr>';
+                document.getElementById('admin-supervisor-wave2-body').innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Gagal memuat data. Periksa koneksi dan izin Firestore.</td></tr>';
+            }
+        }
+
+        const renderSlotStatusTable = (schoolsData, audience) => {
+            const schoolByName = new Map(schoolsData.map(school => [school.nama_sekolah, school]));
+            const rows = schoolList.map((schoolName, schoolIndex) => {
+                const school = schoolByName.get(schoolName);
+                const assignments = normalizeOutgoingAssignments(school?.penugasan_keluar);
+                const filledCount = assignments.filter(item => (item.nama_pengawas || '').trim()).length;
+                const totalSlots = assignments.length;
+                const complete = totalSlots > 0 && filledCount === totalSlots;
+                return {
+                    schoolName,
+                    npsn: school?.npsn || '-',
+                    filledCount,
+                    totalSlots,
+                    complete,
+                    percent: totalSlots > 0 ? Math.round((filledCount / totalSlots) * 100) : 0,
+                    schoolIndex
+                };
+            }).sort((left, right) => {
+                const urgency = row => row.complete ? 2 : row.totalSlots === 0 ? 1 : 0;
+                return urgency(left) - urgency(right) || left.schoolIndex - right.schoolIndex;
+            });
+            const completeCount = rows.filter(row => row.complete).length;
+            const isAdmin = audience === 'admin';
+            const statPrefix = isAdmin ? '' : 'school-';
+            document.getElementById(`${statPrefix}slot-stat-complete`).innerText = completeCount;
+            document.getElementById(`${statPrefix}slot-stat-incomplete`).innerText = rows.length - completeCount;
+            document.getElementById(`${statPrefix}slot-stat-total`).innerText = rows.length;
+
+            const tbodyId = isAdmin ? 'admin-slot-status-body' : 'school-slot-status-body';
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.dataset.status = row.complete ? 'complete' : row.totalSlots === 0 ? 'no-slots' : 'incomplete';
+                tr.dataset.search = `${row.schoolName} ${row.npsn}`.toLowerCase();
+                const isCurrentSchool = audience === 'school' && row.schoolName === currentSchoolName;
+                tr.classList.toggle('is-current-school', isCurrentSchool);
+                const statusText = row.complete ? 'Selesai mengisi' : row.totalSlots === 0 ? 'Belum ada slot' : 'Belum lengkap';
+                const statusClass = row.complete ? 'badge-success' : row.totalSlots === 0 ? 'badge-primary' : 'badge-warning';
+                [row.schoolName, row.npsn].forEach((value, index) => {
+                    const cell = document.createElement('td');
+                    if (index === 0 && isCurrentSchool) {
+                        cell.className = 'font-medium';
+                        const schoolName = document.createElement('span');
+                        schoolName.textContent = value;
+                        const ownSchoolBadge = document.createElement('span');
+                        ownSchoolBadge.className = 'badge badge-primary ml-2';
+                        ownSchoolBadge.textContent = 'Sekolah Anda';
+                        cell.append(schoolName, ownSchoolBadge);
+                    } else {
+                        cell.textContent = value;
+                        if (index === 0) cell.className = 'font-medium';
+                        else cell.style.color = 'var(--color-text-muted)';
+                    }
+                    tr.appendChild(cell);
+                });
+                const slotCell = document.createElement('td');
+                slotCell.className = 'text-center font-semibold';
+                slotCell.textContent = row.totalSlots > 0 ? `${row.filledCount}/${row.totalSlots}` : '0 slot';
+                tr.appendChild(slotCell);
+                const percentCell = document.createElement('td');
+                percentCell.className = 'text-center';
+                const progressLabel = document.createElement('span');
+                progressLabel.textContent = row.totalSlots > 0 ? `${row.percent}%` : '—';
+                percentCell.appendChild(progressLabel);
+                const progressTrack = document.createElement('div');
+                progressTrack.className = 'slot-progress mt-1.5';
+                progressTrack.setAttribute('role', 'progressbar');
+                progressTrack.setAttribute('aria-label', `Kelengkapan ${row.schoolName}`);
+                progressTrack.setAttribute('aria-valuemin', '0');
+                progressTrack.setAttribute('aria-valuemax', '100');
+                progressTrack.setAttribute('aria-valuenow', String(row.percent));
+                const progressFill = document.createElement('div');
+                progressFill.className = `slot-progress-fill${row.complete ? ' is-complete' : ''}`;
+                progressFill.style.width = `${row.percent}%`;
+                progressTrack.appendChild(progressFill);
+                percentCell.appendChild(progressTrack);
+                tr.appendChild(percentCell);
+                const statusCell = document.createElement('td');
+                statusCell.className = 'text-center';
+                const badge = document.createElement('span');
+                badge.className = `badge ${statusClass}`;
+                badge.textContent = statusText;
+                statusCell.appendChild(badge);
+                tr.appendChild(statusCell);
+                tbody.appendChild(tr);
+            });
+            filterSlotStatus(audience);
+        }
+
+        window.renderAdminSlotStatus = (schoolsData = window.adminSchoolData || []) => {
+            renderSlotStatusTable(schoolsData, 'admin');
+        }
+
+        window.renderSchoolSlotStatus = (schoolsData) => {
+            renderSlotStatusTable(schoolsData, 'school');
+        }
+
+        const filterSlotStatus = (audience) => {
+            const isAdmin = audience === 'admin';
+            const searchId = isAdmin ? 'admin-slot-search' : 'school-slot-search';
+            const filterId = isAdmin ? 'admin-slot-filter' : 'school-slot-filter';
+            const tbodyId = isAdmin ? 'admin-slot-status-body' : 'school-slot-status-body';
+            const search = (document.getElementById(searchId)?.value || '').trim().toLowerCase();
+            const status = document.getElementById(filterId)?.value || 'all';
+            document.querySelectorAll(`#${tbodyId} tr[data-status]`).forEach(row => {
+                const matchesSearch = row.dataset.search.includes(search);
+                const matchesStatus = status === 'all'
+                    || row.dataset.status === status
+                    || (status === 'incomplete' && row.dataset.status === 'no-slots');
+                row.classList.toggle('hidden', !matchesSearch || !matchesStatus);
+            });
+        }
+
+        window.filterAdminSlotStatus = () => filterSlotStatus('admin');
+        window.filterSchoolSlotStatus = () => filterSlotStatus('school');
+
+        window.getAdminSupervisorWaveRows = (schoolsData = window.adminSchoolData || []) => {
+            const waveDates = {
+                'Gelombang 1': new Set(['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29']),
+                'Gelombang 2': new Set(['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05'])
+            };
+            const orderedSchools = [...schoolsData].sort((left, right) => {
+                const leftIndex = schoolList.indexOf(left.nama_sekolah);
+                const rightIndex = schoolList.indexOf(right.nama_sekolah);
+                return (leftIndex < 0 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex < 0 ? Number.MAX_SAFE_INTEGER : rightIndex)
+                    || left.nama_sekolah.localeCompare(right.nama_sekolah);
+            });
+            const rowsByWave = { 'Gelombang 1': [], 'Gelombang 2': [] };
+
+            orderedSchools.forEach(school => {
+                normalizeOutgoingAssignments(school.penugasan_keluar).forEach(item => {
+                    const wave = Object.keys(waveDates).find(name => waveDates[name].has(item.date));
+                    if (!wave) return;
+                    rowsByWave[wave].push({
+                        sekolahAsal: school.nama_sekolah || 'Sekolah tidak diketahui',
+                        date: item.date,
+                        tanggal: new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+                        nama: (item.nama_pengawas || '').trim(),
+                        nip: (item.nip || '').trim(),
+                        lab: item.lab ? `Lab ${item.lab}` : '',
+                        sekolahTujuan: item.tujuan || ''
+                    });
+                });
+            });
+
+            Object.values(rowsByWave).forEach(rows => rows.sort((left, right) =>
+                left.sekolahAsal.localeCompare(right.sekolahAsal, 'id')
+                    || left.date.localeCompare(right.date)
+                    || left.lab.localeCompare(right.lab, 'id', { numeric: true })
+            ));
+            return rowsByWave;
+        }
+
+        window.renderAdminSupervisorTables = (schoolsData = window.adminSchoolData || []) => {
+            const rowsByWave = window.getAdminSupervisorWaveRows(schoolsData);
+            [
+                ['Gelombang 1', 'admin-supervisor-wave1-body'],
+                ['Gelombang 2', 'admin-supervisor-wave2-body']
+            ].forEach(([wave, elementId]) => {
+                const tbody = document.getElementById(elementId);
+                tbody.innerHTML = '';
+                if (rowsByWave[wave].length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="py-5 text-center help-text">Belum ada slot penugasan untuk gelombang ini.</td></tr>';
+                    return;
+                }
+                rowsByWave[wave].forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    [index + 1, row.sekolahAsal, row.tanggal, row.nama, row.nip, row.lab, row.sekolahTujuan].forEach(value => {
+                        const td = document.createElement('td');
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+        window.downloadAllSupervisorsExcel = () => {
+            if (!window.XLSX) return alert('Pustaka Excel belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.');
+            const rowsByWave = window.getAdminSupervisorWaveRows();
+            const headers = ['No', 'Sekolah Asal', 'Tanggal', 'Nama', 'NIP', 'Lab', 'Sekolah Tempat Mengawas'];
+            const workbook = window.XLSX.utils.book_new();
+
+            Object.entries(rowsByWave).forEach(([wave, rows]) => {
+                const sheetRows = [headers, ...rows.map((row, index) => [
+                    index + 1, row.sekolahAsal, row.tanggal, row.nama, row.nip, row.lab, row.sekolahTujuan
+                ])];
+                const worksheet = window.XLSX.utils.aoa_to_sheet(sheetRows);
+                worksheet['!cols'] = [{ wch: 7 }, { wch: 38 }, { wch: 16 }, { wch: 30 }, { wch: 20 }, { wch: 12 }, { wch: 38 }];
+                worksheet['!autofilter'] = { ref: `A1:G${Math.max(1, sheetRows.length)}` };
+                window.XLSX.utils.book_append_sheet(workbook, worksheet, wave);
+            });
+
+            window.XLSX.writeFile(workbook, 'data-seluruh-pengawas-tka-2026.xlsx');
+        }
+
+        window.importManualMapping = async (event) => {
+            if (currentAdminRole === 'admin_cabdin') {
+                event.target.value = '';
+                return alert('Akun Admin Cabdin hanya memiliki akses lihat.');
+            }
+            const file = event.target.files?.[0];
+            if (!file) return;
+            if (!ensureFirebaseReady('mengimpor pemetaan manual')) {
+                event.target.value = '';
+                return;
+            }
+
+            try {
+                if (!window.XLSX) throw new Error('Pustaka pembaca Excel belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.');
+                if (!Array.isArray(window.adminSchoolData) || window.adminSchoolData.length === 0) {
+                    throw new Error('Data sekolah belum tersedia. Muat ulang dashboard admin lalu coba lagi.');
+                }
+
+                const workbook = window.XLSX.read(await file.arrayBuffer(), { type: 'array', cellDates: false });
+                const schoolByName = new Map(window.adminSchoolData.map(school => [school.nama_sekolah.trim(), school]));
+                const waveConfigs = [
+                    { name: 'Gel 1', dates: ['2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29'] },
+                    { name: 'Gel 2', dates: ['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05'] }
+                ];
+                const assignmentsBySchool = new Map(window.adminSchoolData.map(school => [school.nama_sekolah, []]));
+                const existingAssignmentsBySchool = new Map(window.adminSchoolData.map(school => [
+                    school.nama_sekolah,
+                    new Map(normalizeOutgoingAssignments(school.penugasan_keluar).map(item => [
+                        `${item.date}|${Number(item.slot_asal_lab)}`,
+                        item
+                    ]))
+                ]));
+                const participantsByWave = new Map();
+                const sourceTotalsByWave = new Map();
+                const waveSummaries = [];
+                const errors = [];
+                let totalSlots = 0;
+
+                const parseDateHeader = value => {
+                    if (typeof value === 'number') {
+                        const parsed = window.XLSX.SSF.parse_date_code(value);
+                        return parsed ? `${parsed.y}-${String(parsed.m).padStart(2, '0')}-${String(parsed.d).padStart(2, '0')}` : '';
+                    }
+                    const normalized = String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const labels = {
+                        '26okt': '2026-10-26', '27okt': '2026-10-27', '28okt': '2026-10-28', '29okt': '2026-10-29',
+                        '02nov': '2026-11-02', '2nov': '2026-11-02', '03nov': '2026-11-03', '3nov': '2026-11-03',
+                        '04nov': '2026-11-04', '4nov': '2026-11-04', '05nov': '2026-11-05', '5nov': '2026-11-05'
+                    };
+                    return labels[normalized] || '';
+                };
+
+                for (const wave of waveConfigs) {
+                    const sheetName = workbook.SheetNames.find(name => name.trim().toLowerCase() === wave.name.toLowerCase());
+                    if (!sheetName) {
+                        errors.push(`Sheet "${wave.name}" tidak ditemukan.`);
+                        continue;
+                    }
+
+                    const rows = window.XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, raw: true, defval: '' });
+                    const firstWorksheetRow = window.XLSX.utils.decode_range(workbook.Sheets[sheetName]['!ref']).s.r;
+                    const headerRowIndex = 4 - firstWorksheetRow;
+                    const firstDataRowIndex = 5 - firstWorksheetRow;
+                    const headerDates = (rows[headerRowIndex] || []).slice(3, 7).map(parseDateHeader);
+                    if (wave.dates.some((date, index) => headerDates[index] !== date)) {
+                        errors.push(`Header tanggal di sheet "${wave.name}" tidak sesuai jadwal gelombang.`);
+                        continue;
+                    }
+
+                    const waveRoutes = [];
+                    const sourceTotals = new Map();
+                    let currentSource = '';
+                    let currentJml = 0;
+                    let sourceSlot = 0;
+                    for (const row of rows.slice(firstDataRowIndex)) {
+                        const sourceName = String(row[1] || '').trim();
+                        if (sourceName) {
+                            currentSource = sourceName;
+                            currentJml = Number(row[2]);
+                            sourceSlot = 0;
+                            if (!Number.isInteger(currentJml) || currentJml < 1) errors.push(`${wave.name}: JML tidak valid untuk ${currentSource}.`);
+                            sourceTotals.set(currentSource, { jml: currentJml, rows: 0 });
+                        }
+
+                        const destinationName = String(row[7] || '').trim();
+                        if (!destinationName) continue;
+                        if (!currentSource || !Number.isInteger(currentJml) || currentJml < 1) {
+                            errors.push(`${wave.name}: tujuan ${destinationName} tidak memiliki sekolah asal/JML.`);
+                            continue;
+                        }
+
+                        sourceSlot++;
+                        sourceTotals.get(currentSource).rows++;
+                        waveRoutes.push({
+                            sourceName: currentSource,
+                            sourceSlot,
+                            destinationName,
+                            supervisors: row.slice(3, 7).map(value => String(value || '').trim())
+                        });
+                    }
+
+                    if (waveRoutes.length === 0) errors.push(`Tidak ada pemetaan pada sheet "${wave.name}".`);
+                    waveSummaries.push(`${wave.name}: ${sourceTotals.size} sekolah, ${waveRoutes.length} slot`);
+                    sourceTotals.forEach((entry, schoolName) => {
+                        if (entry.rows !== entry.jml) errors.push(`${wave.name}: ${schoolName} memiliki ${entry.rows} baris tujuan, tetapi JML tertulis ${entry.jml}.`);
+                        if (!schoolByName.has(schoolName)) errors.push(`${wave.name}: sekolah asal "${schoolName}" tidak ditemukan pada data sekolah tersimpan.`);
+                    });
+
+                    const waveParticipants = new Set(sourceTotals.keys());
+                    participantsByWave.set(wave.name, waveParticipants);
+                    sourceTotalsByWave.set(wave.name, sourceTotals);
+                    wave.dates.forEach((date, dateIndex) => {
+                        const destinationSlots = new Map();
+                        for (const route of waveRoutes) {
+                            const source = schoolByName.get(route.sourceName);
+                            const destination = schoolByName.get(route.destinationName);
+                            if (!destination) {
+                                errors.push(`${wave.name}: sekolah tujuan "${route.destinationName}" tidak ditemukan pada data tersimpan.`);
+                                continue;
+                            }
+                            if (route.sourceName === route.destinationName) {
+                                errors.push(`${wave.name}: ${route.sourceName} dipetakan ke sekolahnya sendiri.`);
+                                continue;
+                            }
+                            if (!source) continue;
+
+                            const targetSlot = (destinationSlots.get(route.destinationName) || 0) + 1;
+                            destinationSlots.set(route.destinationName, targetSlot);
+
+                            const importedName = route.supervisors[dateIndex];
+                            const existingAssignment = existingAssignmentsBySchool.get(route.sourceName)?.get(`${date}|${route.sourceSlot}`);
+                            const existingName = (existingAssignment?.nama_pengawas || '').trim();
+                            const sameSupervisor = importedName && existingName
+                                && importedName.toLocaleLowerCase('id').replace(/\s+/g, ' ') === existingName.toLocaleLowerCase('id').replace(/\s+/g, ' ');
+                            const sourceAssignments = assignmentsBySchool.get(route.sourceName) || [];
+                            sourceAssignments.push({
+                                date,
+                                tujuan: route.destinationName,
+                                tujuanNpsn: destination.npsn || destination.docId,
+                                lab: targetSlot,
+                                slot_asal_lab: route.sourceSlot,
+                                nama_pengawas: importedName || existingName,
+                                nip: importedName
+                                    ? (sameSupervisor ? existingAssignment.nip || '' : '')
+                                    : existingAssignment?.nip || ''
+                            });
+                            assignmentsBySchool.set(route.sourceName, sourceAssignments);
+                            totalSlots++;
+                        }
+
+                        for (const school of window.adminSchoolData) {
+                            const schoolName = school.nama_sekolah;
+                            const targetCount = destinationSlots.get(schoolName) || 0;
+                            const expectedLabs = sourceTotals.get(schoolName)?.jml || 0;
+                            if (targetCount !== expectedLabs) errors.push(`${date}: ${schoolName} menerima ${targetCount} penempatan, tetapi jumlah lab pada Excel ${expectedLabs}.`);
+                        }
+                    });
+                }
+
+                const updatedSchedulesBySchool = new Map(window.adminSchoolData.map(school => {
+                    const schedule = { ...(school.jadwal_harian || {}) };
+                    waveConfigs.forEach(wave => wave.dates.forEach(date => delete schedule[date]));
+                    return [school.nama_sekolah, schedule];
+                }));
+                waveConfigs.forEach(wave => {
+                    const participants = participantsByWave.get(wave.name) || new Set();
+                    participants.forEach(schoolName => {
+                        const source = schoolByName.get(schoolName);
+                        if (!source) return;
+                        const sourceSchedule = updatedSchedulesBySchool.get(schoolName) || {};
+                        wave.dates.forEach(date => {
+                            sourceSchedule[date] = { labCount: Number(sourceTotalsByWave.get(wave.name)?.get(schoolName)?.jml) };
+                        });
+                        updatedSchedulesBySchool.set(schoolName, sourceSchedule);
+                    });
+                });
+
+                assignmentsBySchool.forEach((assignments, schoolName) => {
+                    const targetWave = waveConfigs.find(wave => participantsByWave.get(wave.name)?.has(schoolName));
+                    if (!targetWave) return;
+                    const previousWave = waveConfigs.find(wave => wave.name !== targetWave.name);
+                    const school = schoolByName.get(schoolName);
+                    const movedFromPreviousWave = !participantsByWave.get(previousWave.name)?.has(schoolName)
+                        && previousWave.dates.some(date => getDayLabCount(school.jadwal_harian?.[date]) > 0)
+                        && targetWave.dates.every(date => getDayLabCount(school.jadwal_harian?.[date]) === 0);
+                    if (!movedFromPreviousWave) return;
+
+                    assignments.forEach(item => {
+                        if ((item.nama_pengawas || '').trim()) return;
+                        const dateIndex = targetWave.dates.indexOf(item.date);
+                        if (dateIndex < 0) return;
+                        const previousDate = previousWave.dates[dateIndex];
+                        const previousAssignment = existingAssignmentsBySchool.get(schoolName)?.get(`${previousDate}|${Number(item.slot_asal_lab)}`);
+                        if (!(previousAssignment?.nama_pengawas || '').trim()) return;
+                        item.nama_pengawas = previousAssignment.nama_pengawas;
+                        item.nip = previousAssignment.nip || '';
+                    });
+                });
+
+                window.adminSchoolData.forEach(school => {
+                    const assignments = assignmentsBySchool.get(school.nama_sekolah) || [];
+                    waveConfigs.flatMap(wave => wave.dates).forEach(date => {
+                        const expectedLabs = getDayLabCount(updatedSchedulesBySchool.get(school.nama_sekolah)?.[date]);
+                        const actualAssignments = assignments.filter(item => item.date === date).length;
+                        if (actualAssignments !== expectedLabs) errors.push(`${date}: ${school.nama_sekolah} memiliki ${actualAssignments} pengawas keluar, tetapi jadwal Excel menetapkan ${expectedLabs} lab.`);
+                    });
+                });
+
+                if (errors.length > 0) {
+                    throw new Error(`Pemetaan belum diterapkan karena ditemukan ${errors.length} masalah:\n\n${errors.slice(0, 12).join('\n')}${errors.length > 12 ? '\n...dan masalah lainnya.' : ''}`);
+                }
+
+                const confirmation = `Terapkan pemetaan dan jadwal gelombang dari "${file.name}"?\n\n${waveSummaries.join('\n')}\n\nJadwal gelombang dan jumlah lab akan mengikuti Excel. Nama/NIP lama dipertahankan untuk slot asal dan tanggal yang sama; untuk sekolah yang pindah gelombang, nama/NIP dipindahkan ke tanggal pasangan.`;
+                if (!confirm(confirmation)) return;
+
+                const batch = writeBatch(db);
+                assignmentsBySchool.forEach((assignments, schoolName) => {
+                    const school = schoolByName.get(schoolName);
+                    const { docId, ...schoolData } = school;
+                    const isComplete = assignments.length > 0 && assignments.every(item => (item.nama_pengawas || '').trim());
+                    batch.set(doc(db, 'schedules', school.docId || school.npsn), {
+                        ...schoolData,
+                        jadwal_harian: updatedSchedulesBySchool.get(schoolName) || {},
+                        penugasan_keluar: assignments,
+                        status: isComplete ? 'Data pengawas tersimpan' : 'Penempatan tersedia',
+                        updated_at: new Date()
+                    });
+                });
+                await batch.commit();
+                await window.loadAdminDashboardData();
+                alert(`Pemetaan dan jadwal gelombang berhasil diperbarui untuk ${assignmentsBySchool.size} sekolah. ${totalSlots} slot penugasan diproses; nama/NIP pengawas lama dipertahankan atau dipindahkan sesuai tanggal pasangan.`);
+            } catch (error) {
+                console.error('Gagal mengimpor pemetaan manual:', error);
+                alert(error.message || 'Gagal membaca atau menerapkan file pemetaan.');
+            } finally {
+                event.target.value = '';
+            }
+        }
+
+        window.downloadAdminExcel = () => {
+            if (currentAdminRole === 'admin_cabdin') return;
+            const dates = [
+                { value: '2026-10-26', label: '26 Okt' },
+                { value: '2026-10-27', label: '27 Okt' },
+                { value: '2026-10-28', label: '28 Okt' },
+                { value: '2026-10-29', label: '29 Okt' },
+                { value: '2026-11-02', label: '02-Nov' },
+                { value: '2026-11-03', label: '03-Nov' },
+                { value: '2026-11-04', label: '04-Nov' },
+                { value: '2026-11-05', label: '05-Nov' }
+            ];
+            const submittedByName = new Map((window.adminSchoolData || []).map(school => [school.nama_sekolah, school]));
+            const rows = [
+                ['No', 'Nama Sekolah', 'Jumlah lab Aktif', '', '', '', '', '', '', ''],
+                ['', '', ...dates.map(date => date.label)]
+            ];
+            schoolList.forEach((schoolName, index) => {
+                const schedule = submittedByName.get(schoolName)?.jadwal_harian || {};
+                const labCells = dates.map(date => {
+                    const value = Object.prototype.hasOwnProperty.call(schedule, date.value)
+                        ? getDayLabCount(schedule[date.value])
+                        : '';
+                    return value;
+                });
+                rows.push([index + 1, schoolName, ...labCells]);
+            });
+
+            const worksheet = window.XLSX.utils.aoa_to_sheet(rows);
+            worksheet['!merges'] = [
+                { s: { r: 0, c: 0 }, e: { r: 1, c: 0 } },
+                { s: { r: 0, c: 1 }, e: { r: 1, c: 1 } },
+                { s: { r: 0, c: 2 }, e: { r: 0, c: 9 } }
+            ];
+            worksheet['!cols'] = [{ wch: 6 }, { wch: 40 }, ...dates.map(() => ({ wch: 12 }))];
+            worksheet['!rows'] = [{ hpt: 22 }, { hpt: 20 }];
+            const border = {
+                top: { style: 'thin', color: { rgb: '000000' } },
+                right: { style: 'thin', color: { rgb: '000000' } },
+                bottom: { style: 'thin', color: { rgb: '000000' } },
+                left: { style: 'thin', color: { rgb: '000000' } }
+            };
+            rows.forEach((row, rowIndex) => row.forEach((_, columnIndex) => {
+                const address = window.XLSX.utils.encode_cell({ r: rowIndex, c: columnIndex });
+                worksheet[address] ||= { t: 's', v: '' };
+                worksheet[address].s = {
+                    border,
+                    alignment: { horizontal: rowIndex < 2 || columnIndex !== 1 ? 'center' : 'left', vertical: 'center' },
+                    ...(rowIndex < 2 ? { font: { bold: true } } : {})
+                };
+            }));
+
+            const excelBook = window.XLSX.utils.book_new();
+            window.XLSX.utils.book_append_sheet(excelBook, worksheet, 'Rekap Lab');
+            const file = new Blob([window.XLSX.write(excelBook, { bookType: 'xlsx', type: 'array' })], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            });
+            const url = URL.createObjectURL(file);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rekap-jumlah-lab-aktif-tka-2026.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        window.acakJadwalSilang = async () => {
+            const yakin = confirm("Apakah Anda yakin ingin MENGACAK jadwal sekarang?\nPastikan semua sekolah sudah submit data!");
+            if (!yakin || !ensureFirebaseReady('mengacak penempatan pengawas')) return;
+
+            try {
+                const snapshot = await getDocs(collection(db, 'schedules'));
+                const records = [];
+                snapshot.forEach(docSnap => records.push({ id: docSnap.id, data: docSnap.data() }));
+                const submittedSchools = new Set(records.map(record => record.data.nama_sekolah).filter(Boolean));
+                const missingSchools = schoolList.filter(school => !submittedSchools.has(school));
+                if (missingSchools.length > 0) {
+                    return alert(`Pengacakan belum dilakukan: ${submittedSchools.size} dari ${schoolList.length} sekolah sudah mengirim jadwal.\n\nJadwal belum dikirim oleh: ${missingSchools.join(', ')}.`);
+                }
+
+                const assignmentBySchool = new Map(records.map(record => [record.id, []]));
+                const dates = [...new Set(records.flatMap(record => Object.keys(record.data.jadwal_harian || {})))].sort();
+                const allocationIssues = [];
+
+                dates.forEach(date => {
+                    const active = records.filter(record => record.data.jadwal_harian?.[date]);
+                    if (active.length < 2) {
+                        if (active.length === 1) allocationIssues.push(`${date} (${active[0].data.nama_sekolah || active[0].id})`);
+                        return;
+                    }
+                    const shuffled = [...active].sort(() => Math.random() - 0.5);
+                    const sourceBlocks = [];
+                    const destinationBlocks = [];
+                    shuffled.forEach(school => {
+                        const day = school.data.jadwal_harian[date];
+                        for (let labIndex = 0; labIndex < getDayLabCount(day); labIndex++) {
+                            sourceBlocks.push({ source: school, lab: labIndex + 1 });
+                            destinationBlocks.push({ destination: school, lab: labIndex + 1 });
+                        }
+                    });
+
+                    // Pasangkan satu pengawas untuk setiap lab aktif.
+                    const targetToSource = new Map();
+                    const tryMatchBlock = (sourceBlock, visited) => {
+                        const candidates = destinationBlocks
+                            .filter(target => target.destination.id !== sourceBlock.source.id && !visited.has(target))
+                            .sort(() => Math.random() - 0.5);
+                        for (const target of candidates) {
+                            visited.add(target);
+                            const previousSource = targetToSource.get(target);
+                            if (!previousSource || tryMatchBlock(previousSource, visited)) {
+                                targetToSource.set(target, sourceBlock);
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+
+                    const matchedAssignments = [];
+                    [...sourceBlocks].sort(() => Math.random() - 0.5).forEach(sourceBlock => {
+                        tryMatchBlock(sourceBlock, new Set());
+                    });
+                    const matchedSources = new Set(targetToSource.values());
+                    targetToSource.forEach((sourceBlock, target) => {
+                        matchedAssignments.push({ sourceSlot: sourceBlock, target });
+                    });
+
+                    const sourceLabKeys = new Set(matchedAssignments.map(({ sourceSlot }) => `${sourceSlot.source.id}|${sourceSlot.lab}`));
+                    const destinationLabKeys = new Set(matchedAssignments.map(({ target }) => `${target.destination.id}|${target.lab}`));
+                    if (matchedAssignments.length !== destinationBlocks.length || matchedSources.size !== sourceBlocks.length || sourceLabKeys.size !== sourceBlocks.length || destinationLabKeys.size !== destinationBlocks.length) {
+                        allocationIssues.push(date);
+                        return;
+                    }
+
+                    matchedAssignments.forEach(({ sourceSlot, target }) => {
+                        assignmentBySchool.get(sourceSlot.source.id).push({
+                            date,
+                            tujuan: target.destination.data.nama_sekolah || target.destination.id,
+                            tujuanNpsn: target.destination.id,
+                            lab: target.lab,
+                            slot_asal_lab: sourceSlot.lab,
+                            nama_pengawas: '',
+                            nip: ''
+                        });
+                    });
+
+                    const incomingBySchool = new Map(active.map(school => [school.id, 0]));
+                    matchedAssignments.forEach(({ target }) => {
+                        incomingBySchool.set(target.destination.id, incomingBySchool.get(target.destination.id) + 1);
+                    });
+                    active.forEach(school => {
+                        const expectedLabs = Array.from({ length: getDayLabCount(school.data.jadwal_harian[date]) }, (_, index) => index + 1);
+                        const outgoing = assignmentBySchool.get(school.id).filter(item => item.date === date).length;
+                        const incoming = incomingBySchool.get(school.id);
+                        const outgoingLabs = assignmentBySchool.get(school.id).filter(item => item.date === date).map(item => item.slot_asal_lab);
+                        const incomingLabs = matchedAssignments.filter(({ target }) => target.destination.id === school.id).map(({ target }) => target.lab);
+                        if (outgoing !== expectedLabs.length || incoming !== expectedLabs.length || new Set(outgoingLabs).size !== expectedLabs.length || new Set(incomingLabs).size !== expectedLabs.length || expectedLabs.some(lab => !outgoingLabs.includes(lab) || !incomingLabs.includes(lab))) {
+                            allocationIssues.push(`${date} (${school.data.nama_sekolah || school.id})`);
+                        }
+                    });
+                });
+
+                if (allocationIssues.length > 0) {
+                    return alert(`Pengacakan dibatalkan. Tidak ada perubahan yang disimpan. Periksa tanggal berikut: ${allocationIssues.join(', ')}. Setiap tanggal harus memiliki minimal dua sekolah aktif dan lab tiap sekolah harus dapat dipasangkan silang.`);
+                }
+
+                await Promise.all(records.map(record => setDoc(doc(db, 'schedules', record.id), {
+                    ...record.data,
+                    penugasan_keluar: assignmentBySchool.get(record.id),
+                    status: 'Penempatan tersedia',
+                    updated_at: new Date()
+                })));
+                await loadAdminDashboardData();
+                alert('Penempatan pengawas berhasil diacak. Admin sekolah sekarang dapat mengisi nama pengawas.');
+            } catch (error) {
+                console.error('Gagal mengacak penempatan pengawas:', error);
+                alert(`Pengacakan gagal: ${error.code || error.message || 'kesalahan tidak diketahui'}. Periksa koneksi dan izin Firestore.`);
+            }
+        }
+
+        // --- ALUR SEKOLAH ---
+        window.handleRegisterAuth = async () => {
+            const school = document.getElementById('input-school-dropdown').value;
+            const pass = document.getElementById('input-password-default').value;
+            if (!school) return alert("Silakan pilih nama sekolah Anda.");
+            if (pass !== "test123") return alert("Password default salah.");
+
+            if (db) {
+                try {
+                    const schoolRef = doc(db, 'schools', school);
+                    const schoolSnap = await getDoc(schoolRef);
+                    if (schoolSnap.exists() && schoolSnap.data().isRegistered) {
+                        alert(`⚠️ GAGAL: ${school} sudah pernah melakukan registrasi.\n\nSilakan gunakan menu Login Akun.`);
+                        switchAuthTab('login');
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Gagal memeriksa registrasi sekolah di Firestore:', error);
+                }
+            }
+
+            currentSchoolName = school;
+            document.getElementById('display-school-name').innerText = currentSchoolName;
+            window.switchPage('page-auth', 'page-create-account');
+        }
+
+        window.saveAccountAndProceed = async () => {
+            const npsn = document.getElementById('setup-npsn').value;
+            const pass = document.getElementById('setup-password').value;
+            if (!npsn || !pass) return alert("Mohon isi NPSN dan Password Baru.");
+
+            if (!ensureFirebaseReady('menyimpan akun sekolah')) return;
+
+            try {
+                await setDoc(doc(db, 'schools', currentSchoolName), {
+                    nama_sekolah: currentSchoolName,
+                    npsn: npsn,
+                    password: pass,
+                    isRegistered: true,
+                    created_at: new Date()
+                });
+            } catch (error) {
+                console.error('Gagal menyimpan akun sekolah ke Firestore:', error);
+                alert('Gagal menyimpan akun ke Firestore. Cek konfigurasi Firebase dan Rulesnya.');
+                return;
+            }
+
+            currentNPSN = npsn;
+            document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
+            setSchoolHeaderIdentity(currentSchoolName, currentNPSN);
+            window.switchPage('page-create-account', 'page-setup-jadwal');
+        }
+
+        window.handleLogin = async () => {
+            const npsn = document.getElementById('input-npsn-login').value;
+            const pass = document.getElementById('input-password-login').value;
+            if (!npsn || !pass) return alert("NPSN dan Password wajib diisi.");
+
+            if (!ensureFirebaseReady('login akun sekolah')) return;
+
+            try {
+                const q = query(collection(db, 'schools'), where('npsn', '==', npsn));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    alert('NPSN tidak ditemukan. Apakah Anda sudah registrasi awal?');
+                    return;
+                }
+
+                let matched = null;
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data.password === pass) matched = data;
+                });
+
+                if (!matched) {
+                    alert('Password salah.');
+                    return;
+                }
+
+                currentNPSN = npsn;
+                currentSchoolName = matched.nama_sekolah;
+                document.getElementById('header-school-npsn').innerText = `NPSN: ${currentNPSN}`;
+                setSchoolHeaderIdentity(currentSchoolName, currentNPSN);
+
+                const scheduleSnapshot = await getDoc(doc(db, 'schedules', currentNPSN));
+                const storedSchedule = scheduleSnapshot.exists() ? scheduleSnapshot.data().jadwal_harian : null;
+                const savedSchedule = storedSchedule ? normalizeScheduleData(storedSchedule) : null;
+                const savedAssignments = scheduleSnapshot.exists() ? normalizeOutgoingAssignments(scheduleSnapshot.data().penugasan_keluar) : [];
+                scheduleMappingNeedsReview = scheduleSnapshot.exists()
+                    && scheduleSnapshot.data().status === 'Jadwal berubah - pemetaan perlu dicek';
+                await window.loadIncomingAssignments();
+                const scheduleDates = savedSchedule && typeof savedSchedule === 'object' ? Object.keys(savedSchedule) : [];
+                const hasCompleteSchedule = scheduleDates.length > 0 && scheduleDates.every(date => {
+                    const day = savedSchedule[date];
+                    return day && getDayLabCount(day) > 0;
+                });
+
+                if (hasCompleteSchedule) {
+                    window.scheduleData = savedSchedule;
+                    window.outgoingAssignments = Array.isArray(savedAssignments) ? savedAssignments : [];
+                    window.renderFinalRekap();
+                    window.switchPage('page-auth', 'page-final-rekap');
+                } else {
+                    window.scheduleData = {};
+                    window.outgoingAssignments = [];
+                    window.switchPage('page-auth', 'page-setup-jadwal');
+                }
+            } catch (error) {
+                console.error('Gagal login ke Firestore:', error);
+                alert('Login gagal. Cek konfigurasi Firebase dan Rulesnya.');
+            }
+        }
+
+        window.goToReview = () => {
+            const wave1 = document.getElementById('wave-1').checked;
+            const wave2 = document.getElementById('wave-2').checked;
+            if (!wave1 && !wave2) return alert('Mohon pilih minimal 1 gelombang TKA.');
+
+            const dates = [];
+            if (wave1) dates.push('2026-10-26', '2026-10-27', '2026-10-28', '2026-10-29');
+            if (wave2) dates.push('2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05');
+            const previousSchedule = window.scheduleData;
+            window.scheduleData = Object.fromEntries(dates.map(date => [date, {
+                labCount: getDayLabCount(previousSchedule[date])
+            }]));
+            window.renderReviewData();
+            window.switchPage('page-setup-jadwal', 'page-review');
+        }
+
+        window.renderReviewData = () => {
+            const container = document.getElementById('review-container');
+            container.innerHTML = '';
+            Object.keys(window.scheduleData).sort().forEach(date => {
+                const data = window.scheduleData[date];
+                const dateObj = new Date(`${date}T00:00:00`);
+                const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+                container.innerHTML += `<div class="surface-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div><h3 class="font-display font-semibold" style="color:var(--color-primary)">${dateStr}</h3><p class="help-text mt-1">Jumlah lab aktif</p></div><input type="number" min="1" max="10" value="${data.labCount || ''}" oninput="updateDailyLabCount('${date}', this.value)" aria-label="Jumlah lab aktif ${dateStr}" class="input-field w-28 text-center" required></div>`;
+            });
+        }
+
+        window.updateDailyLabCount = (date, value) => {
+            const count = Number(value);
+            window.scheduleData[date].labCount = Number.isInteger(count) ? Math.max(0, Math.min(10, count)) : 0;
+        }
+
+        window.editScheduleSetup = () => {
+            const dates = Object.keys(window.scheduleData);
+            if (dates.length > 0) {
+                document.getElementById('wave-1').checked = dates.some(date => date.startsWith('2026-10-'));
+                document.getElementById('wave-2').checked = dates.some(date => date.startsWith('2026-11-'));
+            }
+            window.switchPage('page-review', 'page-setup-jadwal');
+        }
+
+        window.editSubmittedSchedule = () => {
+            submittedScheduleSnapshot = normalizeScheduleData(window.scheduleData);
+            isEditingSubmittedSchedule = true;
+            document.getElementById('cancel-schedule-edit').classList.remove('hidden');
+            const dates = Object.keys(window.scheduleData);
+            if (dates.length > 0) {
+                document.getElementById('wave-1').checked = dates.some(date => date.startsWith('2026-10-'));
+                document.getElementById('wave-2').checked = dates.some(date => date.startsWith('2026-11-'));
+            }
+            window.renderReviewData();
+            window.switchPage('page-final-rekap', 'page-setup-jadwal');
+        }
+
+        window.cancelSubmittedScheduleEdit = () => {
+            if (!isEditingSubmittedSchedule || !submittedScheduleSnapshot) return;
+            window.scheduleData = normalizeScheduleData(submittedScheduleSnapshot);
+            const dates = Object.keys(window.scheduleData);
+            document.getElementById('wave-1').checked = dates.some(date => date.startsWith('2026-10-'));
+            document.getElementById('wave-2').checked = dates.some(date => date.startsWith('2026-11-'));
+            submittedScheduleSnapshot = null;
+            isEditingSubmittedSchedule = false;
+            document.getElementById('cancel-schedule-edit').classList.add('hidden');
+            window.renderFinalRekap();
+            window.switchPage('page-setup-jadwal', 'page-final-rekap');
+        }
+
+        window.renderFinalRekap = () => {
+            const tbody = document.getElementById('rekap-table-body');
+            const assignmentPanel = document.getElementById('supervisor-assignment-panel');
+            const assignmentList = document.getElementById('supervisor-assignment-list');
+            window.outgoingAssignments = normalizeOutgoingAssignments(window.outgoingAssignments);
+            document.getElementById('schedule-mapping-review-notice').classList.toggle('hidden', !scheduleMappingNeedsReview);
+            document.getElementById('rekap-school-name').innerText = currentSchoolName || `Sekolah (NPSN: ${currentNPSN})`;
+            tbody.innerHTML = '';
+            assignmentList.innerHTML = '';
+
+            if (window.outgoingAssignments.length > 0) {
+                assignmentPanel.classList.remove('hidden');
+                const filledCount = window.outgoingAssignments.filter(item => (item.nama_pengawas || '').trim()).length;
+                document.getElementById('assignment-status').innerText = filledCount === 0
+                    ? 'Siap diisi'
+                    : filledCount === window.outgoingAssignments.length
+                        ? 'Lengkap'
+                        : `${filledCount}/${window.outgoingAssignments.length} terisi`;
+                const dailyAssignmentSummary = Object.entries(window.scheduleData).sort(([left], [right]) => left.localeCompare(right)).map(([date, day]) => {
+                    const sent = window.outgoingAssignments.filter(item => item.date === date).length;
+                    const expected = getDayLabCount(day);
+                    const dateText = new Date(`${date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+                    return `${dateText}: ${sent}/${expected} pengawas`;
+                });
+                document.getElementById('assignment-slot-summary').innerText = dailyAssignmentSummary.join(' | ');
+                assignmentList.innerHTML = window.outgoingAssignments.map((item, index) => {
+                    const dateText = new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                    return `<tr><td class="font-medium">${index + 1}</td><td class="whitespace-nowrap">${dateText}</td><td class="font-medium">${item.tujuan}</td><td>Lab ${item.lab}</td><td><input class="input-field" value="${item.nama_pengawas || ''}" onchange="updateAssignmentField(${index}, 'nama_pengawas', this.value)" placeholder="Nama pengawas"></td><td><input class="input-field" value="${item.nip || ''}" onchange="updateAssignmentField(${index}, 'nip', this.value)" placeholder="Opsional"></td></tr>`;
+                }).join('');
+            } else {
+                assignmentPanel.classList.add('hidden');
+            }
+
+            window.renderIncomingAssignmentTable();
+
+            Object.keys(window.scheduleData).sort().forEach(date => {
+                const dateObj = new Date(`${date}T00:00:00`);
+                const dateStr = dateObj.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                tbody.innerHTML += `<tr><td class="font-medium">${dateStr}</td><td class="text-center font-display font-semibold text-lg" style="color:var(--color-primary)">${getDayLabCount(window.scheduleData[date])}</td></tr>`;
+            });
+        }
+
+        window.updateAssignmentField = (index, field, value) => {
+            if (window.outgoingAssignments[index]) window.outgoingAssignments[index][field] = value.trim();
+        }
+
+        window.renderIncomingAssignmentTable = () => {
+            const tbody = document.getElementById('incoming-assignment-list');
+            tbody.innerHTML = '';
+            if (window.incomingAssignmentsError) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center help-text">${window.incomingAssignmentsError}</td></tr>`;
+                return;
+            }
+            if (window.incomingAssignments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center help-text">Belum ada penugasan pengawas masuk.</td></tr>';
+                return;
+            }
+
+            window.incomingAssignments.forEach((item, index) => {
+                const dateText = new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                const row = document.createElement('tr');
+                [index + 1, dateText, item.sekolah_asal, `Lab ${item.lab_masuk}`, item.nama_pengawas || 'Belum diisi', item.nip || '-'].forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                tbody.appendChild(row);
+            });
+        }
+
+        window.downloadSchoolSupervisorExcel = (direction) => {
+            if (!window.XLSX) return alert('Pustaka Excel belum berhasil dimuat. Periksa koneksi internet lalu muat ulang halaman.');
+            if (direction !== 'outgoing' && direction !== 'incoming') {
+                return alert('Jenis daftar pengawas tidak valid.');
+            }
+            if (direction === 'incoming' && window.incomingAssignmentsError) {
+                return alert(window.incomingAssignmentsError);
+            }
+
+            const isOutgoing = direction === 'outgoing';
+            const headers = isOutgoing
+                ? ['No', 'Tanggal', 'Tempat Mengawas', 'Lab', 'Nama Pengawas', 'NIP']
+                : ['No', 'Tanggal', 'Sekolah Asal', 'Lab', 'Nama Pengawas', 'NIP'];
+            const assignments = isOutgoing
+                ? normalizeOutgoingAssignments(window.outgoingAssignments)
+                : window.incomingAssignments;
+            const rows = assignments.map((item, index) => [
+                index + 1,
+                new Date(`${item.date}T00:00:00`).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+                isOutgoing ? (item.tujuan || '') : (item.sekolah_asal || ''),
+                `Lab ${isOutgoing ? item.lab : item.lab_masuk}`,
+                (item.nama_pengawas || '').trim() || (isOutgoing ? '' : 'Belum diisi'),
+                (item.nip || '').trim() || (isOutgoing ? '' : '-')
+            ]);
+            const worksheet = window.XLSX.utils.aoa_to_sheet([headers, ...rows]);
+            worksheet['!cols'] = [{ wch: 7 }, { wch: 16 }, { wch: 38 }, { wch: 12 }, { wch: 30 }, { wch: 20 }];
+            worksheet['!autofilter'] = { ref: `A1:F${Math.max(1, rows.length + 1)}` };
+            const workbook = window.XLSX.utils.book_new();
+            window.XLSX.utils.book_append_sheet(workbook, worksheet, isOutgoing ? 'Pengawas Keluar' : 'Pengawas Masuk');
+            const schoolName = (currentSchoolName || currentNPSN || 'sekolah').replace(/[\\/:*?"<>|]/g, '-').trim();
+            const fileName = `daftar-pengawas-${direction}-${schoolName}.xlsx`;
+
+            try {
+                window.XLSX.writeFile(workbook, fileName);
+            } catch (error) {
+                console.error(`Gagal mengunduh Excel pengawas ${direction}:`, error);
+                alert('File Excel gagal dibuat. Silakan coba lagi.');
+            }
+        }
+
+        window.saveSupervisorAssignments = async () => {
+            window.outgoingAssignments = normalizeOutgoingAssignments(window.outgoingAssignments);
+            const filled = window.outgoingAssignments.filter(item => (item.nama_pengawas || '').trim());
+            const duplicateLocations = new Set();
+            const seen = new Map();
+            for (const item of filled) {
+                const identity = (item.nip || item.nama_pengawas).toLowerCase().replace(/\s+/g, ' ');
+                const key = `${item.date}|${identity}`;
+                if (seen.has(key) && seen.get(key) !== item.tujuanNpsn) duplicateLocations.add(identity);
+                seen.set(key, item.tujuanNpsn);
+            }
+            if (duplicateLocations.size > 0) return alert('Pengawas yang sama tidak boleh ditempatkan di dua sekolah pada tanggal yang sama.');
+            if (!ensureFirebaseReady('menyimpan nama pengawas')) return;
+            const saveButton = document.getElementById('save-supervisor-assignments');
+            saveButton.disabled = true;
+            saveButton.innerText = 'Menyimpan...';
+            try {
+                const isComplete = window.outgoingAssignments.length > 0 && filled.length === window.outgoingAssignments.length;
+                await setDoc(doc(db, 'schedules', currentNPSN), {
+                    nama_sekolah: currentSchoolName,
+                    npsn: currentNPSN,
+                    jadwal_harian: window.scheduleData,
+                    penugasan_keluar: window.outgoingAssignments,
+                    status: isComplete ? 'Data pengawas tersimpan' : 'Pengisian pengawas belum lengkap',
+                    updated_at: new Date()
+                }, { merge: true });
+                const filledCount = window.outgoingAssignments.filter(item => (item.nama_pengawas || '').trim()).length;
+                document.getElementById('assignment-status').innerText = `${filledCount}/${window.outgoingAssignments.length} terisi`;
+                alert(`Data pengawas berhasil disimpan ke Firestore (${filledCount}/${window.outgoingAssignments.length} slot terisi).`);
+            } catch (error) {
+                console.error('Gagal menyimpan nama pengawas:', error);
+                alert('Data pengawas gagal disimpan. Cek koneksi Firebase dan Rules.');
+            } finally {
+                saveButton.disabled = false;
+                saveButton.innerText = 'Simpan pengawas';
+            }
+        }
+
+        window.submitFinalData = async () => {
+            const invalidDate = Object.entries(window.scheduleData).find(([, day]) => getDayLabCount(day) < 1 || getDayLabCount(day) > 10);
+            if (invalidDate) return alert(`Jumlah lab tanggal ${invalidDate[0]} harus diisi antara 1 sampai 10.`);
+            if (!ensureFirebaseReady('menyimpan jadwal sekolah')) return;
+
+            const scheduleChanged = isEditingSubmittedSchedule && submittedScheduleSnapshot
+                && (Object.keys(submittedScheduleSnapshot).length !== Object.keys(window.scheduleData).length
+                    || Object.keys(submittedScheduleSnapshot).some(date =>
+                        getDayLabCount(submittedScheduleSnapshot[date]) !== getDayLabCount(window.scheduleData[date])
+                    ));
+            const mappingNeedsReview = scheduleChanged && window.outgoingAssignments.length > 0;
+            if (mappingNeedsReview && !confirm('Jadwal berubah. Pemetaan pengawas yang sudah ada akan tetap disimpan, tetapi mungkin tidak lagi sesuai dengan gelombang atau jumlah lab terbaru dan perlu diperiksa ulang oleh Admin MKKS. Lanjutkan menyimpan jadwal?')) return;
+            const needsReviewAfterSave = mappingNeedsReview || scheduleMappingNeedsReview;
+
+            try {
+                await setDoc(doc(db, 'schedules', currentNPSN), {
+                    nama_sekolah: currentSchoolName,
+                    npsn: currentNPSN,
+                    jadwal_harian: window.scheduleData,
+                    status: needsReviewAfterSave ? 'Jadwal berubah - pemetaan perlu dicek' : 'Penempatan tersedia',
+                    updated_at: new Date()
+                }, { merge: true });
+            } catch (error) {
+                console.error('Gagal menyimpan jadwal ke Firestore:', error);
+                alert('Gagal menyimpan jadwal ke Firestore. Cek konfigurasi Firebase dan Rulesnya.');
+                return;
+            }
+
+            submittedScheduleSnapshot = null;
+            isEditingSubmittedSchedule = false;
+            scheduleMappingNeedsReview = needsReviewAfterSave;
+            document.getElementById('cancel-schedule-edit').classList.add('hidden');
+            window.renderFinalRekap();
+            window.switchPage('page-review', 'page-final-rekap');
+            if (mappingNeedsReview) alert('Jadwal tersimpan. Pemetaan lama tetap dipertahankan; mohon minta Admin MKKS memeriksanya kembali.');
+        }
+    </script>
+</body>
 </html>
